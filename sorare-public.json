@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "source": "Sorare GraphQL API — public read-only probe",
+  "requestedSlug": "mianismo",
+  "updatedAt": null,
+  "status": "pending",
+  "statusLabel": "Da eseguire",
+  "profile": {
+    "found": null,
+    "slug": "mianismo",
+    "nickname": null
+  },
+  "cards": {
+    "status": "pending",
+    "count": null,
+    "items": [],
+    "truncated": false,
+    "message": "Il primo controllo non è ancora stato eseguito."
+  },
+  "message": "Dashboard pronta, sincronizzazione pubblica non ancora eseguita.",
+  "detail": "Vai in GitHub → Actions → Sorare public data refresh → Run workflow. Questa prova non richiede OAuth o credenziali Sorare."
+}
