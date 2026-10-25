@@ -1,10 +1,10 @@
 
 name: Sorare public data refresh
 
-on:
+'on':
   workflow_dispatch:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: '0 */6 * * *'
 
 permissions:
   contents: write
@@ -12,7 +12,6 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,4 +31,3 @@ jobs:
           git add data/sorare-public.json
           git diff --cached --quiet || git commit -m "Refresh Sorare public data"
           git push
-
