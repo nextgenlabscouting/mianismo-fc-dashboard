@@ -109,19 +109,30 @@ function renderSorareReport(data){
 }
 async function loadSorarePublicData(){
   const btn=$('reloadSorareData');if(btn){btn.disabled=true;btn.textContent='Lettura…'}
-  try{const response=await fetch('./data/sorare-public.json?t='+Date.now(),{cache:'no-store'});if(!response.ok)throw new Error('Report non ancora pubblicato (HTTP '+response.status+').');const data=await response.json();renderSorareReport(data);}
-  catch(e){renderSorareReport({status:'pending',requestedSlug:'mianismo',message:'Report non ancora disponibile.',detail:'Carica il workflow e avvialo da GitHub Actions. La dashboard non interroga direttamente Sorare dal browser.',cards:{status:'pending',count:null,items:[],message:'In attesa del report.'}});}
-  finally{if(btn){btn.disabled=false;btn.textContent='Rileggi dati'}}
+  try{
+    const [profileResponse,cardsResponse]=await Promise.all([
+      fetch('/api/public/profile?slug=mianismo&t='+Date.now(),{cache:'no-store'}),
+      fetch('/api/public/cards?slug=mianismo&t='+Date.now(),{cache:'no-store'})
+    ]);
+    const profile=await profileResponse.json().catch(()=>({status:'error',error:'Risposta profilo non valida'}));
+    const cards=await cardsResponse.json().catch(()=>({status:'unavailable',error:'Risposta carte non valida',items:[]}));
+    const profileOk=profileResponse.ok&&profile.status==='ok'&&profile.profile;
+    const cardsOk=cardsResponse.ok&&cards.status==='ok';
+    const overall=profileOk?'ok':profile.status==='not_found'?'profile_not_found_or_not_public':'error';
+    renderSorareReport({
+      status:overall,
+      statusLabel:profileOk?(cardsOk?'API Vercel attiva · Sorare raggiunto':'API profilo attiva · carte non disponibili'):'Controllo API non riuscito',
+      requestedSlug:'mianismo',
+      profile:{found:!!profileOk,slug:profile.profile?.slug||'mianismo',nickname:profile.profile?.nickname||null},
+      cards:{status:cardsOk?'available':'unavailable',count:cards.count??null,items:Array.isArray(cards.items)?cards.items:[],truncated:!!cards.hasMore,message:cardsOk?'Dati pubblici ricevuti':(cards.error||'Elenco carte non disponibile'),detail:cards.error||''},
+      updatedAt:new Date().toISOString(),
+      message:profileOk?'Connessione pubblica al profilo Sorare verificata.':'Non è stato possibile verificare il profilo Sorare.',
+      detail:cardsOk?'Il backend Vercel ha restituito una risposta valida.':(cards.error||profile.error||'Controlla i log della funzione Vercel.')
+    });
+  }catch(e){
+    renderSorareReport({status:'error',requestedSlug:'mianismo',message:'Errore nel collegamento alle API Vercel.',detail:String(e?.message||e),cards:{status:'unavailable',count:null,items:[],message:'Endpoint non raggiungibile.'}});
+  }finally{if(btn){btn.disabled=false;btn.textContent='Rileggi dati'}}
 }
-function renderAll(){renderOverview();renderCards();renderResourcesForm();renderLineup()}
-function openModal(c){$('cardForm').reset();$('editId').value=c?.id||'';$('modalTitle').textContent=c?'Modifica carta':'Aggiungi una carta';if(c){$('playerName').value=c.name||'';$('playerClub').value=c.club||'';$('playerLeague').value=c.league||'';$('playerPosition').value=c.position||'Difensore';$('playerRarity').value=c.rarity||'Limited';$('playerL5').value=c.l5??'';$('playerL15').value=c.l15??'';$('playerAge').value=c.age||'';$('playerNote').value=c.note||'';}$('cardModal').classList.add('open');setTimeout(()=>$('playerName').focus(),30)}function closeModal(){$('cardModal').classList.remove('open')}
-function deleteCard(id){const c=state.cards.find(x=>x.id===id);if(!c)return;if(!confirm(`Eliminare la carta di ${c.name}?`))return;state.cards=state.cards.filter(x=>x.id!==id);state.lineup=state.lineup.map(x=>x===id?'':x);persist();toast('Carta eliminata')}
-['addCardTop','addCardPage','addFirstCard','addEmptyCard'].forEach(id=>{if($(id))$(id).onclick=()=>openModal()});$('closeModal').onclick=closeModal;$('cancelModal').onclick=closeModal;$('cardModal').addEventListener('click',e=>{if(e.target===$('cardModal'))closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-$('cardForm').onsubmit=e=>{e.preventDefault();const id=$('editId').value||('card_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7));const old=state.cards.find(c=>c.id===id);const l5=$('playerL5').value,l15=$('playerL15').value,age=$('playerAge').value;const c={id,name:$('playerName').value.trim(),club:$('playerClub').value.trim(),league:$('playerLeague').value,position:$('playerPosition').value,rarity:$('playerRarity').value,l5:l5===''?'':Number(l5),l15:l15===''?'':Number(l15),age:age===''?'':Number(age),note:$('playerNote').value.trim(),created:old?.created||new Date().toISOString()};if(!c.name){toast('Inserisci il nome del giocatore');return}if(old)state.cards=state.cards.map(x=>x.id===id?c:x);else state.cards.unshift(c);persist();closeModal();toast(old?'Carta aggiornata':'Carta salvata')};
-$('cardSearch').addEventListener('input',renderCards);$('positionFilter').addEventListener('change',renderCards);
-$('resourcesForm').onsubmit=e=>{e.preventDefault();state.resources={gems:Math.max(0,num($('gemsInput').value)),essence:Math.max(0,num($('essenceInput').value)),set:$('setInput').value.trim(),collection:Math.max(0,Math.min(100,num($('collectionInput').value))),goal:Math.max(0,num($('goalInput').value)),notes:$('notesInput').value.trim()};persist();toast('Risorse aggiornate')};$('resetResources').onclick=()=>{if(!confirm('Ripristinare i valori iniziali dichiarati?'))return;state.resources={...initial.resources};persist();toast('Valori iniziali ripristinati')};$('clearLineup').onclick=()=>{state.lineup=['','','','',''];persist();toast('Formazione svuotata')};$('saveLineup').onclick=()=>{persist();toast('Formazione salvata in questo browser')};
-$('exportData').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='mianismo-fc-backup.json';a.click();URL.revokeObjectURL(url);toast('Backup esportato')};$('importData').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(!data||!Array.isArray(data.cards)||!data.resources)throw new Error('Formato non valido');if(!confirm('Importare il backup? I dati attuali verranno sostituiti.'))return;state={...structuredClone(initial),...data,resources:{...initial.resources,...data.resources},lineup:Array.isArray(data.lineup)?data.lineup:['','','','','']};persist();toast('Backup importato')}catch(err){alert('Impossibile importare: il file non sembra un backup MIANISMO FC valido.')}finally{$('importFile').value=''}};
-$('lineupSlots').addEventListener('change',()=>{});
 $('reloadSorareData').addEventListener('click',loadSorarePublicData);
 renderAll();
 loadSorarePublicData();
