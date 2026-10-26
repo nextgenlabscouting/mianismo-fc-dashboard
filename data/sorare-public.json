@@ -2,21 +2,1622 @@
   "schemaVersion": 1,
   "source": "Sorare GraphQL API — public read-only probe",
   "requestedSlug": "mianismo",
-  "updatedAt": null,
-  "status": "pending",
-  "statusLabel": "Da eseguire",
+  "updatedAt": "2026-10-26T03:16:52.946Z",
+  "status": "ok",
+  "statusLabel": "Profilo risolto",
   "profile": {
-    "found": null,
+    "found": true,
     "slug": "mianismo",
-    "nickname": null
+    "nickname": "MiAnIsMo"
   },
   "cards": {
-    "status": "pending",
-    "count": null,
-    "items": [],
-    "truncated": false,
-    "message": "Il primo controllo non è ancora stato eseguito."
+    "status": "available",
+    "count": 400,
+    "items": [
+      {
+        "slug": "emil-audero-mulyadi-2026-common-0106dc41-a9a0-4fc2-b72b-743e5d6a9ea6",
+        "name": "emil-audero-mulyadi-2026-common-0106dc41-a9a0-4fc2-b72b-743e5d6a9ea6"
+      },
+      {
+        "slug": "merwan-ifnaoui-2026-common-cf90b48a-fc31-4d87-b892-056593782f69",
+        "name": "merwan-ifnaoui-2026-common-cf90b48a-fc31-4d87-b892-056593782f69"
+      },
+      {
+        "slug": "nathan-ngoy-2026-common-179c5f41-5d2e-4637-8d09-bf63b9ec4675",
+        "name": "nathan-ngoy-2026-common-179c5f41-5d2e-4637-8d09-bf63b9ec4675"
+      },
+      {
+        "slug": "andrej-kramaric-2026-common-a27037dd-7ee3-456d-ba81-f10199a233cc",
+        "name": "andrej-kramaric-2026-common-a27037dd-7ee3-456d-ba81-f10199a233cc"
+      },
+      {
+        "slug": "johan-andres-mojica-palacio-2026-common-d48e6990-d567-4511-9b96-bdbabe5502ab",
+        "name": "johan-andres-mojica-palacio-2026-common-d48e6990-d567-4511-9b96-bdbabe5502ab"
+      },
+      {
+        "slug": "mathis-amougou-2026-common-ddaa7e6a-0f60-40d5-9e60-8de30161a8f9",
+        "name": "mathis-amougou-2026-common-ddaa7e6a-0f60-40d5-9e60-8de30161a8f9"
+      },
+      {
+        "slug": "niko-sigur-2026-common-0a27ade8-e400-4f79-854c-9efb9f31213e",
+        "name": "niko-sigur-2026-common-0a27ade8-e400-4f79-854c-9efb9f31213e"
+      },
+      {
+        "slug": "timothy-weah-2026-common-ce18677c-dce0-45c8-997b-2b6698d62698",
+        "name": "timothy-weah-2026-common-ce18677c-dce0-45c8-997b-2b6698d62698"
+      },
+      {
+        "slug": "dominic-calvert-lewin-2026-common-084dfd88-b9e5-4041-bb43-85929395b012",
+        "name": "dominic-calvert-lewin-2026-common-084dfd88-b9e5-4041-bb43-85929395b012"
+      },
+      {
+        "slug": "ilia-gruev-2000-05-03-2026-common-de5107e1-efda-4f77-87ac-a2032c5b1937",
+        "name": "ilia-gruev-2000-05-03-2026-common-de5107e1-efda-4f77-87ac-a2032c5b1937"
+      },
+      {
+        "slug": "robert-navarro-munoz-2026-common-f6685ed6-9e25-484b-876f-c690f1c6ff81",
+        "name": "robert-navarro-munoz-2026-common-f6685ed6-9e25-484b-876f-c690f1c6ff81"
+      },
+      {
+        "slug": "tom-heaton-2026-common-932ec139-187b-4b5e-9a54-f98c6b4922a9",
+        "name": "tom-heaton-2026-common-932ec139-187b-4b5e-9a54-f98c6b4922a9"
+      },
+      {
+        "slug": "hugo-ekitike-2026-common-478de313-5bec-4af0-a3ff-faaa7ebccb8e",
+        "name": "hugo-ekitike-2026-common-478de313-5bec-4af0-a3ff-faaa7ebccb8e"
+      },
+      {
+        "slug": "goncalo-manuel-ganchinho-guedes-2026-common-5c223b38-7627-46b5-b7ac-efb59debe0e0",
+        "name": "goncalo-manuel-ganchinho-guedes-2026-common-5c223b38-7627-46b5-b7ac-efb59debe0e0"
+      },
+      {
+        "slug": "tyler-robert-fletcher-2026-common-d9a99064-efe1-4422-80ce-d07e5c837e87",
+        "name": "tyler-robert-fletcher-2026-common-d9a99064-efe1-4422-80ce-d07e5c837e87"
+      },
+      {
+        "slug": "ryan-giles-2026-common-1dc68269-3ac6-4667-977e-c7641f1b2529",
+        "name": "ryan-giles-2026-common-1dc68269-3ac6-4667-977e-c7641f1b2529"
+      },
+      {
+        "slug": "sean-longstaff-2026-common-489d1270-cbc6-48ab-a81f-5d9906deccee",
+        "name": "sean-longstaff-2026-common-489d1270-cbc6-48ab-a81f-5d9906deccee"
+      },
+      {
+        "slug": "dario-cassia-luis-essugo-2026-common-0e662bdc-1899-4ef3-964f-5d2c17fcd5fb",
+        "name": "dario-cassia-luis-essugo-2026-common-0e662bdc-1899-4ef3-964f-5d2c17fcd5fb"
+      },
+      {
+        "slug": "mohamed-elbachir-belloumi-2026-common-5ae8cc6b-e586-4c00-b7cf-ce5c45b7a768",
+        "name": "mohamed-elbachir-belloumi-2026-common-5ae8cc6b-e586-4c00-b7cf-ce5c45b7a768"
+      },
+      {
+        "slug": "adil-ali-mohamed-bourabaa-2026-common-228ded64-f1c7-48de-8afd-b85baf0451c6",
+        "name": "adil-ali-mohamed-bourabaa-2026-common-228ded64-f1c7-48de-8afd-b85baf0451c6"
+      },
+      {
+        "slug": "eric-garcia-martret-2026-common-a03af56c-4068-4acf-97b0-46da384f9bf8",
+        "name": "eric-garcia-martret-2026-common-a03af56c-4068-4acf-97b0-46da384f9bf8"
+      },
+      {
+        "slug": "ibrahim-osman-2026-common-a5af4d28-fab6-47bf-b694-0fb116a2eaba",
+        "name": "ibrahim-osman-2026-common-a5af4d28-fab6-47bf-b694-0fb116a2eaba"
+      },
+      {
+        "slug": "hector-bellerin-moruno-2026-common-efc25e73-cca1-4ce9-85af-6d17a1421b0c",
+        "name": "hector-bellerin-moruno-2026-common-efc25e73-cca1-4ce9-85af-6d17a1421b0c"
+      },
+      {
+        "slug": "zadok-yohanna-2026-common-cd784654-ae52-41a7-bd86-5743d11a5a1f",
+        "name": "zadok-yohanna-2026-common-cd784654-ae52-41a7-bd86-5743d11a5a1f"
+      },
+      {
+        "slug": "hugo-rincon-lumbreras-2026-common-8a5c75a8-c1cc-4500-a143-927b0186e73d",
+        "name": "hugo-rincon-lumbreras-2026-common-8a5c75a8-c1cc-4500-a143-927b0186e73d"
+      },
+      {
+        "slug": "jefferson-andres-lerma-solis-2026-common-5d5b338c-ca70-4c58-b93d-1ae7271c4cda",
+        "name": "jefferson-andres-lerma-solis-2026-common-5d5b338c-ca70-4c58-b93d-1ae7271c4cda"
+      },
+      {
+        "slug": "kandet-diawara-2026-common-2caeb1b7-d25b-4ad0-b739-230853d29848",
+        "name": "kandet-diawara-2026-common-2caeb1b7-d25b-4ad0-b739-230853d29848"
+      },
+      {
+        "slug": "lewis-hall-2004-09-08-2026-common-76a092f2-a076-45a9-86f8-f2bb1e68c0e8",
+        "name": "lewis-hall-2004-09-08-2026-common-76a092f2-a076-45a9-86f8-f2bb1e68c0e8"
+      },
+      {
+        "slug": "sergio-herrera-piron-2026-common-417d9578-ae68-4fc7-836a-70ba759b15d7",
+        "name": "sergio-herrera-piron-2026-common-417d9578-ae68-4fc7-836a-70ba759b15d7"
+      },
+      {
+        "slug": "manuel-sanchez-de-la-pena-2026-common-27cc5ee9-ef3f-4f90-a357-a4bedac8761f",
+        "name": "manuel-sanchez-de-la-pena-2026-common-27cc5ee9-ef3f-4f90-a357-a4bedac8761f"
+      },
+      {
+        "slug": "gonzalo-villar-del-fraile-2026-common-9ce364cf-c6f1-42e5-ba9f-dcd0ba833888",
+        "name": "gonzalo-villar-del-fraile-2026-common-9ce364cf-c6f1-42e5-ba9f-dcd0ba833888"
+      },
+      {
+        "slug": "angel-ortiz-monterrey-2026-common-4a121f82-90e3-46b6-94f4-4348d4810ed3",
+        "name": "angel-ortiz-monterrey-2026-common-4a121f82-90e3-46b6-94f4-4348d4810ed3"
+      },
+      {
+        "slug": "leandro-daniel-cabrera-sasia-2026-common-7ecb89c9-4dc8-46a1-85a6-645b11fe1583",
+        "name": "leandro-daniel-cabrera-sasia-2026-common-7ecb89c9-4dc8-46a1-85a6-645b11fe1583"
+      },
+      {
+        "slug": "filip-ugrinic-2026-common-ff8c5250-5f48-4c41-a06e-fd44bcf5088d",
+        "name": "filip-ugrinic-2026-common-ff8c5250-5f48-4c41-a06e-fd44bcf5088d"
+      },
+      {
+        "slug": "jones-el-abdellaoui-2026-common-835318be-d273-4736-b39e-c6ae253eb598",
+        "name": "jones-el-abdellaoui-2026-common-835318be-d273-4736-b39e-c6ae253eb598"
+      },
+      {
+        "slug": "unai-lopez-cabrera-2026-common-969c32c0-7499-4c9a-8714-231550954779",
+        "name": "unai-lopez-cabrera-2026-common-969c32c0-7499-4c9a-8714-231550954779"
+      },
+      {
+        "slug": "daniel-vivian-moreno-2026-common-13d6a019-5bb6-46a8-8077-fc8f93d45176",
+        "name": "daniel-vivian-moreno-2026-common-13d6a019-5bb6-46a8-8077-fc8f93d45176"
+      },
+      {
+        "slug": "valentin-rosier-2026-common-3c9994f8-3150-4ed4-b768-63bdea8ac61e",
+        "name": "valentin-rosier-2026-common-3c9994f8-3150-4ed4-b768-63bdea8ac61e"
+      },
+      {
+        "slug": "nathan-saliba-2026-common-e7036ac9-7ce7-49b2-84b0-c5f74e02d3e0",
+        "name": "nathan-saliba-2026-common-e7036ac9-7ce7-49b2-84b0-c5f74e02d3e0"
+      },
+      {
+        "slug": "derek-cornelius-2026-common-e56e3e74-ef18-4931-aa51-12ef88ae5bad",
+        "name": "derek-cornelius-2026-common-e56e3e74-ef18-4931-aa51-12ef88ae5bad"
+      },
+      {
+        "slug": "ilyas-azizi-2026-common-4a54bc42-2b38-4ab0-ba52-c12f3d2ea2bc",
+        "name": "ilyas-azizi-2026-common-4a54bc42-2b38-4ab0-ba52-c12f3d2ea2bc"
+      },
+      {
+        "slug": "jim-allevinah-2026-common-bd38e0db-6f4d-4176-ab1c-7cf9fc6d299f",
+        "name": "jim-allevinah-2026-common-bd38e0db-6f4d-4176-ab1c-7cf9fc6d299f"
+      },
+      {
+        "slug": "philipp-treu-2026-common-da099e21-a035-4ce7-b291-ea9c6fdba7d9",
+        "name": "philipp-treu-2026-common-da099e21-a035-4ce7-b291-ea9c6fdba7d9"
+      },
+      {
+        "slug": "diogo-lobao-de-sousa-2026-common-558fed9d-cba8-409c-853b-868365889ab6",
+        "name": "diogo-lobao-de-sousa-2026-common-558fed9d-cba8-409c-853b-868365889ab6"
+      },
+      {
+        "slug": "chemsdine-talbi-2026-common-45e9b2a9-602c-443d-a049-7212b70b8a71",
+        "name": "chemsdine-talbi-2026-common-45e9b2a9-602c-443d-a049-7212b70b8a71"
+      },
+      {
+        "slug": "prosper-peter-2026-common-d5ad6367-9792-408c-8812-04d5aa7bf689",
+        "name": "prosper-peter-2026-common-d5ad6367-9792-408c-8812-04d5aa7bf689"
+      },
+      {
+        "slug": "williot-swedberg-2026-common-08015289-52d7-45f3-86d4-9b56fb85d01c",
+        "name": "williot-swedberg-2026-common-08015289-52d7-45f3-86d4-9b56fb85d01c"
+      },
+      {
+        "slug": "kastriot-imeri-2026-common-0710e4da-53b1-4ea9-b61e-1329b1f6db67",
+        "name": "kastriot-imeri-2026-common-0710e4da-53b1-4ea9-b61e-1329b1f6db67"
+      },
+      {
+        "slug": "martin-adeline-2026-common-a071c610-4f4e-4904-86fb-6308475518f8",
+        "name": "martin-adeline-2026-common-a071c610-4f4e-4904-86fb-6308475518f8"
+      },
+      {
+        "slug": "florent-muslija-2026-common-6f5982d3-1cc5-47ab-9fda-7676753921f9",
+        "name": "florent-muslija-2026-common-6f5982d3-1cc5-47ab-9fda-7676753921f9"
+      },
+      {
+        "slug": "dominik-kohr-2026-common-cd8ebf55-d3f2-4ccf-87b5-c610cc455a37",
+        "name": "dominik-kohr-2026-common-cd8ebf55-d3f2-4ccf-87b5-c610cc455a37"
+      },
+      {
+        "slug": "lasse-gunther-2026-common-e92a0650-af2b-4263-b7b1-7c430fabf04a",
+        "name": "lasse-gunther-2026-common-e92a0650-af2b-4263-b7b1-7c430fabf04a"
+      },
+      {
+        "slug": "paul-love-arrhov-2026-common-ff8e81e4-f7f8-4352-9804-6096190a5d5c",
+        "name": "paul-love-arrhov-2026-common-ff8e81e4-f7f8-4352-9804-6096190a5d5c"
+      },
+      {
+        "slug": "elias-etringer-2026-common-8e314e30-c2b3-4014-91bc-ba419bc6e823",
+        "name": "elias-etringer-2026-common-8e314e30-c2b3-4014-91bc-ba419bc6e823"
+      },
+      {
+        "slug": "alexis-claude-maurice-2026-common-37ed95ca-d04e-4c68-ac4c-b10fba0c2232",
+        "name": "alexis-claude-maurice-2026-common-37ed95ca-d04e-4c68-ac4c-b10fba0c2232"
+      },
+      {
+        "slug": "niclas-fullkrug-2026-common-c4ce5360-069f-45c0-bcba-2aada1ff4c40",
+        "name": "niclas-fullkrug-2026-common-c4ce5360-069f-45c0-bcba-2aada1ff4c40"
+      },
+      {
+        "slug": "marco-friedl-2026-common-1e85f76d-7fcd-4abe-8f42-4365cf316fbb",
+        "name": "marco-friedl-2026-common-1e85f76d-7fcd-4abe-8f42-4365cf316fbb"
+      },
+      {
+        "slug": "young-woo-seol-2026-common-56840003-234c-4558-bd85-570fb77eddaa",
+        "name": "young-woo-seol-2026-common-56840003-234c-4558-bd85-570fb77eddaa"
+      },
+      {
+        "slug": "joel-agyekum-2026-common-fbdc3619-7bcb-4a62-be8d-351f16def866",
+        "name": "joel-agyekum-2026-common-fbdc3619-7bcb-4a62-be8d-351f16def866"
+      },
+      {
+        "slug": "sven-michel-2026-common-bbf4e777-ef52-4b67-9e6d-42500f7306f4",
+        "name": "sven-michel-2026-common-bbf4e777-ef52-4b67-9e6d-42500f7306f4"
+      },
+      {
+        "slug": "bambase-conte-2026-common-c9c0e411-5b21-46f6-8146-32ecf4e6790d",
+        "name": "bambase-conte-2026-common-c9c0e411-5b21-46f6-8146-32ecf4e6790d"
+      },
+      {
+        "slug": "philipp-mwene-2026-common-f6e62736-9714-432e-91bb-a44905ed49d0",
+        "name": "philipp-mwene-2026-common-f6e62736-9714-432e-91bb-a44905ed49d0"
+      },
+      {
+        "slug": "silla-wamangituka-2026-common-8a88a44c-8f95-46a2-8f36-deb9bad70ee1",
+        "name": "silla-wamangituka-2026-common-8a88a44c-8f95-46a2-8f36-deb9bad70ee1"
+      },
+      {
+        "slug": "filippo-calixte-mane-2026-common-0ca6d64d-bf38-4612-9613-c9be7e7feefa",
+        "name": "filippo-calixte-mane-2026-common-0ca6d64d-bf38-4612-9613-c9be7e7feefa"
+      },
+      {
+        "slug": "ezechiel-banzuzi-2026-common-b337d256-5123-471a-9bd9-8d387bb92ffd",
+        "name": "ezechiel-banzuzi-2026-common-b337d256-5123-471a-9bd9-8d387bb92ffd"
+      },
+      {
+        "slug": "min-jae-kim-2026-common-5bf7b954-4989-4a73-812e-e64392b861a1",
+        "name": "min-jae-kim-2026-common-5bf7b954-4989-4a73-812e-e64392b861a1"
+      },
+      {
+        "slug": "stefan-drljaca-2026-common-c6df8b3a-018c-4dcb-b842-e4b6f09c3b00",
+        "name": "stefan-drljaca-2026-common-c6df8b3a-018c-4dcb-b842-e4b6f09c3b00"
+      },
+      {
+        "slug": "derrick-kohn-2026-common-d519e598-020d-40e1-91be-de1f44d66026",
+        "name": "derrick-kohn-2026-common-d519e598-020d-40e1-91be-de1f44d66026"
+      },
+      {
+        "slug": "bruno-ifechukwu-ogbus-2026-common-a1082582-567d-4f37-a1da-304d4030211e",
+        "name": "bruno-ifechukwu-ogbus-2026-common-a1082582-567d-4f37-a1da-304d4030211e"
+      },
+      {
+        "slug": "dejan-ljubicic-2026-common-d8080bb0-711a-4c9e-bb1b-45aef85a8e88",
+        "name": "dejan-ljubicic-2026-common-d8080bb0-711a-4c9e-bb1b-45aef85a8e88"
+      },
+      {
+        "slug": "adam-hlozek-2026-common-1d5bf23e-f75a-40e3-80ea-5b15c820ebf0",
+        "name": "adam-hlozek-2026-common-1d5bf23e-f75a-40e3-80ea-5b15c820ebf0"
+      },
+      {
+        "slug": "yussuf-yurary-poulsen-2026-common-1560475c-d003-46d0-99a0-76d698a942a6",
+        "name": "yussuf-yurary-poulsen-2026-common-1560475c-d003-46d0-99a0-76d698a942a6"
+      },
+      {
+        "slug": "orjan-haskjold-nyland-2026-common-61571b01-5f78-4359-9ee1-9a1000a9ab66",
+        "name": "orjan-haskjold-nyland-2026-common-61571b01-5f78-4359-9ee1-9a1000a9ab66"
+      },
+      {
+        "slug": "elias-etringer-2026-common-1381d1ed-f4bb-482e-b116-892475c8beeb",
+        "name": "elias-etringer-2026-common-1381d1ed-f4bb-482e-b116-892475c8beeb"
+      },
+      {
+        "slug": "hee-chan-hwang-2026-common-6afaa92a-2459-4e1f-a60c-35f48525d52a",
+        "name": "hee-chan-hwang-2026-common-6afaa92a-2459-4e1f-a60c-35f48525d52a"
+      },
+      {
+        "slug": "marcus-schubert-2026-common-e3a6e244-c39c-4691-9de0-ce0d8749a704",
+        "name": "marcus-schubert-2026-common-e3a6e244-c39c-4691-9de0-ce0d8749a704"
+      },
+      {
+        "slug": "robin-fellhauer-2026-common-ad064936-78bd-4750-93c2-7ba47dcd3894",
+        "name": "robin-fellhauer-2026-common-ad064936-78bd-4750-93c2-7ba47dcd3894"
+      },
+      {
+        "slug": "sacha-boey-2026-common-73f3861b-918c-4cb8-9d58-11b9f0ed51f7",
+        "name": "sacha-boey-2026-common-73f3861b-918c-4cb8-9d58-11b9f0ed51f7"
+      },
+      {
+        "slug": "lukas-ullrich-2026-common-46892dbb-45b4-4ae4-8682-577430fb40f0",
+        "name": "lukas-ullrich-2026-common-46892dbb-45b4-4ae4-8682-577430fb40f0"
+      },
+      {
+        "slug": "timo-hubers-2026-common-6f3b7dcc-4536-45c1-ab86-b5b36083c696",
+        "name": "timo-hubers-2026-common-6f3b7dcc-4536-45c1-ab86-b5b36083c696"
+      },
+      {
+        "slug": "alexander-rossing-lelesiit-2026-common-f899423e-ce70-4977-912b-e54ef50a58de",
+        "name": "alexander-rossing-lelesiit-2026-common-f899423e-ce70-4977-912b-e54ef50a58de"
+      },
+      {
+        "slug": "shafiq-bello-nandja-2026-common-5f0be700-f4fb-49fe-9012-d90f7eb11686",
+        "name": "shafiq-bello-nandja-2026-common-5f0be700-f4fb-49fe-9012-d90f7eb11686"
+      },
+      {
+        "slug": "eric-junior-dina-ebimbe-2026-common-baf41523-25ac-43e3-901d-a4e42ff4236c",
+        "name": "eric-junior-dina-ebimbe-2026-common-baf41523-25ac-43e3-901d-a4e42ff4236c"
+      },
+      {
+        "slug": "mats-ole-heitmann-2026-common-11e6e692-abb9-412d-a9a4-cddb8ab3ea9b",
+        "name": "mats-ole-heitmann-2026-common-11e6e692-abb9-412d-a9a4-cddb8ab3ea9b"
+      },
+      {
+        "slug": "marcel-sabitzer-2026-common-6b9414d2-abb0-4fdf-b30e-8a2877de724b",
+        "name": "marcel-sabitzer-2026-common-6b9414d2-abb0-4fdf-b30e-8a2877de724b"
+      },
+      {
+        "slug": "kaua-morais-vieira-dos-santos-2026-common-825e0e0f-a835-4a9f-be4a-1c29c8275625",
+        "name": "kaua-morais-vieira-dos-santos-2026-common-825e0e0f-a835-4a9f-be4a-1c29c8275625"
+      },
+      {
+        "slug": "castello-lukeba-2026-common-5bb97baa-8b96-4251-9a8d-8484247b695b",
+        "name": "castello-lukeba-2026-common-5bb97baa-8b96-4251-9a8d-8484247b695b"
+      },
+      {
+        "slug": "tristan-zobel-2026-common-944d3003-ff51-4b09-bcf3-0a0325520099",
+        "name": "tristan-zobel-2026-common-944d3003-ff51-4b09-bcf3-0a0325520099"
+      },
+      {
+        "slug": "timo-gayret-2026-common-e66a5f03-34a4-4e53-a42b-ae3cebd63775",
+        "name": "timo-gayret-2026-common-e66a5f03-34a4-4e53-a42b-ae3cebd63775"
+      },
+      {
+        "slug": "ramy-bensebaini-2026-common-0cc21a00-6483-4b3b-ab7e-1f10180cc4eb",
+        "name": "ramy-bensebaini-2026-common-0cc21a00-6483-4b3b-ab7e-1f10180cc4eb"
+      },
+      {
+        "slug": "nicolas-capaldo-2026-common-77d6097b-2500-402a-90d6-c0d55f97d805",
+        "name": "nicolas-capaldo-2026-common-77d6097b-2500-402a-90d6-c0d55f97d805"
+      },
+      {
+        "slug": "imad-rondic-2026-common-e53e4696-1806-49d0-8e71-7c37ae4495f8",
+        "name": "imad-rondic-2026-common-e53e4696-1806-49d0-8e71-7c37ae4495f8"
+      },
+      {
+        "slug": "kevin-diks-2026-common-0d8acb65-7b0a-47d9-b991-eb8ddd399bfe",
+        "name": "kevin-diks-2026-common-0d8acb65-7b0a-47d9-b991-eb8ddd399bfe"
+      },
+      {
+        "slug": "albian-hajdari-2026-common-2a7afea0-42db-4f12-8a1a-c8e1aecb7a4e",
+        "name": "albian-hajdari-2026-common-2a7afea0-42db-4f12-8a1a-c8e1aecb7a4e"
+      },
+      {
+        "slug": "wael-mohya-2026-common-85419ff3-f788-4f76-b731-4b9800fb7699",
+        "name": "wael-mohya-2026-common-85419ff3-f788-4f76-b731-4b9800fb7699"
+      },
+      {
+        "slug": "jahmai-simpson-pusey-2026-common-6b93143f-3ed8-440b-9bb9-0c78d59cc5c3",
+        "name": "jahmai-simpson-pusey-2026-common-6b93143f-3ed8-440b-9bb9-0c78d59cc5c3"
+      },
+      {
+        "slug": "bernardo-fernandes-da-silva-junior-2026-common-e005a648-69d3-4a2f-808d-9f1ba25b3593",
+        "name": "bernardo-fernandes-da-silva-junior-2026-common-e005a648-69d3-4a2f-808d-9f1ba25b3593"
+      },
+      {
+        "slug": "carl-klaus-2026-common-3239a43f-7aac-4db0-ad3e-489296d6db19",
+        "name": "carl-klaus-2026-common-3239a43f-7aac-4db0-ad3e-489296d6db19"
+      },
+      {
+        "slug": "oskar-wojcik-2026-common-4f09990f-45a9-4b28-81e0-6a64d5c80d2a",
+        "name": "oskar-wojcik-2026-common-4f09990f-45a9-4b28-81e0-6a64d5c80d2a"
+      },
+      {
+        "slug": "florian-muller-2026-common-592a8a2b-8892-4854-a6f9-bd6654c7cf5b",
+        "name": "florian-muller-2026-common-592a8a2b-8892-4854-a6f9-bd6654c7cf5b"
+      },
+      {
+        "slug": "rouven-vuk-tarnutzer-2026-common-8860e715-6ec6-4490-a921-3452cffb69f2",
+        "name": "rouven-vuk-tarnutzer-2026-common-8860e715-6ec6-4490-a921-3452cffb69f2"
+      },
+      {
+        "slug": "jobe-bellingham-2026-common-c4b54b5e-4b79-44c3-a56d-7004fda7ed3a",
+        "name": "jobe-bellingham-2026-common-c4b54b5e-4b79-44c3-a56d-7004fda7ed3a"
+      },
+      {
+        "slug": "josip-juranovic-2026-common-d5e2f812-7b52-4732-922a-979e41b838e1",
+        "name": "josip-juranovic-2026-common-d5e2f812-7b52-4732-922a-979e41b838e1"
+      },
+      {
+        "slug": "carlos-francisco-puga-medina-2026-common-0c8883df-cbcd-4533-82d8-50aa9306e525",
+        "name": "carlos-francisco-puga-medina-2026-common-0c8883df-cbcd-4533-82d8-50aa9306e525"
+      },
+      {
+        "slug": "abner-vinicius-da-silva-santos-2026-common-43c70ed8-06e6-416b-a1fa-8b3e97962a5d",
+        "name": "abner-vinicius-da-silva-santos-2026-common-43c70ed8-06e6-416b-a1fa-8b3e97962a5d"
+      },
+      {
+        "slug": "joseph-kalulu-kyatengwa-2026-common-440209ce-be68-416b-9ea7-5465cd74a6a8",
+        "name": "joseph-kalulu-kyatengwa-2026-common-440209ce-be68-416b-9ea7-5465cd74a6a8"
+      },
+      {
+        "slug": "ryan-rodin-2026-common-6d851bee-a5b2-4b24-89d5-16993052bbe3",
+        "name": "ryan-rodin-2026-common-6d851bee-a5b2-4b24-89d5-16993052bbe3"
+      },
+      {
+        "slug": "christ-brunel-neyjunior-batola-2026-common-0cf3f6bf-80bd-4f25-b264-71b38e325977",
+        "name": "christ-brunel-neyjunior-batola-2026-common-0cf3f6bf-80bd-4f25-b264-71b38e325977"
+      },
+      {
+        "slug": "skelly-alvero-2026-common-97379354-72fc-4402-a846-030b0cbef0b4",
+        "name": "skelly-alvero-2026-common-97379354-72fc-4402-a846-030b0cbef0b4"
+      },
+      {
+        "slug": "serge-gnabry-2026-common-f51f2f47-2e45-47d0-83ab-b54b704d8cd2",
+        "name": "serge-gnabry-2026-common-f51f2f47-2e45-47d0-83ab-b54b704d8cd2"
+      },
+      {
+        "slug": "leopold-querfeld-2026-common-91c58244-726c-485a-85f5-cf74cb8f3db9",
+        "name": "leopold-querfeld-2026-common-91c58244-726c-485a-85f5-cf74cb8f3db9"
+      },
+      {
+        "slug": "janik-bachmann-2026-common-0f330363-9c71-4b3d-8ef5-10dabf5a94e7",
+        "name": "janik-bachmann-2026-common-0f330363-9c71-4b3d-8ef5-10dabf5a94e7"
+      },
+      {
+        "slug": "hiroki-ito-2026-common-5074ea30-3e36-41cd-9d84-487e423d477e",
+        "name": "hiroki-ito-2026-common-5074ea30-3e36-41cd-9d84-487e423d477e"
+      },
+      {
+        "slug": "zakaria-el-ouahdi-2026-common-7f042fcb-57c2-4519-927f-5ac84fdd6e6e",
+        "name": "zakaria-el-ouahdi-2026-common-7f042fcb-57c2-4519-927f-5ac84fdd6e6e"
+      },
+      {
+        "slug": "david-herold-2026-common-8f31c616-3aa8-4a2d-8714-54945254856d",
+        "name": "david-herold-2026-common-8f31c616-3aa8-4a2d-8714-54945254856d"
+      },
+      {
+        "slug": "mario-gotze-2026-common-ba12f567-37cd-46e2-971d-b1364bb7aaaa",
+        "name": "mario-gotze-2026-common-ba12f567-37cd-46e2-971d-b1364bb7aaaa"
+      },
+      {
+        "slug": "marius-funk-2026-common-5c56e7be-40f2-49f4-8922-98f5295ccca3",
+        "name": "marius-funk-2026-common-5c56e7be-40f2-49f4-8922-98f5295ccca3"
+      },
+      {
+        "slug": "anthony-jung-2026-common-63a6dc24-1ac9-4211-95e8-a6781f165fe7",
+        "name": "anthony-jung-2026-common-63a6dc24-1ac9-4211-95e8-a6781f165fe7"
+      },
+      {
+        "slug": "philipp-sander-2026-common-8e67045d-6003-47e3-b61c-916f45d86776",
+        "name": "philipp-sander-2026-common-8e67045d-6003-47e3-b61c-916f45d86776"
+      },
+      {
+        "slug": "mert-komur-2026-common-6cb67b18-f12b-4a73-baaf-99b08f5fa182",
+        "name": "mert-komur-2026-common-6cb67b18-f12b-4a73-baaf-99b08f5fa182"
+      },
+      {
+        "slug": "jonah-benedict-sticker-2026-common-2c6f93b0-e3f2-4e4f-989e-e5b07215c1d1",
+        "name": "jonah-benedict-sticker-2026-common-2c6f93b0-e3f2-4e4f-989e-e5b07215c1d1"
+      },
+      {
+        "slug": "benno-valentin-kilan-kaltefleiter-2026-common-814379fc-fe6b-4e8c-a1c3-95e3f9972572",
+        "name": "benno-valentin-kilan-kaltefleiter-2026-common-814379fc-fe6b-4e8c-a1c3-95e3f9972572"
+      },
+      {
+        "slug": "nyamekye-awortwie-grant-2026-common-9af8fca8-4ffa-41d0-bf76-9d0d78e22922",
+        "name": "nyamekye-awortwie-grant-2026-common-9af8fca8-4ffa-41d0-bf76-9d0d78e22922"
+      },
+      {
+        "slug": "reigan-heskey-2026-common-1205c939-be25-44fc-82a7-e2ed38d89797",
+        "name": "reigan-heskey-2026-common-1205c939-be25-44fc-82a7-e2ed38d89797"
+      },
+      {
+        "slug": "leon-avdullahu-2026-common-aa30e577-c74b-4269-b45f-82d843548f6c",
+        "name": "leon-avdullahu-2026-common-aa30e577-c74b-4269-b45f-82d843548f6c"
+      },
+      {
+        "slug": "felix-keidel-2026-common-acf6bbd3-422f-4b28-8431-5792e7b68b70",
+        "name": "felix-keidel-2026-common-acf6bbd3-422f-4b28-8431-5792e7b68b70"
+      },
+      {
+        "slug": "yannik-keitel-2026-common-5b494f6a-6b99-4336-9bce-81872780f488",
+        "name": "yannik-keitel-2026-common-5b494f6a-6b99-4336-9bce-81872780f488"
+      },
+      {
+        "slug": "marvin-friedrich-2026-common-77679c9d-8387-46d8-9f91-b35905e1dbb7",
+        "name": "marvin-friedrich-2026-common-77679c9d-8387-46d8-9f91-b35905e1dbb7"
+      },
+      {
+        "slug": "ransford-konigsdorffer-2026-common-b86f7877-bded-421f-be23-611b1395ab3f",
+        "name": "ransford-konigsdorffer-2026-common-b86f7877-bded-421f-be23-611b1395ab3f"
+      },
+      {
+        "slug": "gideon-mensah-2026-common-cfed6db9-b6fd-4f38-aeb5-d5630b50dc59",
+        "name": "gideon-mensah-2026-common-cfed6db9-b6fd-4f38-aeb5-d5630b50dc59"
+      },
+      {
+        "slug": "albert-gronbaek-erlykke-2026-common-fa4fea4a-6666-4716-953e-6c6e23558f96",
+        "name": "albert-gronbaek-erlykke-2026-common-fa4fea4a-6666-4716-953e-6c6e23558f96"
+      },
+      {
+        "slug": "mats-rots-2026-common-0a3b97dd-e026-4fca-a673-99898820a7d5",
+        "name": "mats-rots-2026-common-0a3b97dd-e026-4fca-a673-99898820a7d5"
+      },
+      {
+        "slug": "jan-gyamerah-2026-common-3d17802c-da06-4873-9c68-d8d19b3636d1",
+        "name": "jan-gyamerah-2026-common-3d17802c-da06-4873-9c68-d8d19b3636d1"
+      },
+      {
+        "slug": "linus-guther-2026-common-ec315b6a-355a-400d-a376-ccdc2d5e906f",
+        "name": "linus-guther-2026-common-ec315b6a-355a-400d-a376-ccdc2d5e906f"
+      },
+      {
+        "slug": "joel-schmied-2026-common-012e2075-e2be-4b8a-96a0-d09b569ffa69",
+        "name": "joel-schmied-2026-common-012e2075-e2be-4b8a-96a0-d09b569ffa69"
+      },
+      {
+        "slug": "satoshi-tanaka-2026-common-1424bacf-d947-467e-8e08-7d6a6bff32ae",
+        "name": "satoshi-tanaka-2026-common-1424bacf-d947-467e-8e08-7d6a6bff32ae"
+      },
+      {
+        "slug": "bakery-jatta-2026-common-d9a4afcf-ca03-40ec-982b-0ae653ab94df",
+        "name": "bakery-jatta-2026-common-d9a4afcf-ca03-40ec-982b-0ae653ab94df"
+      },
+      {
+        "slug": "skelly-alvero-2026-common-f5244ce0-308f-4f84-a05a-307b58a794f0",
+        "name": "skelly-alvero-2026-common-f5244ce0-308f-4f84-a05a-307b58a794f0"
+      },
+      {
+        "slug": "sebastiaan-bornauw-2026-common-afab1cab-75af-477c-bb42-e9bc0cc85936",
+        "name": "sebastiaan-bornauw-2026-common-afab1cab-75af-477c-bb42-e9bc0cc85936"
+      },
+      {
+        "slug": "felix-gotze-2026-common-daa0c954-9ed7-47fc-b181-efa1f883ddf4",
+        "name": "felix-gotze-2026-common-daa0c954-9ed7-47fc-b181-efa1f883ddf4"
+      },
+      {
+        "slug": "keke-maximilian-topp-2026-common-109e82d3-7bd2-42d0-a412-816744603f96",
+        "name": "keke-maximilian-topp-2026-common-109e82d3-7bd2-42d0-a412-816744603f96"
+      },
+      {
+        "slug": "steve-mounie-2026-common-e11ea66b-fa1b-45a5-9c33-f76bc6aae113",
+        "name": "steve-mounie-2026-common-e11ea66b-fa1b-45a5-9c33-f76bc6aae113"
+      },
+      {
+        "slug": "luca-pascal-schnellbacher-2026-common-88328398-83f6-4620-9ce2-7a789a53d623",
+        "name": "luca-pascal-schnellbacher-2026-common-88328398-83f6-4620-9ce2-7a789a53d623"
+      },
+      {
+        "slug": "faik-sakar-2026-common-ea381bfd-9028-4319-952b-a0bf54257ab2",
+        "name": "faik-sakar-2026-common-ea381bfd-9028-4319-952b-a0bf54257ab2"
+      },
+      {
+        "slug": "vitalie-becker-2026-common-418299d5-879b-4e56-a683-e0622c4a5245",
+        "name": "vitalie-becker-2026-common-418299d5-879b-4e56-a683-e0622c4a5245"
+      },
+      {
+        "slug": "bilal-el-khannous-2026-common-4db919d9-9e3a-453b-93c5-c72df9600d70",
+        "name": "bilal-el-khannous-2026-common-4db919d9-9e3a-453b-93c5-c72df9600d70"
+      },
+      {
+        "slug": "ismael-saibari-ben-el-basra-2026-common-7cdb7399-4e88-4713-9dcf-db066025d53e",
+        "name": "ismael-saibari-ben-el-basra-2026-common-7cdb7399-4e88-4713-9dcf-db066025d53e"
+      },
+      {
+        "slug": "faik-sakar-2026-common-c25c7bb4-cbd2-46f3-aaae-4ca566e91df5",
+        "name": "faik-sakar-2026-common-c25c7bb4-cbd2-46f3-aaae-4ca566e91df5"
+      },
+      {
+        "slug": "eric-junior-dina-ebimbe-2026-common-e5dafa4e-6280-4928-b9bf-7157e85ab1a4",
+        "name": "eric-junior-dina-ebimbe-2026-common-e5dafa4e-6280-4928-b9bf-7157e85ab1a4"
+      },
+      {
+        "slug": "mert-ayhan-2026-common-e7a40466-1cb5-461f-87db-30c61e0a55a5",
+        "name": "mert-ayhan-2026-common-e7a40466-1cb5-461f-87db-30c61e0a55a5"
+      },
+      {
+        "slug": "max-finkgrafe-2026-common-ba45fcf5-7f77-47d0-ba34-86a657b6e2b7",
+        "name": "max-finkgrafe-2026-common-ba45fcf5-7f77-47d0-ba34-86a657b6e2b7"
+      },
+      {
+        "slug": "calvin-marc-brackelmann-2026-common-d3868fd9-1dbe-4cad-9491-482ca4b41154",
+        "name": "calvin-marc-brackelmann-2026-common-d3868fd9-1dbe-4cad-9491-482ca4b41154"
+      },
+      {
+        "slug": "lukas-johannes-blondal-petersson-2026-common-dd7d6f3a-ccdb-490d-a11b-0a3ed6a3ed44",
+        "name": "lukas-johannes-blondal-petersson-2026-common-dd7d6f3a-ccdb-490d-a11b-0a3ed6a3ed44"
+      },
+      {
+        "slug": "robert-andrich-2026-common-346b37f2-56bf-48b8-ab9f-16b996ec3d88",
+        "name": "robert-andrich-2026-common-346b37f2-56bf-48b8-ab9f-16b996ec3d88"
+      },
+      {
+        "slug": "linton-maina-2026-common-fb868f88-30b4-422a-a238-16fa3798f48e",
+        "name": "linton-maina-2026-common-fb868f88-30b4-422a-a238-16fa3798f48e"
+      },
+      {
+        "slug": "alexander-rossing-lelesiit-2026-common-2c039248-4ad5-4320-a247-ec414edf3c42",
+        "name": "alexander-rossing-lelesiit-2026-common-2c039248-4ad5-4320-a247-ec414edf3c42"
+      },
+      {
+        "slug": "look-saa-nicholas-k-mickelson-2026-common-52b4420a-7de5-40f5-8b96-e8fce05a3d2d",
+        "name": "look-saa-nicholas-k-mickelson-2026-common-52b4420a-7de5-40f5-8b96-e8fce05a3d2d"
+      },
+      {
+        "slug": "derrick-kohn-2026-common-9fb30807-4451-4e32-898a-1d8ece9af855",
+        "name": "derrick-kohn-2026-common-9fb30807-4451-4e32-898a-1d8ece9af855"
+      },
+      {
+        "slug": "natnael-abraha-2026-common-bb3131ff-b520-4c3c-a4c0-da48850a5c52",
+        "name": "natnael-abraha-2026-common-bb3131ff-b520-4c3c-a4c0-da48850a5c52"
+      },
+      {
+        "slug": "sebastian-reinhard-klaas-2026-common-6b541bec-3efb-44a9-96b1-a57e3b1b56b4",
+        "name": "sebastian-reinhard-klaas-2026-common-6b541bec-3efb-44a9-96b1-a57e3b1b56b4"
+      },
+      {
+        "slug": "keita-kosugi-2026-common-997e6da6-b469-4ca5-953b-96dbb5d26ed3",
+        "name": "keita-kosugi-2026-common-997e6da6-b469-4ca5-953b-96dbb5d26ed3"
+      },
+      {
+        "slug": "ritsu-doan-2026-common-92d976f1-8179-468e-9acb-e26352a78452",
+        "name": "ritsu-doan-2026-common-92d976f1-8179-468e-9acb-e26352a78452"
+      },
+      {
+        "slug": "finn-jeltsch-2026-common-a8a0b9b8-a644-45e1-aa32-c33103e80d3a",
+        "name": "finn-jeltsch-2026-common-a8a0b9b8-a644-45e1-aa32-c33103e80d3a"
+      },
+      {
+        "slug": "janis-blaswich-2026-common-da66d089-4eca-4491-ae32-35a6d7cbce8e",
+        "name": "janis-blaswich-2026-common-da66d089-4eca-4491-ae32-35a6d7cbce8e"
+      },
+      {
+        "slug": "noel-aseko-nkili-2026-common-74ebc8ec-344c-4b46-a3c4-1bddaf4f9c3f",
+        "name": "noel-aseko-nkili-2026-common-74ebc8ec-344c-4b46-a3c4-1bddaf4f9c3f"
+      },
+      {
+        "slug": "edin-dzeko-2026-common-755e1071-4328-4b2a-92b3-98edbb88c60b",
+        "name": "edin-dzeko-2026-common-755e1071-4328-4b2a-92b3-98edbb88c60b"
+      },
+      {
+        "slug": "yukhym-konoplia-2026-common-fd8ec1e7-f34a-4384-b07c-fe849fbdc137",
+        "name": "yukhym-konoplia-2026-common-fd8ec1e7-f34a-4384-b07c-fe849fbdc137"
+      },
+      {
+        "slug": "chrislain-matsima-2026-common-12e0d3c6-f6aa-458c-8f07-7114265b82fc",
+        "name": "chrislain-matsima-2026-common-12e0d3c6-f6aa-458c-8f07-7114265b82fc"
+      },
+      {
+        "slug": "darwin-kaan-soylu-2026-common-72daf3cc-90a1-4d89-955f-55a850f2214a",
+        "name": "darwin-kaan-soylu-2026-common-72daf3cc-90a1-4d89-955f-55a850f2214a"
+      },
+      {
+        "slug": "jelle-van-neck-2026-common-90b4c732-ae78-4252-b039-c27f9e939c7e",
+        "name": "jelle-van-neck-2026-common-90b4c732-ae78-4252-b039-c27f9e939c7e"
+      },
+      {
+        "slug": "pavel-sulc-2026-common-81ca8080-29db-48e1-98ee-bc9f0a9a1551",
+        "name": "pavel-sulc-2026-common-81ca8080-29db-48e1-98ee-bc9f0a9a1551"
+      },
+      {
+        "slug": "rayan-fofana-2026-common-c0c58e7e-ff48-4789-a4e1-e9ebddafb275",
+        "name": "rayan-fofana-2026-common-c0c58e7e-ff48-4789-a4e1-e9ebddafb275"
+      },
+      {
+        "slug": "jean-victor-makengo-2026-common-f375b41b-0c95-4e47-acee-c78f316cda50",
+        "name": "jean-victor-makengo-2026-common-f375b41b-0c95-4e47-acee-c78f316cda50"
+      },
+      {
+        "slug": "jeffrey-de-lange-2026-common-07bb43b7-8577-4b0f-8c0d-307d4d067764",
+        "name": "jeffrey-de-lange-2026-common-07bb43b7-8577-4b0f-8c0d-307d4d067764"
+      },
+      {
+        "slug": "joaquin-panichelli-2026-common-1356f66a-6be6-40ab-9698-3882d23c0b97",
+        "name": "joaquin-panichelli-2026-common-1356f66a-6be6-40ab-9698-3882d23c0b97"
+      },
+      {
+        "slug": "salis-abdul-samed-2026-common-a08f3056-7de5-42bc-b1ee-616aa9fcef87",
+        "name": "salis-abdul-samed-2026-common-a08f3056-7de5-42bc-b1ee-616aa9fcef87"
+      },
+      {
+        "slug": "lucas-maronnier-2026-common-9a4af691-9eb3-4d59-ad9c-fbf12ec1acd4",
+        "name": "lucas-maronnier-2026-common-9a4af691-9eb3-4d59-ad9c-fbf12ec1acd4"
+      },
+      {
+        "slug": "lucas-bretelle-2026-common-5855ac82-0e54-4e9b-a318-345ce2194ff1",
+        "name": "lucas-bretelle-2026-common-5855ac82-0e54-4e9b-a318-345ce2194ff1"
+      },
+      {
+        "slug": "ahmed-touba-2026-common-620c042e-f3a7-4e32-84f0-fc2cd9698574",
+        "name": "ahmed-touba-2026-common-620c042e-f3a7-4e32-84f0-fc2cd9698574"
+      },
+      {
+        "slug": "hamari-traore-2026-common-23bd8fd2-447d-479d-914a-4331f684e951",
+        "name": "hamari-traore-2026-common-23bd8fd2-447d-479d-914a-4331f684e951"
+      },
+      {
+        "slug": "kan-guy-arsene-kouassi-2026-common-ce798943-1be0-48a2-8c8b-bda2d838ed17",
+        "name": "kan-guy-arsene-kouassi-2026-common-ce798943-1be0-48a2-8c8b-bda2d838ed17"
+      },
+      {
+        "slug": "adrien-monfray-2026-common-e3db1fa6-3263-47de-aee8-b94c4ae6e354",
+        "name": "adrien-monfray-2026-common-e3db1fa6-3263-47de-aee8-b94c4ae6e354"
+      },
+      {
+        "slug": "xiangxin-wei-2026-common-961cb3db-bc43-4150-b1d5-660a6acb3d52",
+        "name": "xiangxin-wei-2026-common-961cb3db-bc43-4150-b1d5-660a6acb3d52"
+      },
+      {
+        "slug": "lucas-calodat-2026-common-9fc71989-2400-44cc-8917-fe90953d563b",
+        "name": "lucas-calodat-2026-common-9fc71989-2400-44cc-8917-fe90953d563b"
+      },
+      {
+        "slug": "merwan-ifnaoui-2026-common-a922c072-f224-4a7a-82a5-a3a979b555be",
+        "name": "merwan-ifnaoui-2026-common-a922c072-f224-4a7a-82a5-a3a979b555be"
+      },
+      {
+        "slug": "gautier-lloris-2026-common-a4ba476c-e77b-46bd-bbf0-705ac11e81d2",
+        "name": "gautier-lloris-2026-common-a4ba476c-e77b-46bd-bbf0-705ac11e81d2"
+      },
+      {
+        "slug": "vanderson-de-oliveira-campos-2026-common-26ca9261-f461-442d-afa4-fff3cbbb9358",
+        "name": "vanderson-de-oliveira-campos-2026-common-26ca9261-f461-442d-afa4-fff3cbbb9358"
+      },
+      {
+        "slug": "nosa-edward-obaretin-2026-common-dccb8528-790d-4848-912e-6725a4d8b06e",
+        "name": "nosa-edward-obaretin-2026-common-dccb8528-790d-4848-912e-6725a4d8b06e"
+      },
+      {
+        "slug": "moses-daddy-simon-2026-common-53de8627-bfc5-41a4-9e95-f23676f7fa4f",
+        "name": "moses-daddy-simon-2026-common-53de8627-bfc5-41a4-9e95-f23676f7fa4f"
+      },
+      {
+        "slug": "angel-gomes-2026-common-37494cca-475d-4c39-ae25-1d637d21ebb8",
+        "name": "angel-gomes-2026-common-37494cca-475d-4c39-ae25-1d637d21ebb8"
+      },
+      {
+        "slug": "ryan-rodin-2026-common-7e1ddd8a-893d-4eda-b61d-4a686d769638",
+        "name": "ryan-rodin-2026-common-7e1ddd8a-893d-4eda-b61d-4a686d769638"
+      },
+      {
+        "slug": "zachary-athekame-2026-common-d9ba4c88-3301-40ea-80f7-7b0fa23ab2ae",
+        "name": "zachary-athekame-2026-common-d9ba4c88-3301-40ea-80f7-7b0fa23ab2ae"
+      },
+      {
+        "slug": "axel-witsel-2026-common-0b1487d4-6ecc-4ad3-bada-b0cbd337f646",
+        "name": "axel-witsel-2026-common-0b1487d4-6ecc-4ad3-bada-b0cbd337f646"
+      },
+      {
+        "slug": "joan-lenny-yannis-tincres-2026-common-26e64db4-9ea8-4e3e-a7a4-8693902223e5",
+        "name": "joan-lenny-yannis-tincres-2026-common-26e64db4-9ea8-4e3e-a7a4-8693902223e5"
+      },
+      {
+        "slug": "justin-bengui-joao-2026-common-2957f807-53fc-499b-a9ca-613350ba3fd2",
+        "name": "justin-bengui-joao-2026-common-2957f807-53fc-499b-a9ca-613350ba3fd2"
+      },
+      {
+        "slug": "nidal-celik-2026-common-08c0c224-e215-4b13-8fa7-b1bc47e9788a",
+        "name": "nidal-celik-2026-common-08c0c224-e215-4b13-8fa7-b1bc47e9788a"
+      },
+      {
+        "slug": "samir-el-mourabet-2026-common-1da148aa-afa4-4fb7-8d60-3c851ff6f199",
+        "name": "samir-el-mourabet-2026-common-1da148aa-afa4-4fb7-8d60-3c851ff6f199"
+      },
+      {
+        "slug": "morgan-sanson-2026-common-63bcb7df-7759-4b6c-94fc-8a6260d4f2da",
+        "name": "morgan-sanson-2026-common-63bcb7df-7759-4b6c-94fc-8a6260d4f2da"
+      },
+      {
+        "slug": "tiago-santos-carvalho-2026-common-d85da5db-ef47-4b6e-ad8a-7b8ab1cd10c1",
+        "name": "tiago-santos-carvalho-2026-common-d85da5db-ef47-4b6e-ad8a-7b8ab1cd10c1"
+      },
+      {
+        "slug": "anssumane-fati-2026-common-1ad33ceb-216c-4aee-b29c-47ef408137a0",
+        "name": "anssumane-fati-2026-common-1ad33ceb-216c-4aee-b29c-47ef408137a0"
+      },
+      {
+        "slug": "tyler-morton-2026-common-f91b71fe-5838-456a-a6a1-d68d19e88daf",
+        "name": "tyler-morton-2026-common-f91b71fe-5838-456a-a6a1-d68d19e88daf"
+      },
+      {
+        "slug": "aristide-zossou-2026-common-67552571-ae74-4068-9a2a-a50c94db582f",
+        "name": "aristide-zossou-2026-common-67552571-ae74-4068-9a2a-a50c94db582f"
+      },
+      {
+        "slug": "nabil-bentaleb-2026-common-d07332f5-3bb9-485c-9954-1c00fd8788fc",
+        "name": "nabil-bentaleb-2026-common-d07332f5-3bb9-485c-9954-1c00fd8788fc"
+      },
+      {
+        "slug": "abdelhamid-ait-boudlal-2026-common-43861d44-ba8c-40cb-a1ce-9ed9b7564ede",
+        "name": "abdelhamid-ait-boudlal-2026-common-43861d44-ba8c-40cb-a1ce-9ed9b7564ede"
+      },
+      {
+        "slug": "mathys-sauveur-niflore-2026-common-bef94996-b203-4064-be39-177a87ba280a",
+        "name": "mathys-sauveur-niflore-2026-common-bef94996-b203-4064-be39-177a87ba280a"
+      },
+      {
+        "slug": "daren-nbenbege-mosengo-2026-common-af82b776-09e5-4446-b610-cffd3ff61e5e",
+        "name": "daren-nbenbege-mosengo-2026-common-af82b776-09e5-4446-b610-cffd3ff61e5e"
+      },
+      {
+        "slug": "mamadou-coulibaly-2004-04-21-2026-common-a1bac7fb-4557-4b31-b70a-e4d102558f35",
+        "name": "mamadou-coulibaly-2004-04-21-2026-common-a1bac7fb-4557-4b31-b70a-e4d102558f35"
+      },
+      {
+        "slug": "rayan-bamba-2026-common-12412f12-be16-42fd-b928-03b7ac56e4db",
+        "name": "rayan-bamba-2026-common-12412f12-be16-42fd-b928-03b7ac56e4db"
+      },
+      {
+        "slug": "ismael-boura-2026-common-a180b246-4c71-42f6-bf1e-430445c4caa9",
+        "name": "ismael-boura-2026-common-a180b246-4c71-42f6-bf1e-430445c4caa9"
+      },
+      {
+        "slug": "noah-cadiou-2026-common-a83ce877-ca4b-47a7-ae24-7cef6db1d78a",
+        "name": "noah-cadiou-2026-common-a83ce877-ca4b-47a7-ae24-7cef6db1d78a"
+      },
+      {
+        "slug": "alexis-vossah-2026-common-ce5b4e01-e76b-4572-9780-eac3625c01ad",
+        "name": "alexis-vossah-2026-common-ce5b4e01-e76b-4572-9780-eac3625c01ad"
+      },
+      {
+        "slug": "nicolas-alejandro-tagliafico-2026-common-7305c3af-75e8-4d44-a74f-76c5f90952fa",
+        "name": "nicolas-alejandro-tagliafico-2026-common-7305c3af-75e8-4d44-a74f-76c5f90952fa"
+      },
+      {
+        "slug": "jacobo-ortega-conde-2026-common-fba7e343-1148-4e52-98b3-2552600026f6",
+        "name": "jacobo-ortega-conde-2026-common-fba7e343-1148-4e52-98b3-2552600026f6"
+      },
+      {
+        "slug": "augustin-delbecque-2026-common-32722492-cf3b-4dc7-84c6-da4fc144d0ef",
+        "name": "augustin-delbecque-2026-common-32722492-cf3b-4dc7-84c6-da4fc144d0ef"
+      },
+      {
+        "slug": "mbwana-ally-samatta-2026-common-9beabeac-b3a7-4246-aee0-85383f48dfe6",
+        "name": "mbwana-ally-samatta-2026-common-9beabeac-b3a7-4246-aee0-85383f48dfe6"
+      },
+      {
+        "slug": "noah-edjouma-2026-common-d9a9cda7-e24e-48f9-954f-b95c0abc7e4b",
+        "name": "noah-edjouma-2026-common-d9a9cda7-e24e-48f9-954f-b95c0abc7e4b"
+      },
+      {
+        "slug": "djibirin-harouna-2026-common-49203d24-1b21-4f6d-9a65-7c11eb91e9a9",
+        "name": "djibirin-harouna-2026-common-49203d24-1b21-4f6d-9a65-7c11eb91e9a9"
+      },
+      {
+        "slug": "kandet-diawara-2026-common-e7b93a74-bc37-4570-8235-e6746241f22f",
+        "name": "kandet-diawara-2026-common-e7b93a74-bc37-4570-8235-e6746241f22f"
+      },
+      {
+        "slug": "brendan-chardonnet-2026-common-5ad30f98-40f7-4c7b-aa79-dbbb766bc4a2",
+        "name": "brendan-chardonnet-2026-common-5ad30f98-40f7-4c7b-aa79-dbbb766bc4a2"
+      },
+      {
+        "slug": "gaetan-perrin-2026-common-15e17a55-9578-4829-b9ad-588d68e7df16",
+        "name": "gaetan-perrin-2026-common-15e17a55-9578-4829-b9ad-588d68e7df16"
+      },
+      {
+        "slug": "joaquin-martinez-gauna-2026-common-adcd9963-5be5-4148-8cbe-bcd39188bfc4",
+        "name": "joaquin-martinez-gauna-2026-common-adcd9963-5be5-4148-8cbe-bcd39188bfc4"
+      },
+      {
+        "slug": "nathaniel-adjei-2026-common-49e1f862-6785-4502-978d-60ecb7bd1ae4",
+        "name": "nathaniel-adjei-2026-common-49e1f862-6785-4502-978d-60ecb7bd1ae4"
+      },
+      {
+        "slug": "milosz-piekutowski-2026-common-9c9b03d9-62f8-46b7-acc8-5cb8df7990a1",
+        "name": "milosz-piekutowski-2026-common-9c9b03d9-62f8-46b7-acc8-5cb8df7990a1"
+      },
+      {
+        "slug": "benjamin-leroy-2026-common-adf7b78e-f252-4895-8ae1-5f4b6fbdfb37",
+        "name": "benjamin-leroy-2026-common-adf7b78e-f252-4895-8ae1-5f4b6fbdfb37"
+      },
+      {
+        "slug": "bryan-reynolds-2026-common-9b0c7b71-7a68-48b9-82a4-66facb000d2d",
+        "name": "bryan-reynolds-2026-common-9b0c7b71-7a68-48b9-82a4-66facb000d2d"
+      },
+      {
+        "slug": "dilane-bakwa-2026-common-b31c7408-82d6-411d-a521-a59d58883367",
+        "name": "dilane-bakwa-2026-common-b31c7408-82d6-411d-a521-a59d58883367"
+      },
+      {
+        "slug": "maurits-kjaergaard-2026-common-fd837e20-7866-49ff-8955-f3aa52910df1",
+        "name": "maurits-kjaergaard-2026-common-fd837e20-7866-49ff-8955-f3aa52910df1"
+      },
+      {
+        "slug": "gauthier-hein-2026-common-859ebd01-2495-48c8-a37a-9cd0b50d9309",
+        "name": "gauthier-hein-2026-common-859ebd01-2495-48c8-a37a-9cd0b50d9309"
+      },
+      {
+        "slug": "alec-mathieu-georgen-2026-common-8d8cc298-7471-422c-b80a-732c08034bb0",
+        "name": "alec-mathieu-georgen-2026-common-8d8cc298-7471-422c-b80a-732c08034bb0"
+      },
+      {
+        "slug": "genesis-antwi-2026-common-a96d29f3-2016-4d1c-bbed-5d8ca864a170",
+        "name": "genesis-antwi-2026-common-a96d29f3-2016-4d1c-bbed-5d8ca864a170"
+      },
+      {
+        "slug": "derek-cornelius-2026-common-8cbc2494-9b17-49a4-b290-bfc8fb3f7912",
+        "name": "derek-cornelius-2026-common-8cbc2494-9b17-49a4-b290-bfc8fb3f7912"
+      },
+      {
+        "slug": "brandon-austin-2026-common-f720e337-9f53-422d-b71a-3d4274b5cee3",
+        "name": "brandon-austin-2026-common-f720e337-9f53-422d-b71a-3d4274b5cee3"
+      },
+      {
+        "slug": "pierre-emerick-aubameyang-2026-common-0cc16ce9-6f56-45a3-bdee-234d2adab06d",
+        "name": "pierre-emerick-aubameyang-2026-common-0cc16ce9-6f56-45a3-bdee-234d2adab06d"
+      },
+      {
+        "slug": "daniel-ballard-2026-common-89f23f6a-85a6-4a53-b55a-1a332b350b09",
+        "name": "daniel-ballard-2026-common-89f23f6a-85a6-4a53-b55a-1a332b350b09"
+      },
+      {
+        "slug": "christian-gunter-2026-common-e8529e35-a96d-4f60-92fa-10cf573e4a13",
+        "name": "christian-gunter-2026-common-e8529e35-a96d-4f60-92fa-10cf573e4a13"
+      },
+      {
+        "slug": "mark-travers-2026-common-abbc6893-fbda-4223-a8ac-066e1528d1ef",
+        "name": "mark-travers-2026-common-abbc6893-fbda-4223-a8ac-066e1528d1ef"
+      },
+      {
+        "slug": "kim-ji-soo-2026-common-ac80bf34-28ce-492f-b21f-8eab96f5de9a",
+        "name": "kim-ji-soo-2026-common-ac80bf34-28ce-492f-b21f-8eab96f5de9a"
+      },
+      {
+        "slug": "adam-wharton-2026-common-d4452af2-4196-4808-81c8-c950ef6e1688",
+        "name": "adam-wharton-2026-common-d4452af2-4196-4808-81c8-c950ef6e1688"
+      },
+      {
+        "slug": "pau-navarro-badenes-2026-common-a77d3e75-c2f9-4653-abff-c67e673f5f66",
+        "name": "pau-navarro-badenes-2026-common-a77d3e75-c2f9-4653-abff-c67e673f5f66"
+      },
+      {
+        "slug": "adama-traore-diarra-2026-common-5dfa6b21-cd3e-459e-a15d-934f185f4d0d",
+        "name": "adama-traore-diarra-2026-common-5dfa6b21-cd3e-459e-a15d-934f185f4d0d"
+      },
+      {
+        "slug": "viktor-gyokeres-2026-common-b2c648c8-3eec-4564-8854-62c73c07c36e",
+        "name": "viktor-gyokeres-2026-common-b2c648c8-3eec-4564-8854-62c73c07c36e"
+      },
+      {
+        "slug": "louis-mafouta-2026-common-ebed7d91-642d-4f87-a63a-0c282b2405a6",
+        "name": "louis-mafouta-2026-common-ebed7d91-642d-4f87-a63a-0c282b2405a6"
+      },
+      {
+        "slug": "jon-martin-vicente-2026-common-7f5a4c0a-1654-42ea-b0a1-03cada3cf0fc",
+        "name": "jon-martin-vicente-2026-common-7f5a4c0a-1654-42ea-b0a1-03cada3cf0fc"
+      },
+      {
+        "slug": "gnangoro-bouare-samake-2026-common-46c9e079-ca5c-400e-b5dc-417a27951069",
+        "name": "gnangoro-bouare-samake-2026-common-46c9e079-ca5c-400e-b5dc-417a27951069"
+      },
+      {
+        "slug": "unai-eguiluz-arroyo-2026-common-1016ca7f-8743-4326-b2e3-fb235f0a2da7",
+        "name": "unai-eguiluz-arroyo-2026-common-1016ca7f-8743-4326-b2e3-fb235f0a2da7"
+      },
+      {
+        "slug": "younes-ebnoutalib-2026-common-45805ccb-087c-489a-b6d8-372f94192a64",
+        "name": "younes-ebnoutalib-2026-common-45805ccb-087c-489a-b6d8-372f94192a64"
+      },
+      {
+        "slug": "felix-khonde-mambimbi-2026-common-45e62b3a-5cf1-45aa-a12f-647416ac2e0e",
+        "name": "felix-khonde-mambimbi-2026-common-45e62b3a-5cf1-45aa-a12f-647416ac2e0e"
+      },
+      {
+        "slug": "hugo-magnetti-2026-common-0f4e7c06-d8ae-4b4f-9b82-a1f671c32e5c",
+        "name": "hugo-magnetti-2026-common-0f4e7c06-d8ae-4b4f-9b82-a1f671c32e5c"
+      },
+      {
+        "slug": "oliver-mcburnie-2026-common-e200a91b-6883-4136-bf58-6413c72b90c0",
+        "name": "oliver-mcburnie-2026-common-e200a91b-6883-4136-bf58-6413c72b90c0"
+      },
+      {
+        "slug": "liam-delap-2026-common-f15434ab-3529-494f-b7e8-45c60b04c400",
+        "name": "liam-delap-2026-common-f15434ab-3529-494f-b7e8-45c60b04c400"
+      },
+      {
+        "slug": "angel-fortuno-vinas-2026-common-043dc959-b137-4177-a54f-9469786e08e6",
+        "name": "angel-fortuno-vinas-2026-common-043dc959-b137-4177-a54f-9469786e08e6"
+      },
+      {
+        "slug": "bright-ede-2026-common-2ec0e071-27e5-4f2c-bd8b-368fec730606",
+        "name": "bright-ede-2026-common-2ec0e071-27e5-4f2c-bd8b-368fec730606"
+      },
+      {
+        "slug": "altay-bayindir-2026-common-94b49c70-6b78-4857-886a-3e11ea15e123",
+        "name": "altay-bayindir-2026-common-94b49c70-6b78-4857-886a-3e11ea15e123"
+      },
+      {
+        "slug": "malek-el-mala-2026-common-5cbb0945-d83f-4463-a248-47782d8c18c9",
+        "name": "malek-el-mala-2026-common-5cbb0945-d83f-4463-a248-47782d8c18c9"
+      },
+      {
+        "slug": "hector-fort-garcia-2026-common-83699e6e-df70-467a-8ee6-77e3c5b7110b",
+        "name": "hector-fort-garcia-2026-common-83699e6e-df70-467a-8ee6-77e3c5b7110b"
+      },
+      {
+        "slug": "christ-brunel-neyjunior-batola-2026-common-b088720d-b8d5-4fc9-ba22-4a99f152ce7a",
+        "name": "christ-brunel-neyjunior-batola-2026-common-b088720d-b8d5-4fc9-ba22-4a99f152ce7a"
+      },
+      {
+        "slug": "phillip-tietz-2026-common-96116f68-5b9b-4b89-bb8e-67623fd2de7c",
+        "name": "phillip-tietz-2026-common-96116f68-5b9b-4b89-bb8e-67623fd2de7c"
+      },
+      {
+        "slug": "alejandro-padilla-perez-2026-common-cd57ccc0-8523-4b3a-968f-6d93a7aef95d",
+        "name": "alejandro-padilla-perez-2026-common-cd57ccc0-8523-4b3a-968f-6d93a7aef95d"
+      },
+      {
+        "slug": "aaron-martin-caricol-2026-common-0e9a8077-0bcf-4875-b4be-e6d14400b490",
+        "name": "aaron-martin-caricol-2026-common-0e9a8077-0bcf-4875-b4be-e6d14400b490"
+      },
+      {
+        "slug": "adrian-rodriguez-gimenez-2026-common-a0fc4ef0-1a20-429b-95e1-d33619ba976b",
+        "name": "adrian-rodriguez-gimenez-2026-common-a0fc4ef0-1a20-429b-95e1-d33619ba976b"
+      },
+      {
+        "slug": "ibrahima-konate-2026-common-c5078b7e-16c9-4f9f-9a3c-8846f0fd18ea",
+        "name": "ibrahima-konate-2026-common-c5078b7e-16c9-4f9f-9a3c-8846f0fd18ea"
+      },
+      {
+        "slug": "antonio-blanco-conde-2026-common-deb8d1c7-2274-43f4-9895-7880a13e9295",
+        "name": "antonio-blanco-conde-2026-common-deb8d1c7-2274-43f4-9895-7880a13e9295"
+      },
+      {
+        "slug": "nahuel-nicolas-noll-2026-common-469ce7d5-fa6e-4b0c-9653-d05444412bcf",
+        "name": "nahuel-nicolas-noll-2026-common-469ce7d5-fa6e-4b0c-9653-d05444412bcf"
+      },
+      {
+        "slug": "ruben-garcia-santos-2026-common-aa20365f-915a-4be9-947a-27b0f0e03867",
+        "name": "ruben-garcia-santos-2026-common-aa20365f-915a-4be9-947a-27b0f0e03867"
+      },
+      {
+        "slug": "lennard-maloney-2026-common-bfdd3f54-fc69-4fa0-837b-0d5ad83ba4ad",
+        "name": "lennard-maloney-2026-common-bfdd3f54-fc69-4fa0-837b-0d5ad83ba4ad"
+      },
+      {
+        "slug": "rodrigo-bentancur-colman-2026-common-def0d9ef-3ca7-4169-9d65-c39ff1829836",
+        "name": "rodrigo-bentancur-colman-2026-common-def0d9ef-3ca7-4169-9d65-c39ff1829836"
+      },
+      {
+        "slug": "jarell-quansah-2003-01-29-2026-common-fcc31536-e8d1-4e7b-8f95-a990a220b789",
+        "name": "jarell-quansah-2003-01-29-2026-common-fcc31536-e8d1-4e7b-8f95-a990a220b789"
+      },
+      {
+        "slug": "hugo-duro-perales-2026-common-2193f9e0-fbef-4c25-9f69-2deb7af3f71c",
+        "name": "hugo-duro-perales-2026-common-2193f9e0-fbef-4c25-9f69-2deb7af3f71c"
+      },
+      {
+        "slug": "juan-carlos-arana-gomez-2026-common-24eaaffd-b378-4fdb-bcc1-2da0264b9900",
+        "name": "juan-carlos-arana-gomez-2026-common-24eaaffd-b378-4fdb-bcc1-2da0264b9900"
+      },
+      {
+        "slug": "alfonso-gonzalez-martinez-2026-common-591651f2-3dbb-4a31-b3f0-383f3cfbb634",
+        "name": "alfonso-gonzalez-martinez-2026-common-591651f2-3dbb-4a31-b3f0-383f3cfbb634"
+      },
+      {
+        "slug": "yago-de-santiago-alonso-2026-common-181e0e53-4f25-487d-bafa-3535fac55a87",
+        "name": "yago-de-santiago-alonso-2026-common-181e0e53-4f25-487d-bafa-3535fac55a87"
+      },
+      {
+        "slug": "ayoze-perez-gutierrez-2026-common-b395a1b1-0297-43fd-ad22-fdb4d1b55b50",
+        "name": "ayoze-perez-gutierrez-2026-common-b395a1b1-0297-43fd-ad22-fdb4d1b55b50"
+      },
+      {
+        "slug": "pablo-ibanez-lumbreras-2026-common-e66e186e-87eb-406a-b8a9-c201352e58d5",
+        "name": "pablo-ibanez-lumbreras-2026-common-e66e186e-87eb-406a-b8a9-c201352e58d5"
+      },
+      {
+        "slug": "eduardo-camavinga-2026-common-034dda36-fe2a-41bf-a097-6d9b3820a5ef",
+        "name": "eduardo-camavinga-2026-common-034dda36-fe2a-41bf-a097-6d9b3820a5ef"
+      },
+      {
+        "slug": "diego-lopez-noguerol-2026-common-71f866af-0a7c-4d58-a258-39af562ccfbe",
+        "name": "diego-lopez-noguerol-2026-common-71f866af-0a7c-4d58-a258-39af562ccfbe"
+      },
+      {
+        "slug": "adrian-de-la-fuente-2026-common-9487965c-6d5a-427f-a362-0f1a6cecc81e",
+        "name": "adrian-de-la-fuente-2026-common-9487965c-6d5a-427f-a362-0f1a6cecc81e"
+      },
+      {
+        "slug": "cristian-gabriel-romero-2026-common-65b99587-0a2b-482d-adba-171e614d38bc",
+        "name": "cristian-gabriel-romero-2026-common-65b99587-0a2b-482d-adba-171e614d38bc"
+      },
+      {
+        "slug": "jack-andrew-davidson-fletcher-2026-common-03c16851-0db0-4d39-a0dd-e9dc6f847c83",
+        "name": "jack-andrew-davidson-fletcher-2026-common-03c16851-0db0-4d39-a0dd-e9dc6f847c83"
+      },
+      {
+        "slug": "thiago-cruz-fernandez-2026-common-317ea9ca-bc7f-4222-897f-5c8aacc5ce19",
+        "name": "thiago-cruz-fernandez-2026-common-317ea9ca-bc7f-4222-897f-5c8aacc5ce19"
+      },
+      {
+        "slug": "peio-canales-urtasun-2026-common-89cc4925-842f-498e-8d3c-9114157ccf0d",
+        "name": "peio-canales-urtasun-2026-common-89cc4925-842f-498e-8d3c-9114157ccf0d"
+      },
+      {
+        "slug": "milosz-piekutowski-2026-common-52adb2c1-f2fa-4903-a904-ce4978f1fbfb",
+        "name": "milosz-piekutowski-2026-common-52adb2c1-f2fa-4903-a904-ce4978f1fbfb"
+      },
+      {
+        "slug": "djene-dakonam-ortega-2026-common-8c1f2d46-ab92-4163-a651-a81fffbdfb5e",
+        "name": "djene-dakonam-ortega-2026-common-8c1f2d46-ab92-4163-a651-a81fffbdfb5e"
+      },
+      {
+        "slug": "daniel-heuer-fernandes-2026-common-4f18db5d-ccdc-4a41-ae92-eff34f2e5a8c",
+        "name": "daniel-heuer-fernandes-2026-common-4f18db5d-ccdc-4a41-ae92-eff34f2e5a8c"
+      },
+      {
+        "slug": "forzan-assan-ouedraogo-2026-common-5af03a2c-28dc-43d3-b28b-0258ea46d535",
+        "name": "forzan-assan-ouedraogo-2026-common-5af03a2c-28dc-43d3-b28b-0258ea46d535"
+      },
+      {
+        "slug": "andras-schafer-2026-common-77a9304e-0222-4066-be78-f124520dd02e",
+        "name": "andras-schafer-2026-common-77a9304e-0222-4066-be78-f124520dd02e"
+      },
+      {
+        "slug": "bryan-lasme-2026-common-f413b191-d060-4f4b-bf86-3cc8e54b3bbe",
+        "name": "bryan-lasme-2026-common-f413b191-d060-4f4b-bf86-3cc8e54b3bbe"
+      },
+      {
+        "slug": "tom-heinz-wisbereit-2026-common-36ce1c01-6e5e-4c55-aa67-030260931b35",
+        "name": "tom-heinz-wisbereit-2026-common-36ce1c01-6e5e-4c55-aa67-030260931b35"
+      },
+      {
+        "slug": "berkay-yilmaz-2005-02-25-2026-common-bae10c4e-81a7-48aa-9169-2788d7b31aa7",
+        "name": "berkay-yilmaz-2005-02-25-2026-common-bae10c4e-81a7-48aa-9169-2788d7b31aa7"
+      },
+      {
+        "slug": "otto-emerson-stange-2026-common-db80904d-fe43-479a-aa19-4b0b85ae2aa4",
+        "name": "otto-emerson-stange-2026-common-db80904d-fe43-479a-aa19-4b0b85ae2aa4"
+      },
+      {
+        "slug": "robin-hack-2026-common-820f7f91-580a-469f-91e0-13e73c0e46cc",
+        "name": "robin-hack-2026-common-820f7f91-580a-469f-91e0-13e73c0e46cc"
+      },
+      {
+        "slug": "maximilian-kinzig-2026-common-1e29e473-18c6-4667-9d49-f21208da21f0",
+        "name": "maximilian-kinzig-2026-common-1e29e473-18c6-4667-9d49-f21208da21f0"
+      },
+      {
+        "slug": "ismael-landry-doukoure-2026-common-0763187d-df67-42c9-b82b-cd27008261bf",
+        "name": "ismael-landry-doukoure-2026-common-0763187d-df67-42c9-b82b-cd27008261bf"
+      },
+      {
+        "slug": "nicolas-alejandro-tagliafico-2026-common-6d6c15a5-29b6-4233-8cfa-1c8ef7e0f8d5",
+        "name": "nicolas-alejandro-tagliafico-2026-common-6d6c15a5-29b6-4233-8cfa-1c8ef7e0f8d5"
+      },
+      {
+        "slug": "bradley-locko-2026-common-515a3923-7417-4d97-b356-2cc69e7f4e67",
+        "name": "bradley-locko-2026-common-515a3923-7417-4d97-b356-2cc69e7f4e67"
+      },
+      {
+        "slug": "ngal-ayel-mukau-2026-common-6f97c10e-96f8-4a7a-b45f-0c0631ca0adf",
+        "name": "ngal-ayel-mukau-2026-common-6f97c10e-96f8-4a7a-b45f-0c0631ca0adf"
+      },
+      {
+        "slug": "jordan-teze-2026-common-99a2c2f4-1ce4-4f6c-80c2-20aa217db325",
+        "name": "jordan-teze-2026-common-99a2c2f4-1ce4-4f6c-80c2-20aa217db325"
+      },
+      {
+        "slug": "sepe-elye-wahi-2026-common-e2723cf4-927c-470f-8ca5-20020f56462b",
+        "name": "sepe-elye-wahi-2026-common-e2723cf4-927c-470f-8ca5-20020f56462b"
+      },
+      {
+        "slug": "raphael-marc-le-guen-2026-common-b70f389f-cb1c-4ef7-8a8b-2a681f6a3707",
+        "name": "raphael-marc-le-guen-2026-common-b70f389f-cb1c-4ef7-8a8b-2a681f6a3707"
+      },
+      {
+        "slug": "obed-nkambadio-2026-common-ac5a9eef-6a47-4d9a-9cca-9730b73cdfce",
+        "name": "obed-nkambadio-2026-common-ac5a9eef-6a47-4d9a-9cca-9730b73cdfce"
+      },
+      {
+        "slug": "bingourou-kamara-2026-common-fc526b89-21d8-4779-9904-12b12fa238ba",
+        "name": "bingourou-kamara-2026-common-fc526b89-21d8-4779-9904-12b12fa238ba"
+      },
+      {
+        "slug": "pape-cabral-2026-common-0425de1f-7d46-4c90-8c7d-3a8397170983",
+        "name": "pape-cabral-2026-common-0425de1f-7d46-4c90-8c7d-3a8397170983"
+      },
+      {
+        "slug": "michael-amir-richardson-2026-common-a3e02a2b-936f-4de9-9d32-c5590c402102",
+        "name": "michael-amir-richardson-2026-common-a3e02a2b-936f-4de9-9d32-c5590c402102"
+      },
+      {
+        "slug": "ismail-diallo-2026-common-dae1e05d-dcaf-444d-ade6-a35af609fe79",
+        "name": "ismail-diallo-2026-common-dae1e05d-dcaf-444d-ade6-a35af609fe79"
+      },
+      {
+        "slug": "sion-uno-kobi-oppong-2026-common-ebfe6cf7-9a2f-466f-9c55-22cc0ba9f3e3",
+        "name": "sion-uno-kobi-oppong-2026-common-ebfe6cf7-9a2f-466f-9c55-22cc0ba9f3e3"
+      },
+      {
+        "slug": "marcos-aoas-correa-2026-common-10d99847-9b41-4f30-ad33-26276a5e45bf",
+        "name": "marcos-aoas-correa-2026-common-10d99847-9b41-4f30-ad33-26276a5e45bf"
+      },
+      {
+        "slug": "julian-ariel-vignolo-2026-common-3f627fea-c276-437b-9a88-6003acf8a6ae",
+        "name": "julian-ariel-vignolo-2026-common-3f627fea-c276-437b-9a88-6003acf8a6ae"
+      },
+      {
+        "slug": "gabin-bernardeau-2026-common-6ea12d02-81ff-4702-8468-d4f44df76db6",
+        "name": "gabin-bernardeau-2026-common-6ea12d02-81ff-4702-8468-d4f44df76db6"
+      },
+      {
+        "slug": "quentin-ndjantou-mbitcha-2026-common-a9a7df86-520d-4742-adf1-c04d1a07b16a",
+        "name": "quentin-ndjantou-mbitcha-2026-common-a9a7df86-520d-4742-adf1-c04d1a07b16a"
+      },
+      {
+        "slug": "antoine-mendy-2026-common-059e29e1-30a9-408c-8dfe-863d068f4901",
+        "name": "antoine-mendy-2026-common-059e29e1-30a9-408c-8dfe-863d068f4901"
+      },
+      {
+        "slug": "jean-philippe-krasso-2026-common-51fb6fe7-03fc-4dd9-93cf-88a18cd3c49e",
+        "name": "jean-philippe-krasso-2026-common-51fb6fe7-03fc-4dd9-93cf-88a18cd3c49e"
+      },
+      {
+        "slug": "sofiane-diop-2026-common-bae41299-f993-46ae-b344-89c78445c470",
+        "name": "sofiane-diop-2026-common-bae41299-f993-46ae-b344-89c78445c470"
+      },
+      {
+        "slug": "valentin-gendrey-2026-common-19dab8bc-d1e2-471e-9361-1bf85a3e5092",
+        "name": "valentin-gendrey-2026-common-19dab8bc-d1e2-471e-9361-1bf85a3e5092"
+      },
+      {
+        "slug": "ansgar-knauff-2026-common-ae73f87f-66f1-4da9-a1ba-d92975ded965",
+        "name": "ansgar-knauff-2026-common-ae73f87f-66f1-4da9-a1ba-d92975ded965"
+      },
+      {
+        "slug": "rayan-philippe-2026-common-1b0a217c-379b-4830-91d9-504ae3980efe",
+        "name": "rayan-philippe-2026-common-1b0a217c-379b-4830-91d9-504ae3980efe"
+      },
+      {
+        "slug": "luca-reggiani-2026-common-a49ea755-a2b6-4b9e-b88c-083fcef2a7bd",
+        "name": "luca-reggiani-2026-common-a49ea755-a2b6-4b9e-b88c-083fcef2a7bd"
+      },
+      {
+        "slug": "diego-villares-yanez-2026-common-7adcfe49-9e61-40c7-9b47-dad81f5eb87e",
+        "name": "diego-villares-yanez-2026-common-7adcfe49-9e61-40c7-9b47-dad81f5eb87e"
+      },
+      {
+        "slug": "abel-bretones-cruz-2026-common-d723ca4f-1cc2-4bb8-88a5-bfafc16262f9",
+        "name": "abel-bretones-cruz-2026-common-d723ca4f-1cc2-4bb8-88a5-bfafc16262f9"
+      },
+      {
+        "slug": "andrik-markgraf-2026-common-813887bc-10ff-481e-8b70-7b18ffae964f",
+        "name": "andrik-markgraf-2026-common-813887bc-10ff-481e-8b70-7b18ffae964f"
+      },
+      {
+        "slug": "christantus-ugonna-uche-2026-common-e64da2d8-0f4b-4289-af2c-e851e2265cee",
+        "name": "christantus-ugonna-uche-2026-common-e64da2d8-0f4b-4289-af2c-e851e2265cee"
+      },
+      {
+        "slug": "einar-galilea-azaceta-2026-common-f52066df-d291-4722-9a16-316c393cd918",
+        "name": "einar-galilea-azaceta-2026-common-f52066df-d291-4722-9a16-316c393cd918"
+      },
+      {
+        "slug": "lucas-holer-2026-common-088c46b9-1674-40cd-a682-b7107345e73c",
+        "name": "lucas-holer-2026-common-088c46b9-1674-40cd-a682-b7107345e73c"
+      },
+      {
+        "slug": "filip-jorgensen-2026-common-75740bce-7a7c-4d65-8dce-a67da8ad30df",
+        "name": "filip-jorgensen-2026-common-75740bce-7a7c-4d65-8dce-a67da8ad30df"
+      },
+      {
+        "slug": "janik-haberer-2026-common-d26d186a-edde-42d2-96ce-9686afed702b",
+        "name": "janik-haberer-2026-common-d26d186a-edde-42d2-96ce-9686afed702b"
+      },
+      {
+        "slug": "thomas-king-2026-common-41fceadb-ac5d-43fc-af79-03f929fe14cc",
+        "name": "thomas-king-2026-common-41fceadb-ac5d-43fc-af79-03f929fe14cc"
+      },
+      {
+        "slug": "alessio-castro-montes-2026-common-ecf6d4a4-9f42-4ec4-8e31-3ec6adefb6cd",
+        "name": "alessio-castro-montes-2026-common-ecf6d4a4-9f42-4ec4-8e31-3ec6adefb6cd"
+      },
+      {
+        "slug": "jay-dasilva-2026-common-44e80beb-1e36-4197-bb72-d64360fa2cf9",
+        "name": "jay-dasilva-2026-common-44e80beb-1e36-4197-bb72-d64360fa2cf9"
+      },
+      {
+        "slug": "david-soria-solis-2026-common-efd5fc6e-5150-4257-81ab-a56a3e6a2f52",
+        "name": "david-soria-solis-2026-common-efd5fc6e-5150-4257-81ab-a56a3e6a2f52"
+      },
+      {
+        "slug": "senne-lynen-2026-common-2ff3d8aa-8856-4c07-bafb-64800e93facb",
+        "name": "senne-lynen-2026-common-2ff3d8aa-8856-4c07-bafb-64800e93facb"
+      },
+      {
+        "slug": "kaishu-sano-2026-common-4ec44ddb-0f0f-4fd6-bd1e-ca5e9894504e",
+        "name": "kaishu-sano-2026-common-4ec44ddb-0f0f-4fd6-bd1e-ca5e9894504e"
+      },
+      {
+        "slug": "andrej-ilic-2026-common-c955fcea-3283-455c-a98b-fd0f06e97d71",
+        "name": "andrej-ilic-2026-common-c955fcea-3283-455c-a98b-fd0f06e97d71"
+      },
+      {
+        "slug": "marc-bartra-aregall-2026-common-a52e7c37-9454-4963-b609-0ea647c9e8c4",
+        "name": "marc-bartra-aregall-2026-common-a52e7c37-9454-4963-b609-0ea647c9e8c4"
+      },
+      {
+        "slug": "aissa-mandi-2026-common-751f72ce-e950-4934-8230-b095fd5e5f88",
+        "name": "aissa-mandi-2026-common-751f72ce-e950-4934-8230-b095fd5e5f88"
+      },
+      {
+        "slug": "aleksandr-golovin-2026-common-275c9c35-a9b3-45a7-aeb7-8ad0d7096d14",
+        "name": "aleksandr-golovin-2026-common-275c9c35-a9b3-45a7-aeb7-8ad0d7096d14"
+      },
+      {
+        "slug": "conrad-harder-2026-common-c27ac6ea-de89-46c3-9b3a-cc86f4ca5f14",
+        "name": "conrad-harder-2026-common-c27ac6ea-de89-46c3-9b3a-cc86f4ca5f14"
+      },
+      {
+        "slug": "anan-khalaili-2026-common-d2582dbe-b813-4dc9-9114-66144c973c54",
+        "name": "anan-khalaili-2026-common-d2582dbe-b813-4dc9-9114-66144c973c54"
+      },
+      {
+        "slug": "eliesse-ben-seghir-2026-common-3dd87af3-d4ff-4312-91bb-dea35371845c",
+        "name": "eliesse-ben-seghir-2026-common-3dd87af3-d4ff-4312-91bb-dea35371845c"
+      },
+      {
+        "slug": "fabian-rieder-2026-common-76da135d-adb2-4edc-b21b-18451e119d9c",
+        "name": "fabian-rieder-2026-common-76da135d-adb2-4edc-b21b-18451e119d9c"
+      },
+      {
+        "slug": "florian-neuhaus-2026-common-f27dd717-5e34-440b-b2d2-f03d334614c0",
+        "name": "florian-neuhaus-2026-common-f27dd717-5e34-440b-b2d2-f03d334614c0"
+      },
+      {
+        "slug": "karl-edouard-blaise-etta-eyong-2026-common-21b16d3a-c06b-45f9-af81-c3866d7bd3aa",
+        "name": "karl-edouard-blaise-etta-eyong-2026-common-21b16d3a-c06b-45f9-af81-c3866d7bd3aa"
+      },
+      {
+        "slug": "mikel-rodriguez-ulacia-2026-common-28df80fb-d111-4fec-8e9f-6c1b29ddf738",
+        "name": "mikel-rodriguez-ulacia-2026-common-28df80fb-d111-4fec-8e9f-6c1b29ddf738"
+      },
+      {
+        "slug": "jan-jakob-olschowsky-2026-common-07f1610b-7df7-45aa-8bc2-428561016cc5",
+        "name": "jan-jakob-olschowsky-2026-common-07f1610b-7df7-45aa-8bc2-428561016cc5"
+      },
+      {
+        "slug": "yangel-clemente-herrera-ravelo-2026-common-38c86fe5-073b-472d-ac6c-5831fedd0a81",
+        "name": "yangel-clemente-herrera-ravelo-2026-common-38c86fe5-073b-472d-ac6c-5831fedd0a81"
+      },
+      {
+        "slug": "mouctar-diakhaby-2026-common-2b028209-215e-463b-8dd8-f19ffe257848",
+        "name": "mouctar-diakhaby-2026-common-2b028209-215e-463b-8dd8-f19ffe257848"
+      },
+      {
+        "slug": "luca-hocker-2026-common-b535f186-6cfb-42b8-8b5d-4370171491ee",
+        "name": "luca-hocker-2026-common-b535f186-6cfb-42b8-8b5d-4370171491ee"
+      },
+      {
+        "slug": "jose-diogo-dalot-teixeira-2026-common-6320b088-2c81-4bc2-badf-4674303748d0",
+        "name": "jose-diogo-dalot-teixeira-2026-common-6320b088-2c81-4bc2-badf-4674303748d0"
+      },
+      {
+        "slug": "james-tarkowski-2026-common-9befdc9e-384f-4a55-a9da-c3a77b3b390b",
+        "name": "james-tarkowski-2026-common-9befdc9e-384f-4a55-a9da-c3a77b3b390b"
+      },
+      {
+        "slug": "stanis-idumbo-muzambo-2026-common-b526b003-ba61-4a56-9c2d-85dce6d9cbcd",
+        "name": "stanis-idumbo-muzambo-2026-common-b526b003-ba61-4a56-9c2d-85dce6d9cbcd"
+      },
+      {
+        "slug": "simon-moore-2026-common-0b14df33-6a0a-4ccb-92fe-f83c1f6b5ed9",
+        "name": "simon-moore-2026-common-0b14df33-6a0a-4ccb-92fe-f83c1f6b5ed9"
+      },
+      {
+        "slug": "giovanni-leoni-2026-common-33d74672-e10e-4c1b-9403-b49084a91453",
+        "name": "giovanni-leoni-2026-common-33d74672-e10e-4c1b-9403-b49084a91453"
+      },
+      {
+        "slug": "nilson-david-angulo-ramirez-2026-common-a91e06fd-a7c6-4d7b-ae27-7d75b00a86e3",
+        "name": "nilson-david-angulo-ramirez-2026-common-a91e06fd-a7c6-4d7b-ae27-7d75b00a86e3"
+      },
+      {
+        "slug": "david-affengruber-2001-03-19-2026-common-ee513843-29e5-451b-91f0-3cb0a085b1d6",
+        "name": "david-affengruber-2001-03-19-2026-common-ee513843-29e5-451b-91f0-3cb0a085b1d6"
+      },
+      {
+        "slug": "zian-flemming-2026-common-0013a9a5-ce4d-4149-8e45-fe484308f6ba",
+        "name": "zian-flemming-2026-common-0013a9a5-ce4d-4149-8e45-fe484308f6ba"
+      },
+      {
+        "slug": "mateo-joseph-fernandez-regatillo-2026-common-12594c22-9665-4627-ab6d-99cde0bbb851",
+        "name": "mateo-joseph-fernandez-regatillo-2026-common-12594c22-9665-4627-ab6d-99cde0bbb851"
+      },
+      {
+        "slug": "brian-djomeni-madjo-2026-common-56717098-1ff7-4bad-b700-a303421c504c",
+        "name": "brian-djomeni-madjo-2026-common-56717098-1ff7-4bad-b700-a303421c504c"
+      },
+      {
+        "slug": "lukas-nmecha-2026-common-967a52e7-1082-4a47-99b4-8cd9bc5efd55",
+        "name": "lukas-nmecha-2026-common-967a52e7-1082-4a47-99b4-8cd9bc5efd55"
+      },
+      {
+        "slug": "luke-shaw-2026-common-c3279bab-55e7-4974-8766-bb729d4e8bd2",
+        "name": "luke-shaw-2026-common-c3279bab-55e7-4974-8766-bb729d4e8bd2"
+      },
+      {
+        "slug": "daniel-bentley-2026-common-d7791f6d-e6f8-489b-9309-daf86bb5d277",
+        "name": "daniel-bentley-2026-common-d7791f6d-e6f8-489b-9309-daf86bb5d277"
+      },
+      {
+        "slug": "hakon-rafn-valdimarsson-2026-common-5d1fbed1-2218-4d83-8280-542d2a7ccb3c",
+        "name": "hakon-rafn-valdimarsson-2026-common-5d1fbed1-2218-4d83-8280-542d2a7ccb3c"
+      },
+      {
+        "slug": "ellery-balcombe-2026-common-79640386-d84a-4bfe-a280-36f3f508acbf",
+        "name": "ellery-balcombe-2026-common-79640386-d84a-4bfe-a280-36f3f508acbf"
+      },
+      {
+        "slug": "julian-araujo-2026-common-2b13ddab-c3d6-491f-80dd-5450bf07f49d",
+        "name": "julian-araujo-2026-common-2b13ddab-c3d6-491f-80dd-5450bf07f49d"
+      },
+      {
+        "slug": "jack-clarke-2026-common-941eb3c3-62c1-48bb-b429-1dcc1852ee58",
+        "name": "jack-clarke-2026-common-941eb3c3-62c1-48bb-b429-1dcc1852ee58"
+      },
+      {
+        "slug": "max-robert-dowman-2026-common-951aaeeb-c927-4606-bbe4-3e6059160d85",
+        "name": "max-robert-dowman-2026-common-951aaeeb-c927-4606-bbe4-3e6059160d85"
+      },
+      {
+        "slug": "jens-hjerto-dahl-2026-common-f66336ab-1a70-46bf-8c31-80b9405628a6",
+        "name": "jens-hjerto-dahl-2026-common-f66336ab-1a70-46bf-8c31-80b9405628a6"
+      },
+      {
+        "slug": "richarlison-de-andrade-2026-common-0df1cde6-7c1b-422b-a03c-8e1eff7c6b0a",
+        "name": "richarlison-de-andrade-2026-common-0df1cde6-7c1b-422b-a03c-8e1eff7c6b0a"
+      },
+      {
+        "slug": "omar-marmoush-2026-common-5290f24b-0a50-4c3f-b5a5-6bca7fb30bdc",
+        "name": "omar-marmoush-2026-common-5290f24b-0a50-4c3f-b5a5-6bca7fb30bdc"
+      },
+      {
+        "slug": "amine-adli-2026-common-1bee33cb-e230-4900-b18f-516af25777e8",
+        "name": "amine-adli-2026-common-1bee33cb-e230-4900-b18f-516af25777e8"
+      },
+      {
+        "slug": "hidemasa-morita-2026-common-8ac24878-5f57-45b6-8caa-84acc50c911a",
+        "name": "hidemasa-morita-2026-common-8ac24878-5f57-45b6-8caa-84acc50c911a"
+      },
+      {
+        "slug": "abdoul-karim-coulibaly-2026-common-905b74c1-c199-4722-8fd5-2fd60fae8931",
+        "name": "abdoul-karim-coulibaly-2026-common-905b74c1-c199-4722-8fd5-2fd60fae8931"
+      },
+      {
+        "slug": "sander-berge-2026-common-f681d09b-f361-45b1-9ee6-5be3aeebb8d3",
+        "name": "sander-berge-2026-common-f681d09b-f361-45b1-9ee6-5be3aeebb8d3"
+      },
+      {
+        "slug": "alexander-prass-2026-common-73cecaf3-b183-44b2-8c3b-99ec49d6c6fa",
+        "name": "alexander-prass-2026-common-73cecaf3-b183-44b2-8c3b-99ec49d6c6fa"
+      },
+      {
+        "slug": "neco-williams-2026-common-d7a2ea11-95fc-4881-a474-f6e10c341082",
+        "name": "neco-williams-2026-common-d7a2ea11-95fc-4881-a474-f6e10c341082"
+      },
+      {
+        "slug": "maximilian-rohr-2026-common-51202eba-6e43-4508-b6a9-297562b911c3",
+        "name": "maximilian-rohr-2026-common-51202eba-6e43-4508-b6a9-297562b911c3"
+      },
+      {
+        "slug": "paolo-gozzi-iweru-2026-common-873e4355-c430-4ff0-bcfe-9d7a5f4fb838",
+        "name": "paolo-gozzi-iweru-2026-common-873e4355-c430-4ff0-bcfe-9d7a5f4fb838"
+      },
+      {
+        "slug": "sebastian-szymanski-2026-common-f017520a-0623-473f-9851-3b642ddd3fda",
+        "name": "sebastian-szymanski-2026-common-f017520a-0623-473f-9851-3b642ddd3fda"
+      },
+      {
+        "slug": "calvin-ughelumba-2026-common-f4b0fe25-7e54-4920-9ecf-d01aaa3eec5e",
+        "name": "calvin-ughelumba-2026-common-f4b0fe25-7e54-4920-9ecf-d01aaa3eec5e"
+      },
+      {
+        "slug": "lewis-miley-2026-common-1b9b76d6-caaa-4756-a887-6d9384b333e4",
+        "name": "lewis-miley-2026-common-1b9b76d6-caaa-4756-a887-6d9384b333e4"
+      },
+      {
+        "slug": "jonathan-david-2026-common-209495e7-7c74-46af-a686-000a674eee7c",
+        "name": "jonathan-david-2026-common-209495e7-7c74-46af-a686-000a674eee7c"
+      },
+      {
+        "slug": "fernando-dickes-2026-common-29ca025e-c736-4b51-af75-65b6f803a66d",
+        "name": "fernando-dickes-2026-common-29ca025e-c736-4b51-af75-65b6f803a66d"
+      },
+      {
+        "slug": "terem-igobor-moffi-2026-common-5de63ce1-b55f-430e-9e32-340b96e8a632",
+        "name": "terem-igobor-moffi-2026-common-5de63ce1-b55f-430e-9e32-340b96e8a632"
+      },
+      {
+        "slug": "facundo-bernal-cruz-2026-common-893374b7-d672-46bd-b4a1-a21aeda9f110",
+        "name": "facundo-bernal-cruz-2026-common-893374b7-d672-46bd-b4a1-a21aeda9f110"
+      },
+      {
+        "slug": "tom-baack-2026-common-440a9e95-3579-4f66-8226-1c157a7e8b3c",
+        "name": "tom-baack-2026-common-440a9e95-3579-4f66-8226-1c157a7e8b3c"
+      },
+      {
+        "slug": "ruben-santos-gato-alves-dias-2026-common-81ff2ef1-4f43-48cc-a2c2-4f9140f21b5b",
+        "name": "ruben-santos-gato-alves-dias-2026-common-81ff2ef1-4f43-48cc-a2c2-4f9140f21b5b"
+      },
+      {
+        "slug": "aaron-anselmino-2026-common-9153491b-a501-4960-a1ea-c5115c33062e",
+        "name": "aaron-anselmino-2026-common-9153491b-a501-4960-a1ea-c5115c33062e"
+      },
+      {
+        "slug": "abiel-osorio-2026-common-2c76bbd2-9306-48fa-a562-d763274a0e67",
+        "name": "abiel-osorio-2026-common-2c76bbd2-9306-48fa-a562-d763274a0e67"
+      },
+      {
+        "slug": "omar-sissoko-2026-common-086f5bb6-d3e0-4cbb-ba1d-88f31d4231ff",
+        "name": "omar-sissoko-2026-common-086f5bb6-d3e0-4cbb-ba1d-88f31d4231ff"
+      },
+      {
+        "slug": "inigo-ruiz-de-galarreta-etxeberria-2026-common-7efa8e55-cfc2-47f4-a9d2-1e82d0e6afa5",
+        "name": "inigo-ruiz-de-galarreta-etxeberria-2026-common-7efa8e55-cfc2-47f4-a9d2-1e82d0e6afa5"
+      },
+      {
+        "slug": "alvaro-fernandez-llorente-2026-common-e737ea77-f4b7-49bf-be83-d49c1e586575",
+        "name": "alvaro-fernandez-llorente-2026-common-e737ea77-f4b7-49bf-be83-d49c1e586575"
+      },
+      {
+        "slug": "kevin-lomonaco-2026-common-28035a48-3a60-4b38-8140-59a86354396e",
+        "name": "kevin-lomonaco-2026-common-28035a48-3a60-4b38-8140-59a86354396e"
+      },
+      {
+        "slug": "francisco-roman-alarcon-suarez-2026-common-6318ad5f-a31b-49e8-a5ae-fc3f8d4cd017",
+        "name": "francisco-roman-alarcon-suarez-2026-common-6318ad5f-a31b-49e8-a5ae-fc3f8d4cd017"
+      },
+      {
+        "slug": "nicolas-gerrit-kuhn-2026-common-3ab1b1d6-5b50-4404-b6b7-29fe2dcf2c6b",
+        "name": "nicolas-gerrit-kuhn-2026-common-3ab1b1d6-5b50-4404-b6b7-29fe2dcf2c6b"
+      },
+      {
+        "slug": "lucien-agoume-2026-common-45fc63f1-b7dc-45ba-8d66-8c0bfaad8b7b",
+        "name": "lucien-agoume-2026-common-45fc63f1-b7dc-45ba-8d66-8c0bfaad8b7b"
+      },
+      {
+        "slug": "arijon-ibrahimovic-2026-common-04850125-441b-4bb4-b59e-84b624acf79b",
+        "name": "arijon-ibrahimovic-2026-common-04850125-441b-4bb4-b59e-84b624acf79b"
+      },
+      {
+        "slug": "anthony-rouault-2026-common-29c2092f-17d9-4453-9f95-030a4e7516cb",
+        "name": "anthony-rouault-2026-common-29c2092f-17d9-4453-9f95-030a4e7516cb"
+      },
+      {
+        "slug": "dario-esteban-osorio-osorio-2026-common-f8fd259b-a0df-4068-8f96-db4d81443638",
+        "name": "dario-esteban-osorio-osorio-2026-common-f8fd259b-a0df-4068-8f96-db4d81443638"
+      },
+      {
+        "slug": "basar-onal-2026-common-11f82563-c603-434b-b5c0-647db77c8d07",
+        "name": "basar-onal-2026-common-11f82563-c603-434b-b5c0-647db77c8d07"
+      },
+      {
+        "slug": "anton-stach-2026-common-363bac49-7a64-43ee-94e4-65e570b4d7b3",
+        "name": "anton-stach-2026-common-363bac49-7a64-43ee-94e4-65e570b4d7b3"
+      },
+      {
+        "slug": "marvin-senaya-2026-common-8329b30c-dab0-499b-bbde-11b6651b0abd",
+        "name": "marvin-senaya-2026-common-8329b30c-dab0-499b-bbde-11b6651b0abd"
+      },
+      {
+        "slug": "gabriel-silva-moscardo-de-salles-2026-common-dc673ac6-15a9-4e06-a880-d5af1e15709e",
+        "name": "gabriel-silva-moscardo-de-salles-2026-common-dc673ac6-15a9-4e06-a880-d5af1e15709e"
+      },
+      {
+        "slug": "michele-di-gregorio-2026-common-4744a687-3177-462a-a211-1438e161fd06",
+        "name": "michele-di-gregorio-2026-common-4744a687-3177-462a-a211-1438e161fd06"
+      },
+      {
+        "slug": "kilian-belazzoug-2026-common-1f4cdfdb-ba3a-4cab-8ecb-8f0f5543b96b",
+        "name": "kilian-belazzoug-2026-common-1f4cdfdb-ba3a-4cab-8ecb-8f0f5543b96b"
+      }
+    ],
+    "truncated": true,
+    "message": "Identificativi carta ricevuti dalla fonte pubblica."
   },
-  "message": "Dashboard pronta, sincronizzazione pubblica non ancora eseguita.",
-  "detail": "Vai in GitHub → Actions → Sorare public data refresh → Run workflow. Questa prova non richiede OAuth o credenziali Sorare."
+  "message": "Profilo pubblico trovato; 400 identificativi di carta recuperati.",
+  "detail": "L’elenco è parziale: è stato raggiunto il limite prudenziale di pagine per singola esecuzione."
 }
