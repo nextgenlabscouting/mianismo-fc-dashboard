@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "source": "Sorare GraphQL API — public read-only probe",
   "requestedSlug": "mianismo",
-  "updatedAt": "2026-10-26T03:16:52.946Z",
+  "updatedAt": "2026-10-26T12:16:47.078Z",
   "status": "ok",
   "statusLabel": "Profilo risolto",
   "profile": {
@@ -14,6 +14,42 @@
     "status": "available",
     "count": 400,
     "items": [
+      {
+        "slug": "aimar-oroz-huarte-2026-common-236faad8-0e16-46b6-bf62-f8f65a22df00",
+        "name": "aimar-oroz-huarte-2026-common-236faad8-0e16-46b6-bf62-f8f65a22df00"
+      },
+      {
+        "slug": "moises-gomez-bordonado-2026-common-b33c71ee-02dd-4c42-b1a9-8ff22abb864d",
+        "name": "moises-gomez-bordonado-2026-common-b33c71ee-02dd-4c42-b1a9-8ff22abb864d"
+      },
+      {
+        "slug": "raul-garcia-de-haro-2026-common-da5e2dda-b931-45b5-99cd-24c9505a0bad",
+        "name": "raul-garcia-de-haro-2026-common-da5e2dda-b931-45b5-99cd-24c9505a0bad"
+      },
+      {
+        "slug": "warren-zaire-emery-2026-common-4aa3d1c0-cd2b-4516-a64d-49de72d6d315",
+        "name": "warren-zaire-emery-2026-common-4aa3d1c0-cd2b-4516-a64d-49de72d6d315"
+      },
+      {
+        "slug": "maghnes-akliouche-2026-common-71cbfbde-9fda-46e5-96e3-18530b686a47",
+        "name": "maghnes-akliouche-2026-common-71cbfbde-9fda-46e5-96e3-18530b686a47"
+      },
+      {
+        "slug": "keito-nakamura-2026-common-988e1661-ca55-42b8-9102-b25c3ff0d473",
+        "name": "keito-nakamura-2026-common-988e1661-ca55-42b8-9102-b25c3ff0d473"
+      },
+      {
+        "slug": "aitor-fernandez-abarisketa-2026-common-a006775c-559f-41b6-8150-d9ca50399255",
+        "name": "aitor-fernandez-abarisketa-2026-common-a006775c-559f-41b6-8150-d9ca50399255"
+      },
+      {
+        "slug": "joao-pedro-goncalves-neves-2026-common-e86183af-a873-4cc0-aebf-fd3dba5658db",
+        "name": "joao-pedro-goncalves-neves-2026-common-e86183af-a873-4cc0-aebf-fd3dba5658db"
+      },
+      {
+        "slug": "pascal-gross-2026-common-464cebcd-1d8b-4e76-ae61-c0e9de242b22",
+        "name": "pascal-gross-2026-common-464cebcd-1d8b-4e76-ae61-c0e9de242b22"
+      },
       {
         "slug": "emil-audero-mulyadi-2026-common-0106dc41-a9a0-4fc2-b72b-743e5d6a9ea6",
         "name": "emil-audero-mulyadi-2026-common-0106dc41-a9a0-4fc2-b72b-743e5d6a9ea6"
@@ -1577,42 +1613,6 @@
       {
         "slug": "lucien-agoume-2026-common-45fc63f1-b7dc-45ba-8d66-8c0bfaad8b7b",
         "name": "lucien-agoume-2026-common-45fc63f1-b7dc-45ba-8d66-8c0bfaad8b7b"
-      },
-      {
-        "slug": "arijon-ibrahimovic-2026-common-04850125-441b-4bb4-b59e-84b624acf79b",
-        "name": "arijon-ibrahimovic-2026-common-04850125-441b-4bb4-b59e-84b624acf79b"
-      },
-      {
-        "slug": "anthony-rouault-2026-common-29c2092f-17d9-4453-9f95-030a4e7516cb",
-        "name": "anthony-rouault-2026-common-29c2092f-17d9-4453-9f95-030a4e7516cb"
-      },
-      {
-        "slug": "dario-esteban-osorio-osorio-2026-common-f8fd259b-a0df-4068-8f96-db4d81443638",
-        "name": "dario-esteban-osorio-osorio-2026-common-f8fd259b-a0df-4068-8f96-db4d81443638"
-      },
-      {
-        "slug": "basar-onal-2026-common-11f82563-c603-434b-b5c0-647db77c8d07",
-        "name": "basar-onal-2026-common-11f82563-c603-434b-b5c0-647db77c8d07"
-      },
-      {
-        "slug": "anton-stach-2026-common-363bac49-7a64-43ee-94e4-65e570b4d7b3",
-        "name": "anton-stach-2026-common-363bac49-7a64-43ee-94e4-65e570b4d7b3"
-      },
-      {
-        "slug": "marvin-senaya-2026-common-8329b30c-dab0-499b-bbde-11b6651b0abd",
-        "name": "marvin-senaya-2026-common-8329b30c-dab0-499b-bbde-11b6651b0abd"
-      },
-      {
-        "slug": "gabriel-silva-moscardo-de-salles-2026-common-dc673ac6-15a9-4e06-a880-d5af1e15709e",
-        "name": "gabriel-silva-moscardo-de-salles-2026-common-dc673ac6-15a9-4e06-a880-d5af1e15709e"
-      },
-      {
-        "slug": "michele-di-gregorio-2026-common-4744a687-3177-462a-a211-1438e161fd06",
-        "name": "michele-di-gregorio-2026-common-4744a687-3177-462a-a211-1438e161fd06"
-      },
-      {
-        "slug": "kilian-belazzoug-2026-common-1f4cdfdb-ba3a-4cab-8ecb-8f0f5543b96b",
-        "name": "kilian-belazzoug-2026-common-1f4cdfdb-ba3a-4cab-8ecb-8f0f5543b96b"
       }
     ],
     "truncated": true,
