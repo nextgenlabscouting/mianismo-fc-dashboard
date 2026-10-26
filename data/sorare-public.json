@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "source": "Sorare GraphQL API — public read-only probe",
   "requestedSlug": "mianismo",
-  "updatedAt": "2026-10-26T12:16:47.078Z",
+  "updatedAt": "2026-10-26T22:18:39.616Z",
   "status": "ok",
   "statusLabel": "Profilo risolto",
   "profile": {
@@ -14,6 +14,18 @@
     "status": "available",
     "count": 400,
     "items": [
+      {
+        "slug": "mika-marcel-godts-2026-common-a2482c9b-8349-4220-b268-1bc2206c9bed",
+        "name": "mika-marcel-godts-2026-common-a2482c9b-8349-4220-b268-1bc2206c9bed"
+      },
+      {
+        "slug": "mariano-diaz-mejia-2026-common-62394e23-bd61-4044-bd64-b93cd78710e4",
+        "name": "mariano-diaz-mejia-2026-common-62394e23-bd61-4044-bd64-b93cd78710e4"
+      },
+      {
+        "slug": "gonzalo-villar-del-fraile-2026-common-564a3d8f-0695-4191-8cd4-f281af7b7994",
+        "name": "gonzalo-villar-del-fraile-2026-common-564a3d8f-0695-4191-8cd4-f281af7b7994"
+      },
       {
         "slug": "aimar-oroz-huarte-2026-common-236faad8-0e16-46b6-bf62-f8f65a22df00",
         "name": "aimar-oroz-huarte-2026-common-236faad8-0e16-46b6-bf62-f8f65a22df00"
@@ -1601,18 +1613,6 @@
       {
         "slug": "kevin-lomonaco-2026-common-28035a48-3a60-4b38-8140-59a86354396e",
         "name": "kevin-lomonaco-2026-common-28035a48-3a60-4b38-8140-59a86354396e"
-      },
-      {
-        "slug": "francisco-roman-alarcon-suarez-2026-common-6318ad5f-a31b-49e8-a5ae-fc3f8d4cd017",
-        "name": "francisco-roman-alarcon-suarez-2026-common-6318ad5f-a31b-49e8-a5ae-fc3f8d4cd017"
-      },
-      {
-        "slug": "nicolas-gerrit-kuhn-2026-common-3ab1b1d6-5b50-4404-b6b7-29fe2dcf2c6b",
-        "name": "nicolas-gerrit-kuhn-2026-common-3ab1b1d6-5b50-4404-b6b7-29fe2dcf2c6b"
-      },
-      {
-        "slug": "lucien-agoume-2026-common-45fc63f1-b7dc-45ba-8d66-8c0bfaad8b7b",
-        "name": "lucien-agoume-2026-common-45fc63f1-b7dc-45ba-8d66-8c0bfaad8b7b"
       }
     ],
     "truncated": true,
