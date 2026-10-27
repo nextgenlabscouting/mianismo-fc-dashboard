@@ -88,7 +88,7 @@ const QUERY_TIERS = [
     label: "slug-only",
     fields: ["slug"]
   }
-]
+];
 
 async function querySorare(query, variables = {}) {
   const response = await fetch(ENDPOINT, {
