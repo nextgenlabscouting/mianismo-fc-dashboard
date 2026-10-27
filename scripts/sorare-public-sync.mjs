@@ -68,7 +68,7 @@ const QUERY_TIERS = [
     'anyPlayer { displayName }'
   ]},
 { label: 'slug-only', fields: ['slug'] }
-]
+];
 
 async function gql(query, variables = {}) {
   const response = await fetch(ENDPOINT, {
