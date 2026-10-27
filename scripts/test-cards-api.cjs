@@ -75,7 +75,7 @@ async function testVariantQueryFallback() {
   });
   assert.equal(res.statusCode, 200);
   assert.equal(res.body.status, "ok");
-  assert.equal(res.body.queryTier, "skin-variant");
+  assert.equal(res.body.queryTier, "card-details");
   assert.equal(res.body.items[0].name, "Test Player");
   assert.equal(res.body.items[0].imageUrl, "https://cdn.example/card.png");
   assert.equal(res.body.items[0].skinEdition.skinName, "Shiny");
