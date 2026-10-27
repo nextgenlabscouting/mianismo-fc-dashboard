@@ -61,7 +61,7 @@ const CARD_QUERY_TIERS = [
     "anyPlayer { displayName }"
   ]},
 { label: "slug-only", fields: ["slug"] }
-]
+];
 const ALLOWED_ORIGINS = new Set([
   "https://nextgenlabscouting.github.io",
   "https://mianismo-fc-dashboard.pages.dev",
