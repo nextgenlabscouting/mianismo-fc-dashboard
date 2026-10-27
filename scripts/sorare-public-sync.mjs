@@ -18,6 +18,18 @@ const QUERY_TIERS = [
     '... on Card { age rarity customCardEditionName rawSo5Scores(last: 10) }'
   ]},
   {
+    label: 'card-details-with-fixtures',
+    fields: [
+      '__typename slug assetId name',
+      'anyPlayer { displayName fullPictureUrl nextGame { date statusTyped homeTeam { name } awayTeam { name } } }',
+      'anyTeam { name } anyPositions',
+      'pictureUrl(derivative: "full") ipfsPictureUrl',
+      'rarityTyped displayRarity seasonYear serialNumber cardEditionName formattedCardEditionName specialEdition',
+      'skinEdition { skin skinName variant variantName bonus } cardSet { name slug } power grade',
+      '... on Card { age rarity customCardEditionName rawSo5Scores(last: 10) }'
+    ]
+  },
+  {
     label: 'card-details',
     fields: [
       '__typename slug assetId name',
