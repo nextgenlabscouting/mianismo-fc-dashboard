@@ -51,7 +51,8 @@ function normalizeCard(card) {
   const playerRawScores = Array.isArray(card.anyPlayer?.rawPlayerGameScores)
     ? card.anyPlayer.rawPlayerGameScores.filter(value => value != null && Number.isFinite(Number(value))).map(Number)
     : [];
-  const games = Array.isArray(card.anyPlayer?.anyFutureGames?.nodes) ? card.anyPlayer.anyFutureGames.nodes : [];
+  const nextGame = card.anyPlayer?.nextGame || null;
+  const games = nextGame ? [nextGame] : [];
   const skin = card.skinEdition || null;
   return {
     slug: card.slug,
@@ -135,8 +136,8 @@ module.exports = async function handler(req, res) {
               displayName fullPictureUrl avatarPictureUrl squaredPictureUrl age slug
               activeClub { name }
               rawPlayerGameScores(last: 15)
-              anyFutureGames(first: 3) {
-                nodes { date statusTyped homeTeam { name } awayTeam { name } }
+              nextGame {
+                date statusTyped homeTeam { name } awayTeam { name }
               }
             }
             anyTeam { name }
