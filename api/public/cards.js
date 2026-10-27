@@ -62,7 +62,7 @@ function normalizeCard(card) {
     playerSlug: card.anyPlayer?.slug || null,
     position: Array.isArray(card.anyPositions) ? card.anyPositions : [],
     imageUrl: card.pictureUrl || card.ipfsPictureUrl || null,
-    playerImageUrl: card.anyPlayer?.pictureUrl || null,
+    playerImageUrl: card.anyPlayer?.fullPictureUrl || card.anyPlayer?.avatarPictureUrl || card.anyPlayer?.squaredPictureUrl || null,
     rarity: card.displayRarity || card.rarity || card.rarityTyped || "Unknown",
     rarityTyped: card.rarityTyped || null,
     season: card.seasonYear ?? null,
@@ -132,7 +132,7 @@ module.exports = async function handler(req, res) {
             assetId
             name
             anyPlayer {
-              displayName pictureUrl age slug
+              displayName fullPictureUrl avatarPictureUrl squaredPictureUrl age slug
               activeClub { name }
               rawPlayerGameScores(last: 15)
               anyFutureGames(first: 3) {
