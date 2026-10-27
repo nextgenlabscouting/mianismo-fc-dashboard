@@ -127,7 +127,6 @@ module.exports = async function handler(req, res) {
             seasonYear
             serialNumber
             cardEditionName
-            customCardEditionName
             formattedCardEditionName
             specialEdition
             skinEdition { skin skinName variant variantName bonus }
