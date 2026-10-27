@@ -90,9 +90,10 @@ function normalizeCard(card) {
     age: card.age ?? card.anyPlayer?.age ?? null,
     rawScores,
     playerRawScores,
-    l5: average(rawScores.slice(0, 5)) ?? average(playerRawScores.slice(0, 5)),
+    l5: average(playerRawScores.slice(0, 5)) ?? average(rawScores.slice(0, 5)),
     l10: average(playerRawScores.slice(0, 10)) ?? average(rawScores.slice(0, 10)),
-    l15: average(playerRawScores.slice(0, 15)),
+    l15: average(playerRawScores.slice(0, 15)) ?? average(rawScores.slice(0, 15)),
+    cardL5: average(rawScores.slice(0, 5)),
     source: "Sorare GraphQL API"
   };
 }
