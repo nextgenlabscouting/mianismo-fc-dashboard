@@ -387,7 +387,7 @@ async function loadSorarePublicData(){
     const profile=await profileResponse.json().catch(()=>({status:'error',error:'Risposta profilo non valida'}));
     const allCards=[],seen=new Set();
     let cardsData={status:'unavailable',error:'Nessuna risposta carta',items:[]},after=null,complete=false;
-    for(let page=0;page<8;page++){
+    for(let page=0;page<10;page++){
       const params=new URLSearchParams({slug:'mianismo',t:String(Date.now())});
       if(after)params.set('after',after);
       const response=await fetch('/api/public/cards?'+params.toString(),{cache:'no-store'});
