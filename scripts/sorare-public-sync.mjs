@@ -56,7 +56,7 @@ function normalizeCard(card) {
     team: card.anyTeam?.name || null,
     position: Array.isArray(card.anyPositions) ? card.anyPositions : [],
     imageUrl: card.pictureUrl || card.ipfsPictureUrl || null,
-    playerImageUrl: card.anyPlayer?.pictureUrl || null,
+    playerImageUrl: card.anyPlayer?.fullPictureUrl || card.anyPlayer?.avatarPictureUrl || card.anyPlayer?.squaredPictureUrl || null,
     rarity: card.displayRarity || card.rarity || card.rarityTyped || 'Unknown',
     rarityTyped: card.rarityTyped || null,
     season: card.seasonYear ?? null,
@@ -91,7 +91,7 @@ async function fetchCardPages(field) {
       ${field}(first: $first, after: $cursor) {
         nodes {
           __typename slug assetId name
-          anyPlayer { displayName pictureUrl }
+          anyPlayer { displayName fullPictureUrl }
           anyTeam { name }
           anyPositions
           pictureUrl(derivative: "full")
