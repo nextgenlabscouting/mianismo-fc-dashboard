@@ -10,7 +10,7 @@ const QUERY_TIERS = [
       "__typename slug assetId name",
       "anyPlayer { displayName fullPictureUrl avatarPictureUrl squaredPictureUrl age slug activeClub { name } rawPlayerGameScores(last: 15) nextGame { date statusTyped homeTeam { name } awayTeam { name } } }",
       "anyTeam { name } anyPositions",
-      "pictureUrl(derivative: \\"full\\") ipfsPictureUrl",
+      "pictureUrl(derivative: \"full\") ipfsPictureUrl",
       "rarityTyped displayRarity seasonYear serialNumber cardEditionName formattedCardEditionName specialEdition",
       "skinEdition { skin skinName variant variantName bonus } cardSet { name slug } power grade",
       "... on Card { age rarity customCardEditionName rawSo5Scores(last: 10) }"
@@ -22,7 +22,7 @@ const QUERY_TIERS = [
       "__typename slug assetId name",
       "anyPlayer { displayName fullPictureUrl }",
       "anyTeam { name } anyPositions",
-      "pictureUrl(derivative: \\"full\\")",
+      "pictureUrl(derivative: \"full\")",
       "rarityTyped seasonYear serialNumber",
       "... on Card { rawSo5Scores(last: 10) }"
     ]
@@ -33,7 +33,7 @@ const QUERY_TIERS = [
       "slug assetId rarityTyped seasonYear serialNumber",
       "anyPositions anyTeam { name }",
       "anyPlayer { displayName fullPictureUrl }",
-      "pictureUrl(derivative: \\"full\\")"
+      "pictureUrl(derivative: \"full\")"
     ]
   },
   {
