@@ -6,7 +6,8 @@ async function sorareGraphQL(query, variables = {}) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      "User-Agent": "MIANISMO-FC-Dashboard/1.0 (public read-only API)"
+      "User-Agent": "MIANISMO-FC-Dashboard/1.0",
+      ...(process.env.SORARE_API_KEY ? { APIKEY: process.env.SORARE_API_KEY } : {})
     },
     body: JSON.stringify({ query, variables }),
     signal: AbortSignal.timeout(15000)
@@ -46,6 +47,7 @@ module.exports = async function handler(req, res) {
       status: user ? "ok" : "not_found",
       source: "Sorare public GraphQL API",
       profile: user ? { slug: user.slug || slug, nickname: user.nickname || null } : null,
+      apiKeyConfigured: Boolean(process.env.SORARE_API_KEY),
       fetchedAt: new Date().toISOString()
     });
   } catch (error) {
