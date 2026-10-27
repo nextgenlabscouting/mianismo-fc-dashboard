@@ -122,7 +122,6 @@ module.exports = async function handler(req, res) {
             anyPositions
             pictureUrl(derivative: "full")
             ipfsPictureUrl
-            rarity
             rarityTyped
             displayRarity
             seasonYear
@@ -137,6 +136,8 @@ module.exports = async function handler(req, res) {
             grade
             ... on Card {
               age
+              rarity
+              customCardEditionName
               rawSo5Scores(last: 10)
             }
           }
