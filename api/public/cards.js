@@ -1,5 +1,6 @@
 const ENDPOINT = "https://api.sorare.com/graphql";
 const MAX_PAGES = 8;
+const DETAIL_BATCH_SIZE = 25;
 
 async function querySorare(query, variables) {
   const response = await fetch(ENDPOINT, {
@@ -45,23 +46,28 @@ module.exports = async function handler(req, res) {
 
       if (slugs.length) {
         try {
-          const detailData = await querySorare(
-            "query PublicCardDetails($slugs: [String!]) { cards(slugs: $slugs) { slug name rarityTyped season serialNumber pictureUrl player { displayName pictureUrl(derivative: \"avatar\") } team { name } } }",
-            { slugs }
-          );
-          const details = Array.isArray(detailData.cards) ? detailData.cards : [];
-          const bySlug = new Map(details.map(c => [c.slug, c]));
+          const bySlug = new Map();
+          // Keep each detail request small: large batches can be rejected by Sorare.
+          for (let i = 0; i < slugs.length; i += DETAIL_BATCH_SIZE) {
+            const batch = slugs.slice(i, i + DETAIL_BATCH_SIZE);
+            const detailData = await querySorare(
+              "query PublicCardDetails($slugs: [String!]) { anyCards(slugs: $slugs) { slug rarityTyped seasonYear serialNumber anyPlayer { displayName pictureUrl } anyTeam { name } } }",
+              { slugs: batch }
+            );
+            const details = Array.isArray(detailData.anyCards) ? detailData.anyCards : [];
+            details.forEach(c => bySlug.set(c.slug, c));
+          }
           for (const cardSlug of slugs) {
             const c = bySlug.get(cardSlug) || {};
             items.push({
               slug: cardSlug,
-              name: c.player?.displayName || c.name || cardSlug,
-              imageUrl: c.pictureUrl || null,
-              playerImageUrl: c.player?.pictureUrl || null,
+              name: c.anyPlayer?.displayName || cardSlug,
+              imageUrl: null,
+              playerImageUrl: c.anyPlayer?.pictureUrl || null,
               rarity: c.rarityTyped || "Unknown",
-              season: c.season || null,
+              season: c.seasonYear || null,
               serialNumber: c.serialNumber ?? null,
-              team: c.team?.name || null
+              team: c.anyTeam?.name || null
             });
           }
         } catch (detailError) {
