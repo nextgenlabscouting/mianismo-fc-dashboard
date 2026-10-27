@@ -17,6 +17,25 @@ const QUERY_TIERS = [
     ]
   },
   {
+    label: "skin-variant",
+    fields: [
+      "slug assetId rarityTyped seasonYear serialNumber",
+      "anyPositions anyTeam { name }",
+      "anyPlayer { displayName fullPictureUrl }",
+      "pictureUrl(derivative: \"full\")",
+      "skinEdition { skin skinName variant variantName bonus }"
+    ]
+  },
+  {
+    label: "edition-metadata",
+    fields: [
+      "slug assetId rarityTyped seasonYear serialNumber",
+      "anyPositions anyTeam { name }",
+      "anyPlayer { displayName }",
+      "cardEditionName formattedCardEditionName specialEdition"
+    ]
+  },
+  {
     label: "images-and-scores",
     fields: [
       "__typename slug assetId name",
