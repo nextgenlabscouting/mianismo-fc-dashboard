@@ -96,12 +96,12 @@ async function fetchCardPages(field) {
           anyPositions
           pictureUrl(derivative: "full")
           ipfsPictureUrl
-          rarity rarityTyped displayRarity seasonYear serialNumber
+          rarityTyped displayRarity seasonYear serialNumber
           cardEditionName customCardEditionName formattedCardEditionName specialEdition
           skinEdition { skin skinName variant variantName bonus }
           cardSet { name slug }
           power grade
-          ... on Card { age rawSo5Scores(last: 10) }
+          ... on Card { age rarity customCardEditionName rawSo5Scores(last: 10) }
         }
         pageInfo { endCursor hasNextPage }
       }
