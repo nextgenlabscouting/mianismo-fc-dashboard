@@ -113,7 +113,7 @@ function buildPageQuery(tier) {
     "  user(slug: $slug) {",
     "    cards(after: $cursor) {",
     "      nodes { " + fields + " }",
-    "      pageInfo { endCursor }",
+    "      pageInfo { endCursor hasNextPage }",
     "    }",
     "  }",
     "}"
@@ -252,7 +252,9 @@ module.exports = async function handler(req, res) {
 
       pagesFetched += 1;
       const next = connection.pageInfo?.endCursor || null;
-      hasMore = Boolean(next && next !== cursor);
+      hasMore = typeof connection.pageInfo?.hasNextPage === "boolean"
+        ? connection.pageInfo.hasNextPage
+        : Boolean(next && next !== cursor);
       if (!hasMore) {
         cursor = next;
         break;
