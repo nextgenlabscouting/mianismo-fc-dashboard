@@ -104,7 +104,7 @@ export default {
                 anyTeam { name } anyPositions
                 pictureUrl(derivative: "full") ipfsPictureUrl
                 rarityTyped displayRarity seasonYear serialNumber
-                cardEditionName customCardEditionName formattedCardEditionName specialEdition
+                cardEditionName formattedCardEditionName specialEdition
                 skinEdition { skin skinName variant variantName bonus }
                 cardSet { name slug } power grade
                 ... on Card { age rarity customCardEditionName rawSo5Scores(last: 10) }
