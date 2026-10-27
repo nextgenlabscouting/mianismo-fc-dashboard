@@ -97,7 +97,7 @@ async function fetchCardPages(field) {
           pictureUrl(derivative: "full")
           ipfsPictureUrl
           rarityTyped displayRarity seasonYear serialNumber
-          cardEditionName customCardEditionName formattedCardEditionName specialEdition
+          cardEditionName formattedCardEditionName specialEdition
           skinEdition { skin skinName variant variantName bonus }
           cardSet { name slug }
           power grade
