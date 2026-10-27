@@ -8,7 +8,7 @@ const PAGE_SIZE_NOTE = 'Sorare uses cursor pagination; this sync stops at the co
 const MAX_PAGES = 11;
 
 const QUERY_TIERS = [
-  { label: 'rich', fields: [
+{ label: 'rich', fields: [
     '__typename slug assetId name',
     'anyPlayer { displayName fullPictureUrl avatarPictureUrl squaredPictureUrl age slug activeClub { name } rawPlayerGameScores(last: 15) nextGame { date statusTyped homeTeam { name } awayTeam { name } } }',
     'anyTeam { name } anyPositions',
@@ -17,20 +17,19 @@ const QUERY_TIERS = [
     'skinEdition { skin skinName variant variantName bonus } cardSet { name slug } power grade',
     '... on Card { age rarity customCardEditionName rawSo5Scores(last: 10) }'
   ]},
-  { label: 'skin-variant', fields: [
-    'slug assetId rarityTyped seasonYear serialNumber',
-    'anyPositions anyTeam { name }',
-    'anyPlayer { displayName fullPictureUrl }',
-    'pictureUrl(derivative: "full")',
-    'skinEdition { skin skinName variant variantName bonus }'
-  ]},
-  { label: 'edition-metadata', fields: [
-    'slug assetId rarityTyped seasonYear serialNumber',
-    'anyPositions anyTeam { name }',
-    'anyPlayer { displayName }',
-    'cardEditionName formattedCardEditionName specialEdition'
-  ]},
-  { label: 'images-and-scores', fields: [
+  {
+    label: 'card-details',
+    fields: [
+      '__typename slug assetId name',
+      'anyPlayer { displayName fullPictureUrl }',
+      'anyTeam { name } anyPositions',
+      'pictureUrl(derivative: "full") ipfsPictureUrl',
+      'rarityTyped displayRarity seasonYear serialNumber cardEditionName formattedCardEditionName specialEdition',
+      'skinEdition { skin skinName variant variantName bonus } cardSet { name slug } power grade',
+      '... on Card { age rarity customCardEditionName rawSo5Scores(last: 10) }'
+    ]
+  },
+{ label: 'images-and-scores', fields: [
     '__typename slug assetId name',
     'anyPlayer { displayName fullPictureUrl }',
     'anyTeam { name } anyPositions',
@@ -38,25 +37,38 @@ const QUERY_TIERS = [
     'rarityTyped seasonYear serialNumber',
     '... on Card { rawSo5Scores(last: 10) }'
   ]},
-  { label: 'scores', fields: [
+{ label: 'skin-variant', fields: [
+    'slug assetId rarityTyped seasonYear serialNumber',
+    'anyPositions anyTeam { name }',
+    'anyPlayer { displayName fullPictureUrl }',
+    'pictureUrl(derivative: "full")',
+    'skinEdition { skin skinName variant variantName bonus }'
+  ]},
+{ label: 'edition-metadata', fields: [
+    'slug assetId rarityTyped seasonYear serialNumber',
+    'anyPositions anyTeam { name }',
+    'anyPlayer { displayName }',
+    'cardEditionName formattedCardEditionName specialEdition'
+  ]},
+{ label: 'scores', fields: [
     'slug assetId rarityTyped seasonYear serialNumber',
     'anyPositions anyTeam { name }',
     'anyPlayer { displayName }',
     '... on Card { rawSo5Scores(last: 10) }'
   ]},
-  { label: 'images', fields: [
+{ label: 'images', fields: [
     'slug assetId rarityTyped seasonYear serialNumber',
     'anyPositions anyTeam { name }',
     'anyPlayer { displayName fullPictureUrl }',
     'pictureUrl(derivative: "full")'
   ]},
-  { label: 'standard', fields: [
+{ label: 'standard', fields: [
     'slug assetId rarityTyped seasonYear serialNumber',
     'anyPositions anyTeam { name }',
     'anyPlayer { displayName }'
   ]},
-  { label: 'slug-only', fields: ['slug'] }
-];
+{ label: 'slug-only', fields: ['slug'] }
+]
 
 async function gql(query, variables = {}) {
   const response = await fetch(ENDPOINT, {
