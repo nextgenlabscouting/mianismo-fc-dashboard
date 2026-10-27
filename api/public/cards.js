@@ -48,12 +48,18 @@ function normalizeCard(card) {
   const rawScores = Array.isArray(card.rawSo5Scores)
     ? card.rawSo5Scores.filter(value => value != null && Number.isFinite(Number(value))).map(Number)
     : [];
+  const playerRawScores = Array.isArray(card.anyPlayer?.rawPlayerGameScores)
+    ? card.anyPlayer.rawPlayerGameScores.filter(value => value != null && Number.isFinite(Number(value))).map(Number)
+    : [];
+  const games = Array.isArray(card.anyPlayer?.anyFutureGames?.nodes) ? card.anyPlayer.anyFutureGames.nodes : [];
   const skin = card.skinEdition || null;
   return {
     slug: card.slug,
     assetId: card.assetId || null,
     name: card.anyPlayer?.displayName || card.name || card.slug,
     team: card.anyTeam?.name || null,
+    activeTeam: card.anyPlayer?.activeClub?.name || null,
+    playerSlug: card.anyPlayer?.slug || null,
     position: Array.isArray(card.anyPositions) ? card.anyPositions : [],
     imageUrl: card.pictureUrl || card.ipfsPictureUrl || null,
     playerImageUrl: card.anyPlayer?.pictureUrl || null,
@@ -72,12 +78,20 @@ function normalizeCard(card) {
       variantName: skin.variantName || null,
       bonus: skin.bonus ?? null
     } : null,
+    upcomingGames: games.map(game => ({
+      date: game.date || null,
+      homeTeam: game.homeTeam?.name || null,
+      awayTeam: game.awayTeam?.name || null,
+      status: game.statusTyped || null
+    })),
     power: card.power ?? null,
     grade: card.grade ?? null,
-    age: card.age ?? null,
+    age: card.age ?? card.anyPlayer?.age ?? null,
     rawScores,
-    l5: average(rawScores.slice(0, 5)),
-    l10: average(rawScores.slice(0, 10)),
+    playerRawScores,
+    l5: average(rawScores.slice(0, 5)) ?? average(playerRawScores.slice(0, 5)),
+    l10: average(playerRawScores.slice(0, 10)) ?? average(rawScores.slice(0, 10)),
+    l15: average(playerRawScores.slice(0, 15)),
     source: "Sorare GraphQL API"
   };
 }
@@ -117,7 +131,14 @@ module.exports = async function handler(req, res) {
             slug
             assetId
             name
-            anyPlayer { displayName pictureUrl }
+            anyPlayer {
+              displayName pictureUrl age slug
+              activeClub { name }
+              rawPlayerGameScores(last: 15)
+              anyFutureGames(first: 3) {
+                nodes { date statusTyped homeTeam { name } awayTeam { name } }
+              }
+            }
             anyTeam { name }
             anyPositions
             pictureUrl(derivative: "full")
@@ -182,7 +203,8 @@ module.exports = async function handler(req, res) {
         withCardImage: items.filter(card => card.imageUrl).length,
         withPlayerImage: items.filter(card => card.playerImageUrl).length,
         withVariant: items.filter(card => card.skinEdition).length,
-        withRecentScores: items.filter(card => card.rawScores.length).length
+        withRecentScores: items.filter(card => card.playerRawScores.length || card.rawScores.length).length,
+        withUpcomingGames: items.filter(card => card.upcomingGames.length).length
       },
       fetchedAt: new Date().toISOString(),
       note: "Public read-only data. Card details are requested directly from the paginated connection; continue with endCursor when hasMore is true."
