@@ -1,0 +1,28 @@
+name: Sorare cards API regression tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "api/public/cards.js"
+      - "scripts/test-cards-api.cjs"
+      - ".github/workflows/sorare-cards-tests.yml"
+  pull_request:
+    paths:
+      - "api/public/cards.js"
+      - "scripts/test-cards-api.cjs"
+      - ".github/workflows/sorare-cards-tests.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run API regression tests
+        run: node scripts/test-cards-api.cjs
