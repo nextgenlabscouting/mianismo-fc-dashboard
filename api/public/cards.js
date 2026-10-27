@@ -1,4 +1,5 @@
 const ENDPOINT = "https://api.sorare.com/graphql";
+const MAX_PAGES = 8;
 
 async function querySorare(query, variables) {
   const response = await fetch(ENDPOINT, {
@@ -22,19 +23,77 @@ module.exports = async function handler(req, res) {
   }
   const slug = String(req.query.slug || "mianismo").trim();
   if (!/^[a-zA-Z0-9_-]{1,80}$/.test(slug)) return res.status(400).json({ error: "Invalid slug" });
-  let lastError = "No supported public cards connection";
-  for (const field of ["cards", "paginatedCards"]) {
-    try {
-      const query = "query PublicUserCards($slug: String!, $cursor: String) { user(slug: $slug) { " + field + "(after: $cursor) { nodes { slug } pageInfo { endCursor } } } }";
-      const data = await querySorare(query, { slug, cursor: req.query.after || null });
-      const connection = data && data.user && data.user[field];
-      if (!connection) throw new Error("No " + field + " connection returned");
-      const items = (connection.nodes || []).filter(x => x && x.slug).map(x => ({ slug: String(x.slug), name: String(x.slug) }));
-      const endCursor = connection.pageInfo && connection.pageInfo.endCursor || null;
-      return res.status(200).json({ status: "ok", source: "Sorare public GraphQL API", profileSlug: slug, count: items.length, items, endCursor, hasMore: Boolean(endCursor && endCursor !== (req.query.after || null)), fetchedAt: new Date().toISOString(), note: "Public read-only data only." });
-    } catch (error) {
-      lastError = String(error && error.message || "Sorare request failed").slice(0, 200);
+
+  try {
+    const items = [];
+    const seen = new Set();
+    let cursor = null;
+    let hasMore = false;
+    let pagesFetched = 0;
+
+    // Read every page in this request, up to a safe serverless limit.
+    while (pagesFetched < MAX_PAGES) {
+      const data = await querySorare(
+        "query PublicUserCards($slug: String!, $cursor: String) { user(slug: $slug) { cards(after: $cursor) { nodes { slug } pageInfo { endCursor } } } }",
+        { slug, cursor }
+      );
+      const connection = data?.user?.cards;
+      if (!connection) throw new Error("Sorare did not return the public cards connection");
+      const slugs = (connection.nodes || []).map(c => c?.slug).filter(s => s && !seen.has(s));
+      slugs.forEach(s => seen.add(s));
+
+      if (slugs.length) {
+        try {
+          const detailData = await querySorare(
+            "query PublicCardDetails($slugs: [String!]) { cards(slugs: $slugs) { slug name rarityTyped season serialNumber pictureUrl player { displayName pictureUrl(derivative: \"avatar\") } team { name } } }",
+            { slugs }
+          );
+          const details = Array.isArray(detailData.cards) ? detailData.cards : [];
+          const bySlug = new Map(details.map(c => [c.slug, c]));
+          for (const cardSlug of slugs) {
+            const c = bySlug.get(cardSlug) || {};
+            items.push({
+              slug: cardSlug,
+              name: c.player?.displayName || c.name || cardSlug,
+              imageUrl: c.pictureUrl || null,
+              playerImageUrl: c.player?.pictureUrl || null,
+              rarity: c.rarityTyped || "Unknown",
+              season: c.season || null,
+              serialNumber: c.serialNumber ?? null,
+              team: c.team?.name || null
+            });
+          }
+        } catch (_) {
+          // Keep the collection usable even if Sorare changes a detail field.
+          slugs.forEach(cardSlug => items.push({ slug: cardSlug, name: cardSlug, imageUrl: null, rarity: "Unknown" }));
+        }
+      }
+
+      pagesFetched += 1;
+      const next = connection.pageInfo?.endCursor || null;
+      hasMore = Boolean(next && next !== cursor);
+      if (!hasMore) break;
+      cursor = next;
     }
+
+    return res.status(200).json({
+      status: "ok",
+      source: "Sorare public GraphQL API",
+      profileSlug: slug,
+      count: items.length,
+      items,
+      endCursor: cursor,
+      hasMore,
+      pagesFetched,
+      fetchedAt: new Date().toISOString(),
+      note: "Public read-only data. Pagination is followed automatically up to the per-request safety limit."
+    });
+  } catch (error) {
+    return res.status(502).json({
+      status: "unavailable",
+      error: String(error?.message || "Sorare request failed").slice(0, 200),
+      profileSlug: slug,
+      items: []
+    });
   }
-  return res.status(502).json({ status: "unavailable", error: lastError, profileSlug: slug, items: [] });
 };
