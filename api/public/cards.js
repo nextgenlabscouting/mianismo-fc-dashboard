@@ -4,7 +4,7 @@ const MAX_PAGES = 1;
 // Optional fields are isolated into query tiers. If the Sorare schema changes,
 // the endpoint can still return the inventory using the documented base fields.
 const QUERY_TIERS = [
-  {
+{
     label: "rich",
     fields: [
       "__typename slug assetId name",
@@ -17,25 +17,18 @@ const QUERY_TIERS = [
     ]
   },
   {
-    label: "skin-variant",
+    label: "card-details",
     fields: [
-      "slug assetId rarityTyped seasonYear serialNumber",
-      "anyPositions anyTeam { name }",
+      "__typename slug assetId name",
       "anyPlayer { displayName fullPictureUrl }",
-      "pictureUrl(derivative: \"full\")",
-      "skinEdition { skin skinName variant variantName bonus }"
+      "anyTeam { name } anyPositions",
+      "pictureUrl(derivative: \"full\") ipfsPictureUrl",
+      "rarityTyped displayRarity seasonYear serialNumber cardEditionName formattedCardEditionName specialEdition",
+      "skinEdition { skin skinName variant variantName bonus } cardSet { name slug } power grade",
+      "... on Card { age rarity customCardEditionName rawSo5Scores(last: 10) }"
     ]
   },
-  {
-    label: "edition-metadata",
-    fields: [
-      "slug assetId rarityTyped seasonYear serialNumber",
-      "anyPositions anyTeam { name }",
-      "anyPlayer { displayName }",
-      "cardEditionName formattedCardEditionName specialEdition"
-    ]
-  },
-  {
+{
     label: "images-and-scores",
     fields: [
       "__typename slug assetId name",
@@ -46,7 +39,26 @@ const QUERY_TIERS = [
       "... on Card { rawSo5Scores(last: 10) }"
     ]
   },
-  {
+{
+    label: "skin-variant",
+    fields: [
+      "slug assetId rarityTyped seasonYear serialNumber",
+      "anyPositions anyTeam { name }",
+      "anyPlayer { displayName fullPictureUrl }",
+      "pictureUrl(derivative: \"full\")",
+      "skinEdition { skin skinName variant variantName bonus }"
+    ]
+  },
+{
+    label: "edition-metadata",
+    fields: [
+      "slug assetId rarityTyped seasonYear serialNumber",
+      "anyPositions anyTeam { name }",
+      "anyPlayer { displayName }",
+      "cardEditionName formattedCardEditionName specialEdition"
+    ]
+  },
+{
     label: "scores",
     fields: [
       "slug assetId rarityTyped seasonYear serialNumber",
@@ -55,7 +67,7 @@ const QUERY_TIERS = [
       "... on Card { rawSo5Scores(last: 10) }"
     ]
   },
-  {
+{
     label: "images",
     fields: [
       "slug assetId rarityTyped seasonYear serialNumber",
@@ -64,7 +76,7 @@ const QUERY_TIERS = [
       "pictureUrl(derivative: \"full\")"
     ]
   },
-  {
+{
     label: "standard",
     fields: [
       "slug assetId rarityTyped seasonYear serialNumber",
@@ -72,11 +84,11 @@ const QUERY_TIERS = [
       "anyPlayer { displayName }"
     ]
   },
-  {
+{
     label: "slug-only",
     fields: ["slug"]
   }
-];
+]
 
 async function querySorare(query, variables = {}) {
   const response = await fetch(ENDPOINT, {
