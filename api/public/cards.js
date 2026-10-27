@@ -4,7 +4,7 @@ const MAX_PAGES = 8;
 async function querySorare(query, variables) {
   const response = await fetch(ENDPOINT, {
     method: "POST",
-    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+    headers: { "Content-Type": "application/json", "Accept": "application/json", ...(process.env.SORARE_API_KEY ? { APIKEY: process.env.SORARE_API_KEY } : {}) },
     body: JSON.stringify({ query, variables }),
     signal: AbortSignal.timeout(12000)
   });
@@ -30,6 +30,7 @@ module.exports = async function handler(req, res) {
     let cursor = null;
     let hasMore = false;
     let pagesFetched = 0;
+    let detailsError = null;
 
     // Read every page in this request, up to a safe serverless limit.
     while (pagesFetched < MAX_PAGES) {
@@ -63,7 +64,8 @@ module.exports = async function handler(req, res) {
               team: c.team?.name || null
             });
           }
-        } catch (_) {
+        } catch (detailError) {
+          detailsError = String(detailError?.message || "Card details query failed").slice(0, 200);
           // Keep the collection usable even if Sorare changes a detail field.
           slugs.forEach(cardSlug => items.push({ slug: cardSlug, name: cardSlug, imageUrl: null, rarity: "Unknown" }));
         }
@@ -85,6 +87,8 @@ module.exports = async function handler(req, res) {
       endCursor: cursor,
       hasMore,
       pagesFetched,
+      apiKeyConfigured: Boolean(process.env.SORARE_API_KEY),
+      detailsError,
       fetchedAt: new Date().toISOString(),
       note: "Public read-only data. Pagination is followed automatically up to the per-request safety limit."
     });
@@ -93,6 +97,7 @@ module.exports = async function handler(req, res) {
       status: "unavailable",
       error: String(error?.message || "Sorare request failed").slice(0, 200),
       profileSlug: slug,
+      apiKeyConfigured: Boolean(process.env.SORARE_API_KEY),
       items: []
     });
   }
