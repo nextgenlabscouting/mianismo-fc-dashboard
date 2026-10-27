@@ -53,7 +53,7 @@ function cardFixture(extra = {}) {
     serialNumber: 42,
     anyPositions: ["Goalkeeper"],
     anyTeam: { name: "Test FC" },
-    anyPlayer: { displayName: "Test Player", fullPictureUrl: "https://cdn.example/player.png" },
+    anyPlayer: { displayName: "Test Player", fullPictureUrl: "https://cdn.example/player.png", nextGame: { date: "2026-10-31T15:00:00Z", statusTyped: "scheduled", homeTeam: { name: "Test FC" }, awayTeam: { name: "Away FC" } } },
     pictureUrl: "https://cdn.example/card.png",
     skinEdition: { skin: "shiny", skinName: "Shiny", variant: "SHINY", variantName: "Shiny", bonus: 1 },
     rawSo5Scores: [50, 60, 40, 55, 45],
@@ -75,11 +75,16 @@ async function testVariantQueryFallback() {
   });
   assert.equal(res.statusCode, 200);
   assert.equal(res.body.status, "ok");
-  assert.equal(res.body.queryTier, "card-details");
+  assert.equal(res.body.queryTier, "card-details-with-fixtures");
   assert.equal(res.body.items[0].name, "Test Player");
   assert.equal(res.body.items[0].imageUrl, "https://cdn.example/card.png");
   assert.equal(res.body.items[0].skinEdition.skinName, "Shiny");
+  assert.equal(res.body.items[0].rawScores.length, 5);
+  assert.equal(res.body.items[0].l5, 50);
+  assert.equal(res.body.items[0].upcomingGames.length, 1);
+  assert.equal(res.body.items[0].upcomingGames[0].awayTeam, "Away FC");
   assert.equal(res.body.dataQuality.withVariant, 1);
+  assert.equal(res.body.dataQuality.withUpcomingGames, 1);
   assert.equal(calls, 2);
 }
 
