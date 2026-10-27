@@ -1,4 +1,55 @@
 const SORARE_ENDPOINT = "https://api.sorare.com/graphql";
+
+const CARD_QUERY_TIERS = [
+  { label: "rich", fields: [
+    "__typename slug assetId name",
+    "anyPlayer { displayName fullPictureUrl avatarPictureUrl squaredPictureUrl age slug activeClub { name } rawPlayerGameScores(last: 15) nextGame { date statusTyped homeTeam { name } awayTeam { name } } }",
+    "anyTeam { name } anyPositions",
+    "pictureUrl(derivative: \"full\") ipfsPictureUrl",
+    "rarityTyped displayRarity seasonYear serialNumber cardEditionName formattedCardEditionName specialEdition",
+    "skinEdition { skin skinName variant variantName bonus } cardSet { name slug } power grade",
+    "... on Card { age rarity customCardEditionName rawSo5Scores(last: 10) }"
+  ]},
+  { label: "skin-variant", fields: [
+    "slug assetId rarityTyped seasonYear serialNumber",
+    "anyPositions anyTeam { name }",
+    "anyPlayer { displayName fullPictureUrl }",
+    "pictureUrl(derivative: \"full\")",
+    "skinEdition { skin skinName variant variantName bonus }"
+  ]},
+  { label: "edition-metadata", fields: [
+    "slug assetId rarityTyped seasonYear serialNumber",
+    "anyPositions anyTeam { name }",
+    "anyPlayer { displayName }",
+    "cardEditionName formattedCardEditionName specialEdition"
+  ]},
+  { label: "images-and-scores", fields: [
+    "__typename slug assetId name",
+    "anyPlayer { displayName fullPictureUrl }",
+    "anyTeam { name } anyPositions",
+    "pictureUrl(derivative: \"full\")",
+    "rarityTyped seasonYear serialNumber",
+    "... on Card { rawSo5Scores(last: 10) }"
+  ]},
+  { label: "scores", fields: [
+    "slug assetId rarityTyped seasonYear serialNumber",
+    "anyPositions anyTeam { name }",
+    "anyPlayer { displayName }",
+    "... on Card { rawSo5Scores(last: 10) }"
+  ]},
+  { label: "images", fields: [
+    "slug assetId rarityTyped seasonYear serialNumber",
+    "anyPositions anyTeam { name }",
+    "anyPlayer { displayName fullPictureUrl }",
+    "pictureUrl(derivative: \"full\")"
+  ]},
+  { label: "standard", fields: [
+    "slug assetId rarityTyped seasonYear serialNumber",
+    "anyPositions anyTeam { name }",
+    "anyPlayer { displayName }"
+  ]},
+  { label: "slug-only", fields: ["slug"] }
+];
 const ALLOWED_ORIGINS = new Set([
   "https://nextgenlabscouting.github.io",
   "https://mianismo-fc-dashboard.pages.dev",
@@ -46,28 +97,78 @@ function average(values) {
   const numbers = (Array.isArray(values) ? values : []).filter(value => value != null && Number.isFinite(Number(value))).map(Number);
   return numbers.length ? Math.round(numbers.reduce((sum, value) => sum + value, 0) / numbers.length * 10) / 10 : null;
 }
+function scoreNumbers(values) {
+  return (Array.isArray(values) ? values : [])
+    .map(value => typeof value === "object" && value !== null
+      ? (value.score ?? value.points ?? value.value ?? null)
+      : value)
+    .filter(value => value != null && Number.isFinite(Number(value)))
+    .map(Number);
+}
+function average(values) {
+  const numbers = scoreNumbers(values);
+  return numbers.length ? Math.round(numbers.reduce((sum, value) => sum + value, 0) / numbers.length * 10) / 10 : null;
+}
 function normalizeCard(card) {
-  const rawScores = Array.isArray(card.rawSo5Scores) ? card.rawSo5Scores.filter(value => value != null && Number.isFinite(Number(value))).map(Number) : [];
+  const player = card.anyPlayer || {};
+  const rawScores = scoreNumbers(card.rawSo5Scores);
+  const playerRawScores = scoreNumbers(player.rawPlayerGameScores);
+  const nextGame = player.nextGame || null;
   const skin = card.skinEdition || null;
   return {
-    slug: card.slug, assetId: card.assetId || null,
-    name: card.anyPlayer?.displayName || card.name || card.slug,
+    slug: card.slug,
+    assetId: card.assetId || null,
+    playerSlug: player.slug || null,
+    name: player.displayName || card.name || card.slug,
     team: card.anyTeam?.name || null,
+    activeTeam: player.activeClub?.name || null,
     position: Array.isArray(card.anyPositions) ? card.anyPositions : [],
     imageUrl: card.pictureUrl || card.ipfsPictureUrl || null,
-    playerImageUrl: card.anyPlayer?.fullPictureUrl || card.anyPlayer?.avatarPictureUrl || card.anyPlayer?.squaredPictureUrl || null,
+    playerImageUrl: player.fullPictureUrl || player.avatarPictureUrl || player.squaredPictureUrl || null,
     rarity: card.displayRarity || card.rarity || card.rarityTyped || "Unknown",
     rarityTyped: card.rarityTyped || null,
-    season: card.seasonYear ?? null, serialNumber: card.serialNumber ?? null,
+    season: card.seasonYear ?? null,
+    serialNumber: card.serialNumber ?? null,
     edition: card.customCardEditionName || card.formattedCardEditionName || card.cardEditionName || card.specialEdition || null,
     specialEdition: card.specialEdition || null,
     set: card.cardSet ? { name: card.cardSet.name, slug: card.cardSet.slug } : null,
     skinEdition: skin ? { skin: skin.skin || null, skinName: skin.skinName || null, variant: skin.variant || null, variantName: skin.variantName || null, bonus: skin.bonus ?? null } : null,
-    power: card.power ?? null, grade: card.grade ?? null, age: card.age ?? null,
-    rawScores, l5: average(rawScores.slice(0, 5)), l10: average(rawScores.slice(0, 10)),
+    power: card.power ?? null,
+    grade: card.grade ?? null,
+    age: card.age ?? player.age ?? null,
+    rawScores,
+    playerRawScores,
+    l5: average(playerRawScores.slice(0, 5)) ?? average(rawScores.slice(0, 5)),
+    l10: average(playerRawScores.slice(0, 10)) ?? average(rawScores.slice(0, 10)),
+    l15: average(playerRawScores.slice(0, 15)) ?? average(rawScores.slice(0, 15)),
+    cardL5: average(rawScores.slice(0, 5)),
+    upcomingGames: nextGame ? [{ date: nextGame.date || null, homeTeam: nextGame.homeTeam?.name || null, awayTeam: nextGame.awayTeam?.name || null, status: nextGame.statusTyped || null }] : [],
     source: "Sorare GraphQL API"
   };
 }
+function buildCardsQuery(field, tier) {
+  const fields = CARD_QUERY_TIERS[tier].fields.join("\n                ");
+  return [
+    "query PublicUserCards($slug: String!, $cursor: String) {",
+    "  user(slug: $slug) {",
+    "    " + field + "(after: $cursor) {",
+    "      nodes { " + fields + " }",
+    "      pageInfo { endCursor }",
+    "    }",
+    "  }",
+    "}"
+  ].join("\n");
+}
+function cardQuality(items) {
+  return {
+    withCardImage: items.filter(card => card.imageUrl).length,
+    withPlayerImage: items.filter(card => card.playerImageUrl).length,
+    withVariant: items.filter(card => card.skinEdition || card.specialEdition || card.edition).length,
+    withRecentScores: items.filter(card => card.rawScores.length || card.playerRawScores.length).length,
+    withUpcomingGames: items.filter(card => card.upcomingGames.length).length
+  };
+}
+
 export default {
   async fetch(request) {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(request) });
@@ -91,49 +192,59 @@ export default {
     if (url.pathname === "/api/public/cards") {
       const slug = (url.searchParams.get("slug") || "mianismo").trim();
       const after = url.searchParams.get("after") || null;
-      const first = Math.max(1, Math.min(50, Number(url.searchParams.get("first") || 50)));
       if (!/^[a-zA-Z0-9_-]{1,80}$/.test(slug)) return json(request, { error: "Invalid profile slug." }, 400);
       if (after && after.length > 500) return json(request, { error: "Invalid pagination cursor." }, 400);
       try {
-        const query = `query PublicUserCards($slug: String!, $cursor: String, $first: Int!) {
-          user(slug: $slug) {
-            cards(first: $first, after: $cursor) {
-              nodes {
-                __typename slug assetId name
-                anyPlayer { displayName fullPictureUrl }
-                anyTeam { name } anyPositions
-                pictureUrl(derivative: "full") ipfsPictureUrl
-                rarityTyped displayRarity seasonYear serialNumber
-                cardEditionName formattedCardEditionName specialEdition
-                skinEdition { skin skinName variant variantName bonus }
-                cardSet { name slug } power grade
-                ... on Card { age rarity customCardEditionName rawSo5Scores(last: 10) }
-              }
-              pageInfo { endCursor hasNextPage }
+        let connection = null;
+        let lastError = null;
+        const fallbackErrors = [];
+        let selectedField = "cards";
+        let selectedTier = 0;
+
+        for (const field of ["cards", "paginatedCards"]) {
+          for (let tier = 0; tier < CARD_QUERY_TIERS.length; tier++) {
+            try {
+              const data = await sorareGraphQL(buildCardsQuery(field, tier), { slug, cursor: after });
+              const candidate = data?.user?.[field];
+              if (!candidate) throw new Error("Sorare did not return the " + field + " connection");
+              connection = candidate;
+              selectedField = field;
+              selectedTier = tier;
+              break;
+            } catch (error) {
+              lastError = error;
+              fallbackErrors.push({ field, tier: CARD_QUERY_TIERS[tier].label, error: String(error?.message || error).slice(0, 220) });
             }
           }
-        }`;
-        const data = await sorareGraphQL(query, { slug, cursor: after, first });
-        const connection = data?.user?.cards;
-        if (!connection) throw new Error("Sorare did not return the public cards connection");
+          if (connection) break;
+        }
+
+        if (!connection) throw lastError || new Error("All Sorare card query variants failed");
         const items = (connection.nodes || []).filter(card => card?.slug).map(normalizeCard);
         const endCursor = connection.pageInfo?.endCursor || null;
         return json(request, {
-          status: "ok", source: "Sorare public GraphQL API", profileSlug: slug,
-          count: items.length, items, endCursor,
-          hasMore: Boolean(connection.pageInfo?.hasNextPage && endCursor && endCursor !== after),
+          status: "ok",
+          source: "Sorare public GraphQL API",
+          profileSlug: slug,
+          count: items.length,
+          items,
+          endCursor,
+          hasMore: Boolean(endCursor && endCursor !== after),
+          queryField: selectedField,
+          queryTier: CARD_QUERY_TIERS[selectedTier].label,
           apiKeyConfigured: false,
-          dataQuality: {
-            withCardImage: items.filter(card => card.imageUrl).length,
-            withPlayerImage: items.filter(card => card.playerImageUrl).length,
-            withVariant: items.filter(card => card.skinEdition).length,
-            withRecentScores: items.filter(card => card.rawScores.length).length
-          },
+          dataQuality: cardQuality(items),
+          diagnostic: { attemptedFallbacks: fallbackErrors.length, fallbackErrors: fallbackErrors.slice(-5) },
           fetchedAt: new Date().toISOString(),
-          note: "Public read-only data; pass endCursor as after to fetch the next page."
+          note: "Public read-only data. Optional fields fall back automatically when the schema rejects them; pass endCursor as after for the next page."
         });
       } catch (error) {
-        return json(request, { status: "unavailable", error: String(error?.message || "Could not read public cards").slice(0, 400), profileSlug: slug, items: [] }, 502);
+        return json(request, {
+          status: "unavailable",
+          error: String(error?.message || "Could not read public cards").slice(0, 400),
+          profileSlug: slug,
+          items: []
+        }, 502);
       }
     }
     return json(request, { error: "Route not found.", availableRoutes: ["/health", "/api/public/profile?slug=mianismo", "/api/public/cards?slug=mianismo"] }, 404);
