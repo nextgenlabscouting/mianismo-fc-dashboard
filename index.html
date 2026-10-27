@@ -44,13 +44,13 @@
     <div class="panel"><div class="panel-head"><div><h3 class="panel-title">Archivio carte</h3><p class="panel-sub">Un registro personale della tua collezione Sorare.</p></div><button class="btn btn-primary btn-small" id="addCardPage">＋ Aggiungi carta</button></div><div class="toolbar"><div class="toolbar-left"><input class="input" id="cardSearch" placeholder="Cerca giocatore, club o campionato…" aria-label="Cerca carte"><select class="select" id="positionFilter" aria-label="Filtra per ruolo"><option value="">Tutti i ruoli</option><option>Portiere</option><option>Difensore</option><option>Centrocampista</option><option>Attaccante</option><option>Altro</option></select></div><div class="toolbar-right"><button class="btn btn-small" id="exportData">Esporta backup</button><button class="btn btn-small" id="importData">Importa backup</button><input type="file" id="importFile" accept="application/json" class="hide"></div></div><div id="cardsGrid" class="cards-grid"></div><div id="cardsEmpty" class="empty"><span class="empty-icon">▧</span><strong>Nessuna carta in archivio</strong><p>Inserisci la prima carta. I dati saranno salvati nel browser su questo dispositivo.</p><button class="btn btn-primary btn-small" id="addEmptyCard">＋ Aggiungi carta</button></div></div>
   </section>
   <section class="page" id="page-lineup">
-    <div class="grid lineup-layout"><div class="panel"><div class="panel-head"><div><h3 class="panel-title">Lineup builder</h3><p class="panel-sub">Componi una bozza di formazione con le carte registrate.</p></div><span class="tag">5 slot</span></div><div class="notice" style="margin-bottom:15px"><span class="notice-icon">ⓘ</span><div>È uno strumento organizzativo generico, non un validatore ufficiale delle regole della competizione selezionata. Controlla sempre i requisiti in Sorare.</div></div><div class="slots" id="lineupSlots"></div><div class="status-line"></div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><div class="muted" style="font-size:11px">Media L5 inserita (carte selezionate)</div><div class="resource-big" id="lineupAverage">—</div></div><div><button class="btn btn-small" id="clearLineup">Svuota formazione</button><button class="btn btn-primary btn-small" id="saveLineup">Salva formazione</button></div></div></div><div class="panel"><div class="panel-head"><div><h3 class="panel-title">Valutazione della bozza</h3><p class="panel-sub">Solo dati presenti nella tua dashboard.</p></div></div><div id="lineupSummary" class="empty"><span class="empty-icon">⚽</span><strong>Seleziona le carte</strong><p>Quando compili gli slot, qui vedrai i dettagli della formazione scelta.</p></div></div></div>
+    <div class="grid lineup-layout"><div class="panel"><div class="panel-head"><div><h3 class="panel-title">Lineup builder</h3><p class="panel-sub">Componi una bozza di formazione con le carte registrate.</p></div><span class="tag">5 slot</span></div><div class="notice" style="margin-bottom:15px"><span class="notice-icon">ⓘ</span><div>È uno strumento organizzativo generico, non un validatore ufficiale delle regole della competizione selezionata. Controlla sempre i requisiti in Sorare.</div></div><div class="toolbar" style="margin-top:0"><div class="field" style="max-width:190px"><label for="lineupTarget">Obiettivo punti (facoltativo)</label><input class="input" id="lineupTarget" type="number" min="0" max="1000" step="1" placeholder="Es. 300"></div><div class="toolbar-right"><button class="btn btn-primary" id="autoBuildLineup" type="button">Trova formazione stimata</button></div></div><div class="slots" id="lineupSlots"></div><div class="status-line"></div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><div class="muted" style="font-size:11px">Media L5 inserita (carte selezionate)</div><div class="resource-big" id="lineupAverage">—</div></div><div><button class="btn btn-small" id="clearLineup">Svuota formazione</button><button class="btn btn-primary btn-small" id="saveLineup">Salva formazione</button></div></div></div><div class="panel"><div class="panel-head"><div><h3 class="panel-title">Valutazione della bozza</h3><p class="panel-sub">Solo dati presenti nella tua dashboard.</p></div></div><div id="lineupSummary" class="empty"><span class="empty-icon">⚽</span><strong>Seleziona le carte</strong><p>Quando compili gli slot, qui vedrai i dettagli della formazione scelta.</p></div></div></div>
   </section>
   <section class="page" id="page-resources">
     <div class="panel"><div class="panel-head"><div><h3 class="panel-title">Risorse e obiettivi</h3><p class="panel-sub">Tieni traccia di Gems, Essence e completamento della collezione.</p></div><span class="tag">Modificabile</span></div><div class="resource-grid"><div class="resource-tile"><div class="label">Gems disponibili</div><div class="value green" id="resourceGemsDisplay">320</div><div class="foot">Saldo dichiarato, da verificare</div></div><div class="resource-tile"><div class="label">Essence</div><div class="value cyan" id="resourceEssenceDisplay">10.000</div><div class="foot" id="resourceSetDisplay">Set: Hyperglitch</div></div><div class="resource-tile"><div class="label">Collezione</div><div class="value" id="resourceCollectionDisplay">80%</div><div class="progress-track"><div class="progress-bar" id="collectionBar" style="width:80%"></div></div><div class="foot">Obiettivo modificabile</div></div></div><form id="resourcesForm"><div class="resource-form"><div class="field"><label for="gemsInput">Gems attuali</label><input class="input" id="gemsInput" type="number" min="0" step="1" value="320" required></div><div class="field"><label for="essenceInput">Essence attuali</label><input class="input" id="essenceInput" type="number" min="0" step="1" value="10000" required></div><div class="field"><label for="setInput">Nome del Set</label><input class="input" id="setInput" value="Hyperglitch" maxlength="60" required></div><div class="field"><label for="collectionInput">Completamento collezione (%)</label><input class="input" id="collectionInput" type="number" min="0" max="100" step="1" value="80" required><small>Inserisci un valore tra 0 e 100.</small></div><div class="field"><label for="goalInput">Obiettivo Gems</label><input class="input" id="goalInput" type="number" min="0" step="1" value="500" required></div><div class="field"><label for="notesInput">Note / prossime scadenze</label><input class="input" id="notesInput" placeholder="Es. verificare premi del Set…" maxlength="250"></div></div><div style="display:flex;gap:9px;justify-content:flex-end;margin-top:18px"><button type="button" class="btn" id="resetResources">Ripristina valori iniziali</button><button class="btn btn-primary" type="submit">Salva risorse</button></div></form><div class="status-line"></div><div class="panel-head"><div><h3 class="panel-title">Progresso verso l'obiettivo</h3><p class="panel-sub">Avanzamento aritmetico basato sul saldo che hai inserito.</p></div></div><div class="progress-track" style="height:10px"><div class="progress-bar" id="goalBar"></div></div><div style="display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted)"><span id="goalCaption">320 / 500 Gems</span><span id="goalPercent">64%</span></div><div class="status-line"></div><div class="notice"><span class="notice-icon">ⓘ</span><div>Questo registro non certifica il saldo Sorare e non prevede i premi futuri. Aggiorna i valori dopo averli verificati nel tuo account.</div></div></div>
   </section>
   <section class="page" id="page-sorare">
-    <div class="hero"><div class="hero-copy"><div class="hero-label">Public data bridge</div><h2>MIANISMO FC <span class="green">Sorare Sync.</span></h2><p>Questo pannello legge il report pubblico aggiornato da GitHub Actions. Non usa la password Sorare e non finge di leggere dati privati.</p><a class="btn btn-primary" href="https://sorare.com/it/football/series/my-club/mianismo" target="_blank" rel="noopener noreferrer">Apri il profilo Sorare ↗</a> <button class="btn" id="reloadSorareData">Rileggi dati</button></div><div class="hero-mark">↻<span style="font-size:9px;align-self:end;margin-left:-12px;margin-bottom:26px">/ API</span></div></div>
+    <div class="hero"><div class="hero-copy"><div class="hero-label">Public data bridge</div><h2>MIANISMO FC <span class="green">Sorare Sync.</span></h2><p>Questo pannello legge il report pubblico aggiornato da GitHub Actions. Non usa la password Sorare e non finge di leggere dati privati.</p><a class="btn btn-primary" href="https://sorare.com/it/football/series/my-club/mianismo" target="_blank" rel="noopener noreferrer">Apri il profilo Sorare ↗</a> <button class="btn" id="reloadSorareData">Rileggi dati</button> <button class="btn btn-primary" id="importSorareCards" disabled>Importa carte nella collezione</button></div><div class="hero-mark">↻<span style="font-size:9px;align-self:end;margin-left:-12px;margin-bottom:26px">/ API</span></div></div>
     <div class="grid stats">
       <div class="stat"><div class="stat-head"><span>Stato sincronizzazione</span><span class="stat-icon">↻</span></div><div class="stat-value" id="sorareStatus" style="font-size:20px">In attesa</div><div class="stat-foot" id="sorareStatusFoot">Da eseguire il primo controllo</div></div>
       <div class="stat"><div class="stat-head"><span>Profilo risolto</span><span class="stat-icon">◎</span></div><div class="stat-value" id="sorareProfileFound">—</div><div class="stat-foot" id="sorareProfileName">Slug richiesto: mianismo</div></div>
@@ -84,12 +84,88 @@ function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show')
 function goto(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));const titles={overview:['La tua stagione, sotto controllo.','Dati, carte e risorse di MIANISMO FC in un unico posto.'],cards:['La tua collezione.','Organizza le carte e conserva le statistiche che vuoi confrontare.'],lineup:['Costruisci la tua formazione.','Componi una bozza e confronta le medie inserite.'],resources:['Gestisci ogni risorsa.','Saldo, obiettivi e note operative in un unico pannello.'],sorare:['Sorare Sync.','Report pubblico recuperato automaticamente tramite GitHub Actions.']};$('pageTitle').textContent=titles[page][0];$('pageSubtitle').textContent=titles[page][1];window.scrollTo({top:0,behavior:'smooth'});if(page==='lineup')renderLineup()}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.page)));document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.goto)));
 function cardInitials(name){return String(name||'?').split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase()}
-function cardHTML(c){return `<article class="player-card"><div class="card-top"><div class="player-avatar">${esc(cardInitials(c.name))}</div><div style="min-width:0"><div class="player-name">${esc(c.name)}</div><div class="player-club">${esc(c.club||'Club non inserito')}</div></div><span class="rarity">${esc(c.rarity||'Non indicata')}</span></div><div class="card-metrics"><div class="metric"><span>Media L5</span><strong>${c.l5!==''&&c.l5!=null?esc(fmt(c.l5)):'—'}</strong></div><div class="metric"><span>Media L15</span><strong>${c.l15!==''&&c.l15!=null?esc(fmt(c.l15)):'—'}</strong></div><div class="metric"><span>Ruolo</span><strong style="font-size:11px">${esc(c.position||'—')}</strong></div></div><div class="card-tags">${c.league?`<span class="tag">${esc(c.league)}</span>`:''}${c.age?`<span class="tag">${esc(c.age)} anni</span>`:''}</div>${c.note?`<div class="muted" style="font-size:11px;margin-top:9px">${esc(c.note)}</div>`:''}<div class="card-actions"><button class="btn btn-small" data-edit="${esc(c.id)}">Modifica</button><button class="btn btn-small" data-delete="${esc(c.id)}">Elimina</button></div></article>`}
+function cardHTML(c){return `<article class="player-card"><div class="card-top"><div class="player-avatar">${c.imageUrl?`<img src="${esc(c.imageUrl)}" alt="Carta ${esc(c.name)}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:esc(cardInitials(c.name))}</div><div style="min-width:0"><div class="player-name">${esc(c.name)}</div><div class="player-club">${esc(c.club||'Club non inserito')}</div></div><span class="rarity">${esc(c.rarity||'Non indicata')}</span></div><div class="card-metrics"><div class="metric"><span>Media L5</span><strong>${c.l5!==''&&c.l5!=null?esc(fmt(c.l5)):'—'}</strong></div><div class="metric"><span>Media L15</span><strong>${c.l15!==''&&c.l15!=null?esc(fmt(c.l15)):'—'}</strong></div><div class="metric"><span>Ruolo</span><strong style="font-size:11px">${esc(c.position||'—')}</strong></div></div><div class="card-tags">${c.league?`<span class="tag">${esc(c.league)}</span>`:''}${c.age?`<span class="tag">${esc(c.age)} anni</span>`:''}</div>${c.note?`<div class="muted" style="font-size:11px;margin-top:9px">${esc(c.note)}</div>`:''}<div class="card-actions"><button class="btn btn-small" data-edit="${esc(c.id)}">Modifica</button><button class="btn btn-small" data-delete="${esc(c.id)}">Elimina</button></div></article>`}
 function renderCards(){const q=$('cardSearch').value.trim().toLowerCase(),pos=$('positionFilter').value;const list=state.cards.filter(c=>(!q||[c.name,c.club,c.league,c.rarity,c.position].some(x=>String(x||'').toLowerCase().includes(q)))&&(!pos||c.position===pos));$('cardsGrid').innerHTML=list.map(cardHTML).join('');$('cardsEmpty').classList.toggle('hide',list.length>0);if(state.cards.length&&list.length===0){$('cardsEmpty').classList.remove('hide');$('cardsEmpty').innerHTML='<span class="empty-icon">⌕</span><strong>Nessuna carta corrispondente</strong><p>Prova a cambiare ricerca o filtri.</p>';}else if(state.cards.length===0){$('cardsEmpty').innerHTML='<span class="empty-icon">▧</span><strong>Nessuna carta in archivio</strong><p>Inserisci la prima carta. I dati saranno salvati nel browser su questo dispositivo.</p><button class="btn btn-primary btn-small" id="addEmptyCard">＋ Aggiungi carta</button>';if($('addEmptyCard'))$('addEmptyCard').onclick=()=>openModal();}document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openModal(state.cards.find(c=>c.id===b.dataset.edit)));document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteCard(b.dataset.delete));$('navCardCount').textContent=state.cards.length}
 function renderOverview(){const r=state.resources;$('statCards').textContent=state.cards.length;$('statCardsFoot').textContent=state.cards.length?`${state.cards.filter(c=>c.l5!==''&&c.l5!=null).length} con media L5 inserita`:'Nessuna carta inserita';$('statGems').textContent=fmt(r.gems);$('statEssence').textContent=fmt(r.essence);$('statEssenceFoot').textContent=(r.set||'Set non indicato')+' · da confermare';$('statCollection').textContent=fmt(r.collection)+'%';$('resourceGemsDisplay').textContent=fmt(r.gems);$('resourceEssenceDisplay').textContent=fmt(r.essence);$('resourceSetDisplay').textContent='Set: '+(r.set||'Non indicato');$('resourceCollectionDisplay').textContent=fmt(r.collection)+'%';$('collectionBar').style.width=Math.max(0,Math.min(100,num(r.collection)))+'%';let cards=state.cards.slice(0,3);if(cards.length){$('overviewCards').className='cards-grid';$('overviewCards').innerHTML=cards.map(cardHTML).join('');bindCardActions($('overviewCards'));}else{$('overviewCards').className='empty';$('overviewCards').innerHTML='<span class="empty-icon">▧</span><strong>La tua collezione parte da qui</strong><p>Aggiungi le carte che possiedi per organizzare ruoli, medie e campionati.</p><button class="btn btn-primary btn-small" id="addFirstCard">＋ Inserisci la prima carta</button>';if($('addFirstCard'))$('addFirstCard').onclick=()=>openModal();}}
 function bindCardActions(root){root.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openModal(state.cards.find(c=>c.id===b.dataset.edit)));root.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteCard(b.dataset.delete))}
-function renderLineup(){const slots=$('lineupSlots');const labels=['Slot 1','Slot 2','Slot 3','Slot 4','Slot 5'];slots.innerHTML=labels.map((label,i)=>{const id=state.lineup[i]||'';const c=state.cards.find(x=>x.id===id);return `<div class="slot ${c?'filled':''}"><div class="slot-label">${label}</div><select class="select lineup-select" data-slot="${i}"><option value="">Seleziona una carta…</option>${state.cards.map(x=>`<option value="${esc(x.id)}" ${x.id===id?'selected':''}>${esc(x.name)}${x.club?' · '+esc(x.club):''}</option>`).join('')}</select><div class="slot-info">${c?`${esc(c.position||'Ruolo non indicato')} · L5: <b>${c.l5!==''&&c.l5!=null?esc(fmt(c.l5)):'n.d.'}</b>`:'Nessun giocatore selezionato'}</div></div>`}).join('');slots.querySelectorAll('select').forEach(s=>s.onchange=()=>{const idx=Number(s.dataset.slot);state.lineup[idx]=s.value;persist();renderLineup()});const chosen=state.lineup.map(id=>state.cards.find(c=>c.id===id)).filter(Boolean);const scores=chosen.map(c=>c.l5).filter(v=>v!==''&&v!=null&&Number.isFinite(Number(v))).map(Number);$('lineupAverage').textContent=scores.length?fmt(scores.reduce((a,b)=>a+b,0)/scores.length):'—';if(!chosen.length){$('lineupSummary').className='empty';$('lineupSummary').innerHTML='<span class="empty-icon">⚽</span><strong>Seleziona le carte</strong><p>Quando compili gli slot, qui vedrai i dettagli della formazione scelta.</p>';return;}$('lineupSummary').className='';$('lineupSummary').innerHTML=`<div class="resource-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="resource-tile"><div class="label">Carte selezionate</div><div class="value">${chosen.length}/5</div></div><div class="resource-tile"><div class="label">Medie disponibili</div><div class="value green">${scores.length}/ ${chosen.length}</div></div></div><div class="activity-list">${chosen.map(c=>`<div class="activity"><div class="activity-ico">${esc(cardInitials(c.name))}</div><div><strong>${esc(c.name)}</strong><p>${esc(c.club||'Club non inserito')} · ${esc(c.position||'Ruolo n.d.')} · L5 ${c.l5!==''&&c.l5!=null?esc(fmt(c.l5)):'non inserita'}</p></div></div>`).join('')}</div><div class="status-line"></div><div class="notice"><span class="notice-icon">ⓘ</span><div>La media visualizzata usa soltanto i valori L5 che hai inserito. Non è una previsione del punteggio di giornata.</div></div>`}
+function positionKinds(card){
+  const text=(Array.isArray(card.position)?card.position:[card.position]).filter(Boolean).join(' ').toLowerCase();
+  const kinds=[];
+  if(/goalkeeper|keeper|portiere|\bgk\b/.test(text))kinds.push('GK');
+  if(/defender|difensore|\bdf\b|\bdef\b/.test(text))kinds.push('DF');
+  if(/midfielder|centrocampista|\bmd\b|\bmid\b/.test(text))kinds.push('MD');
+  if(/forward|attaccante|\bfw\b|\bst\b|\bfor\b/.test(text))kinds.push('FW');
+  return kinds;
+}
+function cardScoreStats(card){
+  const raw=Array.isArray(card.rawScores)?card.rawScores.filter(v=>v!=null&&Number.isFinite(Number(v))).map(Number):[];
+  const avg=values=>values.length?values.reduce((a,b)=>a+b,0)/values.length:null;
+  let expected=card.l5!==''&&card.l5!=null&&Number.isFinite(Number(card.l5))?Number(card.l5):avg(raw.slice(0,5));
+  if(expected==null&&card.l10!==''&&card.l10!=null&&Number.isFinite(Number(card.l10)))expected=Number(card.l10);
+  if(expected==null&&card.l15!==''&&card.l15!=null&&Number.isFinite(Number(card.l15)))expected=Number(card.l15);
+  const series=raw.length?raw:raw.slice(0,5),mean=avg(series);
+  const sd=series.length>1?Math.sqrt(series.reduce((sum,v)=>sum+Math.pow(v-mean,2),0)/series.length):0;
+  return {expected,sd,low:expected==null?null:Math.max(0,expected-sd*0.5),high:series.length?Math.max(...series):expected,rawCount:raw.length};
+}
+function playerIdentity(card){return (String(card.name||'')+'|'+String(card.club||'')).trim().toLowerCase();}
+function lineupUtility(card){const stats=cardScoreStats(card);return stats.expected==null?-100000:stats.expected-0.35*stats.sd;}
+function buildOptimalLineup(){
+  if(state.cards.length<5){toast('Servono almeno 5 carte registrate per costruire una bozza.');return;}
+  const selected=[],used=new Set(),available=state.cards.slice();
+  function pickFor(kind){
+    const candidates=available.filter(card=>{
+      const identity=playerIdentity(card);
+      if(used.has(identity))return false;
+      const kinds=positionKinds(card);
+      return kind==='FLEX'?kinds.some(k=>k!=='GK'):kinds.includes(kind);
+    }).sort((a,b)=>lineupUtility(b)-lineupUtility(a));
+    const chosen=candidates[0];
+    if(chosen){selected.push(chosen);used.add(playerIdentity(chosen));}
+  }
+  ['GK','DF','MD','FW','FLEX'].forEach(pickFor);
+  while(selected.length<5){
+    const next=available.filter(c=>!used.has(playerIdentity(c))).sort((a,b)=>lineupUtility(b)-lineupUtility(a))[0];
+    if(!next)break;
+    selected.push(next);used.add(playerIdentity(next));
+  }
+  state.lineup=selected.slice(0,5).map(c=>c.id).concat(['','','','','']).slice(0,5);
+  persist();renderLineup();
+  const withScores=selected.filter(c=>cardScoreStats(c).expected!=null).length;
+  toast('Bozza creata: '+withScores+'/5 carte hanno uno storico utilizzabile. Verifica ruoli e regole ufficiali del Set.');
+}
+function renderLineup(){
+  const slots=$('lineupSlots'),labels=['GK','DF','MD','FW','Flex'];
+  slots.innerHTML=labels.map((label,i)=>{
+    const id=state.lineup[i]||'',c=state.cards.find(x=>x.id===id),stats=c?cardScoreStats(c):null;
+    const pos=c?(Array.isArray(c.position)?c.position.join(', '):c.position||'Ruolo n.d.'):'';
+    const score=c&&stats&&stats.expected!=null?'<b>'+esc(fmt(stats.expected))+'</b>':'dato punti n.d.';
+    return '<div class="slot '+(c?'filled':'')+'"><div class="slot-label">'+label+'</div><select class="select lineup-select" data-slot="'+i+'"><option value="">Seleziona una carta…</option>'+state.cards.map(x=>'<option value="'+esc(x.id)+'" '+(x.id===id?'selected':'')+'>'+esc(x.name)+(x.club?' · '+esc(x.club):'')+'</option>').join('')+'</select><div class="slot-info">'+(c?esc(pos)+' · L5: '+score:'Nessun giocatore selezionato')+'</div></div>';
+  }).join('');
+  slots.querySelectorAll('select').forEach(sel=>sel.onchange=()=>{
+    state.lineup[Number(sel.dataset.slot)]=sel.value;
+    persist();renderLineup();
+  });
+  const chosen=state.lineup.map(id=>state.cards.find(c=>c.id===id)).filter(Boolean),stats=chosen.map(cardScoreStats);
+  const known=stats.filter(x=>x.expected!=null),expected=known.reduce((sum,x)=>sum+x.expected,0);
+  const cautious=known.reduce((sum,x)=>sum+(x.low??x.expected),0),upside=known.reduce((sum,x)=>sum+(x.high??x.expected),0);
+  $('lineupAverage').textContent=known.length?fmt(expected/known.length):'—';
+  if(!chosen.length){
+    $('lineupSummary').className='empty';
+    $('lineupSummary').innerHTML='<span class="empty-icon">⚽</span><strong>Seleziona le carte</strong><p>Quando compili gli slot, qui vedrai medie storiche, scenario prudente e scenario storico alto.</p>';
+    return;
+  }
+  const target=Number($('lineupTarget')?.value||0),gap=target>0?target-expected:null;
+  const cardsHtml=chosen.map((c,i)=>{
+    const st=stats[i],pos=Array.isArray(c.position)?c.position.join(', '):c.position||'Ruolo n.d.';
+    return '<div class="activity"><div class="activity-ico">'+esc(cardInitials(c.name))+'</div><div><strong>'+esc(c.name)+'</strong><p>'+esc(c.club||'Club non inserito')+' · '+esc(pos)+' · media disponibile '+(st.expected==null?'n.d.':esc(fmt(st.expected)))+' · storico '+st.rawCount+' voti</p></div></div>';
+  }).join('');
+  const objective=target>0?'<div class="notice"><span class="notice-icon">◎</span><div>Obiettivo: <strong>'+esc(fmt(target))+'</strong> punti. '+(known.length<5?'Stima parziale: mancano medie per '+(5-known.length)+' slot. ':gap>0?'La somma delle medie è sotto l’obiettivo di '+esc(fmt(gap))+' punti. ':'La somma delle medie raggiunge o supera l’obiettivo di '+esc(fmt(Math.abs(gap)))+' punti. ')+'Confronto aritmetico, non probabilità di vincita.</div></div>':'';
+  $('lineupSummary').className='';
+  $('lineupSummary').innerHTML='<div class="resource-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="resource-tile"><div class="label">Carte selezionate</div><div class="value">'+chosen.length+'/5</div></div><div class="resource-tile"><div class="label">Medie disponibili</div><div class="value green">'+known.length+'/5</div></div><div class="resource-tile"><div class="label">Somma medie storiche</div><div class="value">'+(known.length?esc(fmt(expected)):'—')+'</div><div class="foot">Non è un punteggio garantito</div></div><div class="resource-tile"><div class="label">Scenario prudente</div><div class="value">'+(known.length?esc(fmt(cautious)):'—')+'</div><div class="foot">Media meno variabilità osservata</div></div><div class="resource-tile"><div class="label">Scenario storico alto</div><div class="value cyan">'+(known.length?esc(fmt(upside)):'—')+'</div><div class="foot">Somma dei massimi disponibili</div></div></div><div class="activity-list">'+cardsHtml+'</div><div class="status-line"></div>'+objective+'<div class="notice" style="margin-top:12px"><span class="notice-icon">ⓘ</span><div>Stima orientativa basata su storico disponibile: non considera ancora titolarità, avversario, minuti, bonus non confermati o le regole del nuovo Set. Non è una previsione ufficiale.</div></div>';
+}
+
 function renderResourcesForm(){const r=state.resources;$('gemsInput').value=r.gems;$('essenceInput').value=r.essence;$('setInput').value=r.set;$('collectionInput').value=r.collection;$('goalInput').value=r.goal;$('notesInput').value=r.notes||'';const ratio=r.goal>0?Math.min(100,num(r.gems)/num(r.goal)*100):0;$('goalBar').style.width=ratio+'%';$('goalCaption').textContent=`${fmt(r.gems)} / ${fmt(r.goal)} Gems`;$('goalPercent').textContent=Math.round(ratio)+'%'}
+let liveSorareItems=[];
 function renderSorareReport(data){
   const status=data?.status||'pending';
   const ok=status==='ok';
@@ -99,43 +175,116 @@ function renderSorareReport(data){
   $('sorareProfileFound').textContent=data?.profile?.found?'Sì':data?.profile?.found===false?'No':'—';
   $('sorareProfileName').textContent=data?.profile?.nickname?`${data.profile.nickname} · ${data.profile.slug}`:`Slug richiesto: ${data?.requestedSlug||'mianismo'}`;
   const items=Array.isArray(data?.cards?.items)?data.cards.items:[];
+  liveSorareItems=items;
+  const importButton=$('importSorareCards');if(importButton){importButton.disabled=!items.length;importButton.textContent=items.length?'Importa/aggiorna '+items.length+' carte':'Importa carte nella collezione';}
   $('sorareCardCount').textContent=data?.cards?.count!=null?fmt(data.cards.count):'—';
   $('sorareCardFoot').textContent=data?.cards?.status==='available'?(data.cards.truncated?'Elenco parziale':'Elenco ricevuto'):data?.cards?.message||'Non ancora verificato';
   $('sorareUpdated').textContent=data?.updatedAt?new Date(data.updatedAt).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'}):'Mai';
   $('sorareCardBadge').textContent=`${items.length} identificativi`;
-  if(items.length){$('sorareCardsList').className='cards-grid';$('sorareCardsList').innerHTML=items.map((c,i)=>`<article class="player-card" style="padding:10px"><div style="height:175px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 20%,#263e4b,#101927 70%);border-radius:12px;overflow:hidden;margin-bottom:10px">${c.imageUrl?`<img src="${esc(c.imageUrl)}" alt="${esc(c.name||'Carta Sorare')}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:'<span style="font-size:40px;color:#a3ff5f">⚽</span>'}</div><div class="player-name">${esc(c.name||c.slug||'Carta Sorare')}</div><div class="player-club">${esc(c.team||'Sorare')}${c.season?' · '+esc(c.season):''}</div><div class="card-tags" style="margin-top:8px"><span class="tag">${esc(c.rarity||'Rarità n.d.')}</span>${c.serialNumber!=null?`<span class="tag">N° ${esc(c.serialNumber)}</span>`:''}</div><details style="margin-top:8px;color:#91a1b8;font-size:10px"><summary>Dettagli tecnici</summary><p style="overflow-wrap:anywhere">${esc(c.slug||'')}</p></details></article>`).join('')+(data.cards.truncated?'<div class="notice" style="grid-column:1/-1"><span class="notice-icon">ⓘ</span><div>Elenco parziale: la richiesta ha raggiunto il limite di pagine previsto.</div></div>':'');}
+  if(items.length){$('sorareCardsList').className='cards-grid';$('sorareCardsList').innerHTML=items.map((c,i)=>`<article class="player-card" style="padding:10px"><div style="height:175px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 20%,#263e4b,#101927 70%);border-radius:12px;overflow:hidden;margin-bottom:10px">${c.imageUrl?`<img src="${esc(c.imageUrl)}" alt="${esc(c.name||'Carta Sorare')}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:'<span style="font-size:40px;color:#a3ff5f">⚽</span>'}</div><div class="player-name">${esc(c.name||c.slug||'Carta Sorare')}</div><div class="player-club">${esc(c.team||'Sorare')}${c.season?' · '+esc(c.season):''}</div><div class="card-tags" style="margin-top:8px"><span class="tag">${esc(c.rarity||'Rarità n.d.')}</span>${c.serialNumber!=null?`<span class="tag">N° ${esc(c.serialNumber)}</span>`:''}${c.edition?`<span class="tag">${esc(c.edition)}</span>`:''}${c.skinEdition?.skinName?`<span class="tag">${esc(c.skinEdition.skinName)}</span>`:''}${c.skinEdition?.variantName?`<span class="tag">${esc(c.skinEdition.variantName)}</span>`:''}${c.skinEdition?.bonus!=null?`<span class="tag">Bonus API: ${esc(c.skinEdition.bonus)}</span>`:''}<span class="tag">L5 ${c.l5!=null?esc(fmt(c.l5)):'n.d.'}</span></div><details style="margin-top:8px;color:#91a1b8;font-size:10px"><summary>Dettagli tecnici</summary><p style="overflow-wrap:anywhere">${esc(c.slug||'')}</p></details></article>`).join('')+(data.cards.truncated?'<div class="notice" style="grid-column:1/-1"><span class="notice-icon">ⓘ</span><div>Elenco parziale: la richiesta ha raggiunto il limite di pagine previsto.</div></div>':'');}
   else {$('sorareCardsList').className='empty';$('sorareCardsList').innerHTML=`<span class="empty-icon">${status==='error'?'!':'↻'}</span><strong>${esc(data?.cards?.message||data?.message||'Nessuna carta disponibile nel report')}</strong><p>${esc(data?.cards?.detail||'Dopo la prima esecuzione potremo vedere quali campi pubblici sono accessibili.')}</p>`;}
   $('sorareMessage').innerHTML=`<strong>${esc(data?.message||'In attesa del primo report.')}</strong><br>${esc(data?.detail||'Avvia GitHub Actions per effettuare il controllo pubblico.')}`;
 }
+function importSorareCards(silent=false){
+  if(!liveSorareItems.length){toast('Prima sincronizza le carte Sorare.');return;}
+  function normalizedPosition(value){
+    const text=(Array.isArray(value)?value:[value]).filter(Boolean).join(' ').toLowerCase();
+    if(/goalkeeper|keeper|portiere|\bgk\b/.test(text))return 'Portiere';
+    if(/defender|difensore|\bdf\b|\bdef\b/.test(text))return 'Difensore';
+    if(/midfielder|centrocampista|\bmd\b|\bmid\b/.test(text))return 'Centrocampista';
+    if(/forward|attaccante|\bfw\b|\bst\b|\bfor\b/.test(text))return 'Attaccante';
+    return '';
+  }
+  const merged=state.cards.slice(),indexBySlug=new Map();
+  merged.forEach((card,index)=>{const key=card.sorareSlug||card.slug;if(key)indexBySlug.set(key,index);});
+  let added=0,updated=0;
+  for(const card of liveSorareItems){
+    if(!card.slug)continue;
+    const idx=indexBySlug.get(card.slug),old=idx===undefined?{}:merged[idx],skin=card.skinEdition||null;
+    const item={
+      ...old,id:old.id||'sorare-'+card.slug,sorareSlug:card.slug,slug:card.slug,assetId:card.assetId||old.assetId||null,
+      name:card.name||old.name||card.slug,club:card.team||old.club||'',
+      position:normalizedPosition(card.position)||old.position||'Altro',
+      rarity:skin&&skin.skinName?(String(card.rarity||'Common')+' · '+skin.skinName):(card.rarity||old.rarity||'Unknown'),
+      l5:card.l5??old.l5??'',l15:old.l15??card.l10??'',age:card.age??old.age??'',
+      imageUrl:card.imageUrl||old.imageUrl||null,playerImageUrl:card.playerImageUrl||old.playerImageUrl||null,
+      skinEdition:skin,variantName:skin?.variantName||skin?.variant||old.variantName||null,
+      skin:skin?.skin||old.skin||null,bonus:skin?.bonus??old.bonus??null,
+      power:card.power??old.power??null,grade:card.grade??old.grade??null,
+      rawScores:Array.isArray(card.rawScores)?card.rawScores:(old.rawScores||[]),
+      season:card.season??old.season??null,serialNumber:card.serialNumber??old.serialNumber??null,
+      edition:card.edition??old.edition??null,setName:card.set?.name??old.setName??null,source:'sorare'
+    };
+    if(idx===undefined){indexBySlug.set(card.slug,merged.length);merged.push(item);added++;}else{merged[idx]=item;updated++;}
+  }
+  state.cards=merged;persist();
+  if(!silent)toast('Import completato: '+added+' nuove carte, '+updated+' aggiornate.');
+  renderLineup();
+}
+
 async function loadSorarePublicData(){
-  const btn=$('reloadSorareData');if(btn){btn.disabled=true;btn.textContent='Lettura…'}
+  const btn=$('reloadSorareData');
+  if(btn){btn.disabled=true;btn.textContent='Lettura…';}
   try{
-    const [profileResponse,cardsResponse]=await Promise.all([
-      fetch('/api/public/profile?slug=mianismo&t='+Date.now(),{cache:'no-store'}),
-      fetch('/api/public/cards?slug=mianismo&t='+Date.now(),{cache:'no-store'})
-    ]);
+    const profileResponse=await fetch('/api/public/profile?slug=mianismo&t='+Date.now(),{cache:'no-store'});
     const profile=await profileResponse.json().catch(()=>({status:'error',error:'Risposta profilo non valida'}));
-    const cards=await cardsResponse.json().catch(()=>({status:'unavailable',error:'Risposta carte non valida',items:[]}));
+    const allCards=[],seen=new Set();
+    let cardsData={status:'unavailable',error:'Nessuna risposta carta',items:[]},after=null,complete=false;
+    for(let page=0;page<8;page++){
+      const params=new URLSearchParams({slug:'mianismo',t:String(Date.now())});
+      if(after)params.set('after',after);
+      const response=await fetch('/api/public/cards?'+params.toString(),{cache:'no-store'});
+      const chunk=await response.json().catch(()=>({status:'unavailable',error:'Risposta carte non valida',items:[]}));
+      if(!response.ok||chunk.status!=='ok'){cardsData=chunk;break;}
+      for(const item of (Array.isArray(chunk.items)?chunk.items:[])){
+        const key=item.assetId||item.slug;
+        if(!key||seen.has(key))continue;
+        seen.add(key);allCards.push(item);
+      }
+      cardsData=chunk;
+      const next=chunk.endCursor||null;
+      if(!chunk.hasMore||!next||next===after){complete=true;break;}
+      after=next;
+    }
     const profileOk=profileResponse.ok&&profile.status==='ok'&&profile.profile;
-    const cardsOk=cardsResponse.ok&&cards.status==='ok';
-    const overall=profileOk?'ok':profile.status==='not_found'?'profile_not_found_or_not_public':'error';
+    const cardsOk=cardsData.status==='ok';
+    if(cardsOk){
+      cardsData={...cardsData,items:allCards,count:allCards.length,hasMore:!complete};
+      cardsData.dataQuality={
+        withCardImage:allCards.filter(c=>c.imageUrl).length,
+        withPlayerImage:allCards.filter(c=>c.playerImageUrl).length,
+        withVariant:allCards.filter(c=>c.skinEdition).length,
+        withRecentScores:allCards.filter(c=>Array.isArray(c.rawScores)&&c.rawScores.length).length
+      };
+    }
+    const status=profileOk?'ok':profile.status==='not_found'?'profile_not_found_or_not_public':'error';
     renderSorareReport({
-      status:overall,
-      statusLabel:profileOk?(cardsOk?'API Vercel attiva · Sorare raggiunto':'API profilo attiva · carte non disponibili'):'Controllo API non riuscito',
+      status,
+      statusLabel:profileOk?(cardsOk?'Sorare collegato · '+allCards.length+' carte lette':'Profilo attivo · carte non disponibili'):'Controllo API non riuscito',
       requestedSlug:'mianismo',
       profile:{found:!!profileOk,slug:profile.profile?.slug||'mianismo',nickname:profile.profile?.nickname||null},
-      cards:{status:cardsOk?'available':'unavailable',count:cards.count??null,items:Array.isArray(cards.items)?cards.items:[],truncated:!!cards.hasMore,message:cardsOk?'Dati pubblici ricevuti':(cards.error||'Elenco carte non disponibile'),detail:cards.error||''},
-      updatedAt:new Date().toISOString(),
+      cards:{status:cardsOk?'available':'unavailable',count:cardsData.count??null,items:Array.isArray(cardsData.items)?cardsData.items:[],truncated:!!cardsData.hasMore,message:cardsOk?(complete?'Dati pubblici ricevuti':'Elenco parziale, sincronizza di nuovo'):(cardsData.error||'Elenco carte non disponibile'),detail:cardsData.error||''},
+      updatedAt:cardsData.fetchedAt||new Date().toISOString(),
       message:profileOk?'Connessione pubblica al profilo Sorare verificata.':'Non è stato possibile verificare il profilo Sorare.',
-      detail:cardsOk?'Il backend Vercel ha restituito una risposta valida.':(cards.error||profile.error||'Controlla i log della funzione Vercel.')
+      detail:cardsOk?'Immagini, rarità, varianti e punteggi vengono mostrati solo quando l’API li espone.':'Dettaglio API: '+(cardsData.error||profile.error||'verifica i log del backend.')
     });
-  }catch(e){
-    renderSorareReport({status:'error',requestedSlug:'mianismo',message:'Errore nel collegamento alle API Vercel.',detail:String(e?.message||e),cards:{status:'unavailable',count:null,items:[],message:'Endpoint non raggiungibile.'}});
-  }finally{if(btn){btn.disabled=false;btn.textContent='Rileggi dati'}}
+    if(cardsOk&&state.cards.some(c=>c.source==='sorare'))importSorareCards(true);
+  }catch(error){
+    renderSorareReport({status:'error',requestedSlug:'mianismo',message:'Errore nel collegamento alle API Vercel.',detail:String(error?.message||error),cards:{status:'unavailable',count:null,items:[],message:'Endpoint non raggiungibile.'}});
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='Rileggi dati';}
+  }
 }
+
 $('reloadSorareData').addEventListener('click',loadSorarePublicData);
+$('importSorareCards').addEventListener('click',()=>importSorareCards(false));
+$('autoBuildLineup').addEventListener('click',buildOptimalLineup);
+$('lineupTarget').addEventListener('input',renderLineup);
+$('clearLineup').addEventListener('click',()=>{state.lineup=['','','','',''];persist();renderLineup();});
+$('saveLineup').addEventListener('click',()=>{persist();toast('Formazione salvata in questo browser.');});
 renderAll();
 loadSorarePublicData();
+setInterval(()=>{if(!document.hidden)loadSorarePublicData();},300000);
 })();
 </script>
 </body></html>
