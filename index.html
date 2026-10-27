@@ -328,7 +328,7 @@ async function loadSorarePublicData(){
       message:profileOk?'Connessione pubblica al profilo Sorare verificata.':'Non è stato possibile verificare il profilo Sorare.',
       detail:cardsOk?'Immagini, rarità, varianti e punteggi vengono mostrati solo quando l’API li espone.':'Dettaglio API: '+(cardsData.error||profile.error||'verifica i log del backend.')
     });
-    if(cardsOk&&state.cards.some(c=>c.source==='sorare'))importSorareCards(true);
+    if(cardsOk&&allCards.length)importSorareCards(true);
   }catch(error){
     renderSorareReport({status:'error',requestedSlug:'mianismo',message:'Errore nel collegamento alle API Vercel.',detail:String(error?.message||error),cards:{status:'unavailable',count:null,items:[],message:'Endpoint non raggiungibile.'}});
   }finally{
