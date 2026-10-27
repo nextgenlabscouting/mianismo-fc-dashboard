@@ -5,7 +5,7 @@ const ENDPOINT = 'https://api.sorare.com/graphql';
 const SLUG = (process.env.SORARE_USER_SLUG || 'mianismo').trim();
 const OUTPUT = 'data/sorare-public.json';
 const PAGE_SIZE_NOTE = 'Sorare uses cursor pagination; this sync stops at the configured safety limit.';
-const MAX_PAGES = 9;
+const MAX_PAGES = 11;
 
 const QUERY_TIERS = [
   { label: 'rich', fields: [
@@ -98,7 +98,7 @@ function buildCardsQuery(field, tier) {
     '  user(slug: $slug) {',
     '    ' + field + '(after: $cursor) {',
     '      nodes { ' + fields + ' }',
-    '      pageInfo { endCursor hasNextPage }',
+    '      pageInfo { endCursor }',
     '    }',
     '  }',
     '}'
@@ -214,7 +214,7 @@ async function fetchCardPages(field) {
     }
 
     const next = connection.pageInfo?.endCursor || null;
-    if (connection.pageInfo?.hasNextPage === false || !next || next === cursor) {
+    if (!next || next === cursor || !(connection.nodes || []).length) {
       return { items, truncated: false, endCursor: next, queryTier: QUERY_TIERS[activeTier].label, fallbackErrors };
     }
     cursor = next;
