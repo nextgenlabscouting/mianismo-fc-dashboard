@@ -335,6 +335,7 @@ async function loadSorarePublicData(){
   }
 }
 
+function renderAll(){renderOverview();renderCards();renderResourcesForm();renderLineup();}
 $('reloadSorareData').addEventListener('click',loadSorarePublicData);
 $('importSorareCards').addEventListener('click',()=>importSorareCards(false));
 $('autoBuildLineup').addEventListener('click',buildOptimalLineup);
