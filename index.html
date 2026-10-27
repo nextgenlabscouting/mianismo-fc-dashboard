@@ -45,7 +45,7 @@
     <div class="panel"><div class="panel-head"><div><h3 class="panel-title">Archivio carte</h3><p class="panel-sub">Un registro personale della tua collezione Sorare.</p></div><button class="btn btn-primary btn-small" id="addCardPage">＋ Aggiungi carta</button></div><div class="toolbar"><div class="toolbar-left"><input class="input" id="cardSearch" placeholder="Cerca giocatore, club o campionato…" aria-label="Cerca carte"><select class="select" id="positionFilter" aria-label="Filtra per ruolo"><option value="">Tutti i ruoli</option><option>Portiere</option><option>Difensore</option><option>Centrocampista</option><option>Attaccante</option><option>Altro</option></select></div><div class="toolbar-right"><button class="btn btn-small" id="exportData">Esporta backup</button><button class="btn btn-small" id="importData">Importa backup</button><input type="file" id="importFile" accept="application/json" class="hide"></div></div><div id="cardsGrid" class="cards-grid"></div><div id="cardsEmpty" class="empty"><span class="empty-icon">▧</span><strong>Nessuna carta in archivio</strong><p>Inserisci la prima carta. I dati saranno salvati nel browser su questo dispositivo.</p><button class="btn btn-primary btn-small" id="addEmptyCard">＋ Aggiungi carta</button></div></div>
   </section>
   <section class="page" id="page-lineup">
-    <div class="grid lineup-layout"><div class="panel"><div class="panel-head"><div><h3 class="panel-title">Set Strategy Lab</h3><p class="panel-sub">Ottimizza una squadra per target punti e cap L10 usando lo storico disponibile.</p></div><span class="tag">5 giocatori · modello provvisorio</span></div><div class="notice" style="margin-bottom:15px"><span class="notice-icon">ⓘ</span><div>Il modello usa il riferimento del Set precedente (cap L10 120, MVP escluso). Le regole del Set in arrivo non sono ancora state confermate: verifica il cap e il tabellone in Sorare prima di usarlo come vincolo ufficiale.</div></div><div class="toolbar" style="margin-top:0"><div class="field" style="max-width:190px"><label for="lineupTarget">Target punti (livello)</label><input class="input" id="lineupTarget" type="number" min="0" max="1000" step="1" placeholder="Es. 300"></div><div class="field" style="max-width:190px"><label for="lineupCap">Cap L10 (MVP escluso)</label><input class="input" id="lineupCap" type="number" min="0" max="500" step="1" value="120"></div><div class="toolbar-right"><button class="btn btn-primary" id="autoBuildLineup" type="button">Ottimizza squadra Set</button></div></div><div class="slots" id="lineupSlots"></div><div class="status-line"></div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><div class="muted" style="font-size:11px">Media L5 inserita (carte selezionate)</div><div class="resource-big" id="lineupAverage">—</div></div><div><button class="btn btn-small" id="clearLineup">Svuota formazione</button><button class="btn btn-primary btn-small" id="saveLineup">Salva formazione</button></div></div></div><div class="panel"><div class="panel-head"><div><h3 class="panel-title">Valutazione della bozza</h3><p class="panel-sub">Solo dati presenti nella tua dashboard.</p></div></div><div id="lineupSummary" class="empty"><span class="empty-icon">⚽</span><strong>Seleziona le carte</strong><p>Quando compili gli slot, qui vedrai i dettagli della formazione scelta.</p></div></div></div>
+    <div class="grid lineup-layout"><div class="panel"><div class="panel-head"><div><h3 class="panel-title">Set Strategy Lab</h3><p class="panel-sub">Ottimizza una squadra per target punti e cap L10 usando lo storico disponibile.</p></div><span class="tag">5 giocatori · modello provvisorio</span></div><div class="notice" style="margin-bottom:15px"><span class="notice-icon">ⓘ</span><div>Il modello usa il riferimento del Set precedente (cap L10 120, MVP escluso). Le regole del Set in arrivo non sono ancora state confermate: verifica il cap e il tabellone in Sorare prima di usarlo come vincolo ufficiale.</div></div><div class="toolbar" style="margin-top:0"><div class="field" style="max-width:190px"><label for="lineupTarget">Target punti (livello)</label><input class="input" id="lineupTarget" type="number" min="0" max="1000" step="1" placeholder="Es. 300"></div><div class="field" style="max-width:190px"><label for="lineupCap">Cap L10 (MVP escluso)</label><input class="input" id="lineupCap" type="number" min="0" max="500" step="1" value="120"></div><div class="field" style="max-width:190px"><label for="lineupBonus">Bonus club simulato (%)</label><input class="input" id="lineupBonus" type="number" min="0" max="5" step="0.5" value="0"><small>Scenario, formula del nuovo Set da verificare</small></div><div class="toolbar-right"><button class="btn btn-primary" id="autoBuildLineup" type="button">Ottimizza squadra Set</button></div></div><div class="slots" id="lineupSlots"></div><div class="status-line"></div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><div class="muted" style="font-size:11px">Media L5 inserita (carte selezionate)</div><div class="resource-big" id="lineupAverage">—</div></div><div><button class="btn btn-small" id="clearLineup">Svuota formazione</button><button class="btn btn-primary btn-small" id="saveLineup">Salva formazione</button></div></div></div><div class="panel"><div class="panel-head"><div><h3 class="panel-title">Valutazione della bozza</h3><p class="panel-sub">Solo dati presenti nella tua dashboard.</p></div></div><div id="lineupSummary" class="empty"><span class="empty-icon">⚽</span><strong>Seleziona le carte</strong><p>Quando compili gli slot, qui vedrai i dettagli della formazione scelta.</p></div></div></div>
   </section>
   <section class="page" id="page-resources">
     <div class="panel"><div class="panel-head"><div><h3 class="panel-title">Risorse e obiettivi</h3><p class="panel-sub">Tieni traccia di Gems, Essence e completamento della collezione.</p></div><span class="tag">Modificabile</span></div><div class="resource-grid"><div class="resource-tile"><div class="label">Gems disponibili</div><div class="value green" id="resourceGemsDisplay">320</div><div class="foot">Saldo dichiarato, da verificare</div></div><div class="resource-tile"><div class="label">Essence</div><div class="value cyan" id="resourceEssenceDisplay">10.000</div><div class="foot" id="resourceSetDisplay">Set: Hyperglitch</div></div><div class="resource-tile"><div class="label">Collezione</div><div class="value" id="resourceCollectionDisplay">80%</div><div class="progress-track"><div class="progress-bar" id="collectionBar" style="width:80%"></div></div><div class="foot">Obiettivo modificabile</div></div></div><form id="resourcesForm"><div class="resource-form"><div class="field"><label for="gemsInput">Gems attuali</label><input class="input" id="gemsInput" type="number" min="0" step="1" value="320" required></div><div class="field"><label for="essenceInput">Essence attuali</label><input class="input" id="essenceInput" type="number" min="0" step="1" value="10000" required></div><div class="field"><label for="setInput">Nome del Set</label><input class="input" id="setInput" value="Hyperglitch" maxlength="60" required></div><div class="field"><label for="collectionInput">Completamento collezione (%)</label><input class="input" id="collectionInput" type="number" min="0" max="100" step="1" value="80" required><small>Inserisci un valore tra 0 e 100.</small></div><div class="field"><label for="goalInput">Obiettivo Gems</label><input class="input" id="goalInput" type="number" min="0" step="1" value="500" required></div><div class="field"><label for="notesInput">Note / prossime scadenze</label><input class="input" id="notesInput" placeholder="Es. verificare premi del Set…" maxlength="250"></div></div><div style="display:flex;gap:9px;justify-content:flex-end;margin-top:18px"><button type="button" class="btn" id="resetResources">Ripristina valori iniziali</button><button class="btn btn-primary" type="submit">Salva risorse</button></div></form><div class="status-line"></div><div class="panel-head"><div><h3 class="panel-title">Progresso verso l'obiettivo</h3><p class="panel-sub">Avanzamento aritmetico basato sul saldo che hai inserito.</p></div></div><div class="progress-track" style="height:10px"><div class="progress-bar" id="goalBar"></div></div><div style="display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted)"><span id="goalCaption">320 / 500 Gems</span><span id="goalPercent">64%</span></div><div class="status-line"></div><div class="notice"><span class="notice-icon">ⓘ</span><div>Questo registro non certifica il saldo Sorare e non prevede i premi futuri. Aggiorna i valori dopo averli verificati nel tuo account.</div></div></div>
@@ -145,78 +145,175 @@ function renderOverview(){
 }
 
 function bindCardActions(root){root.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openModal(state.cards.find(c=>c.id===b.dataset.edit)));root.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteCard(b.dataset.delete))}
+function positionKinds(card){
+  const source=[];
+  if(Array.isArray(card.positionCodes))source.push(...card.positionCodes);
+  if(Array.isArray(card.position))source.push(...card.position);
+  else if(card.position)source.push(card.position);
+  const text=source.join(' ').toLowerCase();
+  const kinds=[];
+  if(/goalkeeper|keeper|portiere|\bgk\b|\bgk[,\s]/.test(text))kinds.push('GK');
+  if(/defender|difensore|\bdf\b|\bdef\b/.test(text))kinds.push('DF');
+  if(/midfielder|centrocampista|\bmd\b|\bmid\b/.test(text))kinds.push('MD');
+  if(/forward|attaccante|\bfw\b|\bst\b|\bfor\b/.test(text))kinds.push('FW');
+  return [...new Set(kinds)];
+}
 function cardScoreStats(card){
   const playerRaw=Array.isArray(card.playerRawScores)?card.playerRawScores.filter(v=>v!=null&&Number.isFinite(Number(v))).map(Number):[];
   const raw=playerRaw.length?playerRaw:(Array.isArray(card.rawScores)?card.rawScores.filter(v=>v!=null&&Number.isFinite(Number(v))).map(Number):[]);
   const avg=values=>values.length?values.reduce((a,b)=>a+b,0)/values.length:null;
-  let expected=card.l5!==''&&card.l5!=null&&Number.isFinite(Number(card.l5))?Number(card.l5):avg(raw.slice(0,5));
+  const expected=card.l5!==''&&card.l5!=null&&Number.isFinite(Number(card.l5))?Number(card.l5):avg(raw.slice(0,5));
   const capL10=card.l10!==''&&card.l10!=null&&Number.isFinite(Number(card.l10))?Number(card.l10):avg(raw.slice(0,10));
   const series=raw.slice(0,10),mean=avg(series);
   const sd=series.length>1?Math.sqrt(series.reduce((sum,v)=>sum+Math.pow(v-mean,2),0)/series.length):0;
-  return {expected,capL10,sd,low:expected==null?null:Math.max(0,expected-sd*0.5),high:series.length?Math.max(...series):expected,rawCount:raw.length};
+  return {expected,capL10,sd,low:expected==null?null:Math.max(0,expected-sd*.5),high:series.length?Math.max(...series):expected,rawCount:raw.length};
 }
-function playerIdentity(card){return (String(card.playerSlug||card.name||'')+'|'+String(card.activeTeam||card.club||'')).trim().toLowerCase();}
-function lineupUtility(card){const st=cardScoreStats(card);return st.expected==null?-100000:st.expected-0.35*st.sd;}
+function playerIdentity(card){
+  const player=String(card.playerSlug||card.name||'').trim().toLowerCase();
+  const club=String(card.activeTeam||card.club||'').trim().toLowerCase();
+  return player+'|'+club;
+}
+function lineupUtility(card){
+  const stats=cardScoreStats(card);
+  return stats.expected==null?-100000:stats.expected-.3*stats.sd;
+}
+function uniqueByPlayer(cards){
+  const map=new Map();
+  cards.forEach(card=>{
+    const key=playerIdentity(card),old=map.get(key);
+    if(!old||lineupUtility(card)>lineupUtility(old))map.set(key,card);
+  });
+  return [...map.values()];
+}
+function roleCandidates(all,role){
+  const eligible=all.filter(card=>positionKinds(card).includes(role));
+  const byScore=eligible.slice().sort((a,b)=>lineupUtility(b)-lineupUtility(a)).slice(0,12);
+  const byCap=eligible.slice().sort((a,b)=>cardScoreStats(a).capL10-cardScoreStats(b).capL10).slice(0,6);
+  return uniqueByPlayer([...byScore,...byCap]);
+}
+function flexCandidates(all){
+  const eligible=all.filter(card=>positionKinds(card).some(role=>role!=='GK'));
+  const byScore=eligible.slice().sort((a,b)=>lineupUtility(b)-lineupUtility(a)).slice(0,18);
+  const byCap=eligible.slice().sort((a,b)=>cardScoreStats(a).capL10-cardScoreStats(b).capL10).slice(0,8);
+  return uniqueByPlayer([...byScore,...byCap]);
+}
+function getCapUsage(team){
+  const values=team.map(cardScoreStats).map(stats=>stats.capL10);
+  if(values.length!==5||values.some(value=>value==null))return null;
+  return values.reduce((sum,value)=>sum+value,0)-Math.max(...values);
+}
+function teamProjection(team,bonusPct){
+  const stats=team.map(cardScoreStats);
+  const base=stats.reduce((sum,stats)=>sum+(stats.expected||0),0);
+  const byClub={};
+  team.forEach(card=>{
+    const club=String(card.activeTeam||card.club||'').trim();
+    if(club)byClub[club]=(byClub[club]||0)+1;
+  });
+  const bonusPoints=bonusPct>0?team.reduce((sum,card,index)=>{
+    const club=String(card.activeTeam||card.club||'').trim();
+    return sum+(club&&byClub[club]>1?(stats[index].expected||0)*bonusPct/100:0);
+  },0):0;
+  const risk=Math.sqrt(stats.reduce((sum,stats)=>sum+stats.sd*stats.sd,0));
+  return {stats,base,bonusPoints,projected:base+bonusPoints,risk,low:stats.reduce((sum,x)=>sum+(x.low??x.expected??0),0)+bonusPoints,high:stats.reduce((sum,x)=>sum+(x.high??x.expected??0),0)+bonusPoints};
+}
 function buildOptimalLineup(){
-  const capRaw=Number($('lineupCap')?.value??120),cap=Number.isFinite(capRaw)&&capRaw>=0?capRaw:120;
+  const rawCap=Number($('lineupCap')?.value??120),cap=Number.isFinite(rawCap)&&rawCap>=0?rawCap:120;
+  const rawBonus=Number($('lineupBonus')?.value??0),bonusPct=Math.max(0,Math.min(5,Number.isFinite(rawBonus)?rawBonus:0));
+  const target=Number($('lineupTarget')?.value||0);
   const bestByPlayer=new Map();
   for(const card of state.cards){
     const stats=cardScoreStats(card);
-    if(stats.expected==null||stats.capL10==null)continue;
-    const key=playerIdentity(card),existing=bestByPlayer.get(key);
-    if(!existing||lineupUtility(card)>lineupUtility(existing))bestByPlayer.set(key,card);
+    if(stats.expected==null||stats.capL10==null||positionKinds(card).length===0)continue;
+    const key=playerIdentity(card),old=bestByPlayer.get(key);
+    if(!old||lineupUtility(card)>lineupUtility(old))bestByPlayer.set(key,card);
   }
   const all=[...bestByPlayer.values()];
-  if(all.length<5){toast('Servono almeno 5 giocatori distinti con media L5 e L10. Sincronizza le carte Sorare e riprova.');return;}
-  const byScore=all.slice().sort((a,b)=>lineupUtility(b)-lineupUtility(a)).slice(0,26);
-  const byCap=all.slice().sort((a,b)=>cardScoreStats(a).capL10-cardScoreStats(b).capL10).slice(0,12);
-  const candidates=[...new Map([...byScore,...byCap].map(card=>[playerIdentity(card),card])).values()];
-  let best=null,bestUtility=-Infinity;
-  const n=candidates.length;
-  for(let a=0;a<n-4;a++)for(let b=a+1;b<n-3;b++)for(let c=b+1;c<n-2;c++)for(let d=c+1;d<n-1;d++)for(let e=d+1;e<n;e++){
-    const team=[candidates[a],candidates[b],candidates[c],candidates[d],candidates[e]],stats=team.map(cardScoreStats),l10=stats.map(x=>x.capL10);
-    const capUsed=l10.reduce((sum,v)=>sum+v,0)-Math.max(...l10);
-    if(capUsed>cap)continue;
-    const expected=stats.reduce((sum,x)=>sum+(x.expected||0),0),risk=Math.sqrt(stats.reduce((sum,x)=>sum+x.sd*x.sd,0));
-    const utility=expected-0.3*risk;
-    if(utility>bestUtility){bestUtility=utility;best={team,stats,expected,capUsed,risk};}
+  const roles=[['GK','Portieri'],['DF','Difensori'],['MD','Centrocampisti'],['FW','Attaccanti']];
+  const lists=Object.fromEntries(roles.map(([role])=>[role,roleCandidates(all,role)]));
+  const missing=roles.filter(([role])=>lists[role].length===0).map(([,label])=>label);
+  if(missing.length){
+    toast('Non posso costruire una squadra valida: mancano carte con ruolo riconosciuto per '+missing.join(', ')+'. Sincronizza i dati o correggi i ruoli delle carte.');
+    return;
   }
-  if(!best){toast('Nessuna squadra tra le candidate rispetta il cap L10 '+fmt(cap)+'. Modifica il cap solo se le regole ufficiali lo consentono.');return;}
-  state.lineup=best.team.map(card=>card.id);persist();renderLineup();
-  const target=Number($('lineupTarget')?.value||0);
-  toast('Squadra Set proposta · cap L10 '+fmt(best.capUsed)+'/'+fmt(cap)+(target>0?' · target '+fmt(target):'')+'. Verifica bonus e regole ufficiali del Set.');
+  const flex=flexCandidates(all);
+  if(!flex.length){toast('Nessuna carta di movimento disponibile per il quinto slot.');return;}
+  let best=null,bestUtility=-Infinity;
+  for(const gk of lists.GK){
+    for(const df of lists.DF){
+      if(playerIdentity(gk)===playerIdentity(df))continue;
+      for(const md of lists.MD){
+        if([gk,df].some(card=>playerIdentity(card)===playerIdentity(md)))continue;
+        for(const fw of lists.FW){
+          if([gk,df,md].some(card=>playerIdentity(card)===playerIdentity(fw)))continue;
+          const four=[gk,df,md,fw];
+          for(const fifth of flex){
+            if(four.some(card=>playerIdentity(card)===playerIdentity(fifth)))continue;
+            const team=[gk,df,md,fw,fifth];
+            const capUsed=getCapUsage(team);
+            if(capUsed==null||capUsed>cap)continue;
+            const projection=teamProjection(team,bonusPct);
+            let utility=projection.projected-.25*projection.risk;
+            if(target>0){
+              const z=(projection.projected-target)/Math.max(8,projection.risk);
+              const targetChance=1/(1+Math.exp(-1.702*z));
+              utility=targetChance*1000+projection.projected*.05-projection.risk*.05;
+            }
+            if(utility>bestUtility){bestUtility=utility;best={team,capUsed,projection};}
+          }
+        }
+      }
+    }
+  }
+  if(!best){
+    toast('Nessuna squadra candidata rispetta il cap L10 '+fmt(cap)+'. Prova a rivedere i ruoli riconosciuti o il cap ufficiale.');
+    return;
+  }
+  state.lineup=best.team.map(card=>card.id);
+  persist();
+  renderLineup();
+  toast('Squadra valida per ruolo proposta · cap '+fmt(best.capUsed)+'/'+fmt(cap)+' L10 · target '+(target>0?fmt(target):'non impostato')+'. Stima statistica, non garanzia.');
 }
 function renderLineup(){
-  const slots=$('lineupSlots'),labels=['Giocatore 1','Giocatore 2','Giocatore 3','Giocatore 4','Giocatore 5'];
+  const slots=$('lineupSlots'),labels=['Portiere','Difensore','Centrocampista','Attaccante','Flex / posizione aggiuntiva'];
   slots.innerHTML=labels.map((label,i)=>{
     const id=state.lineup[i]||'',card=state.cards.find(x=>x.id===id),stats=card?cardScoreStats(card):null;
-    const pos=card?(Array.isArray(card.position)?card.position.join(', '):card.position||'Ruolo n.d.'):'';
+    const pos=card?(Array.isArray(card.positionCodes)&&card.positionCodes.length?card.positionCodes.join(', '):(Array.isArray(card.position)?card.position.join(', '):card.position||'Ruolo n.d.')):'';
     const l10=stats&&stats.capL10!=null?fmt(stats.capL10):'n.d.',l5=stats&&stats.expected!=null?fmt(stats.expected):'n.d.';
-    return '<div class="slot '+(card?'filled':'')+'"><div class="slot-label">'+label+'</div><select class="select lineup-select" data-slot="'+i+'"><option value="">Seleziona una carta…</option>'+state.cards.map(x=>'<option value="'+esc(x.id)+'" '+(x.id===id?'selected':'')+'>'+esc(x.name)+(x.club?' · '+esc(x.club):'')+'</option>').join('')+'</select><div class="slot-info">'+(card?esc(pos)+' · L5 '+esc(l5)+' · L10 '+esc(l10):'Nessun giocatore selezionato')+'</div></div>';
+    const options=state.cards.map(x=>'<option value="'+esc(x.id)+'" '+(x.id===id?'selected':'')+'>'+esc(x.name)+(x.club?' · '+esc(x.club):'')+'</option>').join('');
+    return '<div class="slot '+(card?'filled':'')+'"><div class="slot-label">'+label+'</div><select class="select lineup-select" data-slot="'+i+'"><option value="">Seleziona una carta…</option>'+options+'</select><div class="slot-info">'+(card?esc(pos)+' · L5 '+esc(l5)+' · L10 '+esc(l10):'Nessun giocatore selezionato')+'</div></div>';
   }).join('');
   slots.querySelectorAll('select').forEach(sel=>sel.onchange=()=>{state.lineup[Number(sel.dataset.slot)]=sel.value;persist();renderLineup();});
-  const chosen=state.lineup.map(id=>state.cards.find(card=>card.id===id)).filter(Boolean),stats=chosen.map(cardScoreStats);
-  const known=stats.filter(x=>x.expected!=null),withL10=stats.filter(x=>x.capL10!=null);
-  const expected=known.reduce((sum,x)=>sum+x.expected,0),cautious=known.reduce((sum,x)=>sum+(x.low??x.expected),0),upside=known.reduce((sum,x)=>sum+(x.high??x.expected),0);
-  const l10=withL10.map(x=>x.capL10),capUsed=l10.length===5?l10.reduce((sum,v)=>sum+v,0)-Math.max(...l10):null;
-  const capRaw=Number($('lineupCap')?.value??120),cap=Number.isFinite(capRaw)&&capRaw>=0?capRaw:120,target=Number($('lineupTarget')?.value||0);
-  $('lineupAverage').textContent=known.length?fmt(expected/known.length):'—';
-  if(!chosen.length){$('lineupSummary').className='empty';$('lineupSummary').innerHTML='<span class="empty-icon">◈</span><strong>Costruisci la tua squadra Set</strong><p>Seleziona cinque giocatori oppure usa l’ottimizzatore. Le stime utilizzano L5 e il cap usa L10.</p>';return;}
+  const chosen=state.lineup.map(id=>state.cards.find(card=>card.id===id)).filter(Boolean);
+  const rawBonus=Number($('lineupBonus')?.value??0),bonusPct=Math.max(0,Math.min(5,Number.isFinite(rawBonus)?rawBonus:0));
+  const target=Number($('lineupTarget')?.value||0),stats=chosen.map(cardScoreStats);
+  const known=stats.filter(x=>x.expected!=null),capUsed=getCapUsage(chosen),capRaw=Number($('lineupCap')?.value??120),cap=Number.isFinite(capRaw)&&capRaw>=0?capRaw:120;
+  $('lineupAverage').textContent=known.length?fmt(known.reduce((sum,x)=>sum+x.expected,0)/known.length):'—';
+  if(!chosen.length){$('lineupSummary').className='empty';$('lineupSummary').innerHTML='<span class="empty-icon">◈</span><strong>Costruisci la tua squadra Set</strong><p>Seleziona cinque giocatori oppure usa l’ottimizzatore. Le stime usano L5 e il cap usa L10.</p>';return;}
+  const projection=teamProjection(chosen,bonusPct);
   const byClub={};
-  chosen.forEach(card=>{const club=card.activeTeam||card.club;if(club)byClub[club]=(byClub[club]||0)+1;});
+  chosen.forEach(card=>{const club=String(card.activeTeam||card.club||'').trim();if(club)byClub[club]=(byClub[club]||0)+1;});
   const synergies=Object.entries(byClub).filter(([,count])=>count>1).sort((a,b)=>b[1]-a[1]);
   const clubText=synergies.length?synergies.map(([club,count])=>count+' × '+club).join(' · '):'Nessuna concentrazione di club tra le carte selezionate';
+  const roleNames=['GK','DF','MD','FW','Flex'];
+  const roleErrors=chosen.map((card,i)=>{
+    const kinds=positionKinds(card);
+    const valid=i===4?kinds.some(role=>role!=='GK'):kinds.includes(['GK','DF','MD','FW'][i]);
+    return valid?null:labelsRoleError(roleNames[i],card.name);
+  }).filter(Boolean);
   const rows=chosen.map((card,i)=>{
-    const st=stats[i],position=Array.isArray(card.position)?card.position.join(', '):card.position||'Ruolo n.d.';
+    const st=stats[i],position=Array.isArray(card.positionCodes)&&card.positionCodes.length?card.positionCodes.join(', '):(Array.isArray(card.position)?card.position.join(', '):card.position||'Ruolo n.d.');
     const upcoming=Array.isArray(card.upcomingGames)?card.upcomingGames[0]:null;
     const match=upcoming&&upcoming.date?' · prossima '+new Date(upcoming.date).toLocaleDateString('it-IT',{day:'2-digit',month:'short'}):'';
     return '<div class="activity"><div class="activity-ico">'+esc(cardInitials(card.name))+'</div><div><strong>'+esc(card.name)+'</strong><p>'+esc(card.club||'Club n.d.')+' · '+esc(position)+' · L5 '+(st.expected==null?'n.d.':esc(fmt(st.expected)))+' · L10 '+(st.capL10==null?'n.d.':esc(fmt(st.capL10)))+esc(match)+'</p></div></div>';
   }).join('');
-  const objective=target>0?'<div class="notice"><span class="notice-icon">◎</span><div>Target: <strong>'+esc(fmt(target))+'</strong>. '+(known.length<5?'Stima parziale: mancano medie per '+(5-known.length)+' giocatori. ':expected>=target?'La somma delle medie L5 raggiunge il target di '+esc(fmt(expected-target))+' punti. ':'La somma delle medie L5 è sotto il target di '+esc(fmt(target-expected))+' punti. ')+'Non è una probabilità di completamento del livello.</div></div>':'';
-  const capNote=capUsed==null?'Cap non verificabile: servono cinque valori L10.':capUsed<=cap?'Cap L10 stimato: '+fmt(capUsed)+' / '+fmt(cap)+' (escluso il giocatore con L10 più alta).':'Cap L10 sopra la soglia inserita: '+fmt(capUsed)+' / '+fmt(cap)+'.';
+  const objective=target>0?'<div class="notice"><span class="notice-icon">◎</span><div>Target: <strong>'+esc(fmt(target))+'</strong>. '+(known.length<5?'Stima parziale: mancano medie per '+(5-known.length)+' giocatori. ':projection.projected>=target?'La proiezione raggiunge il target di '+esc(fmt(projection.projected-target))+' punti. ':'La proiezione è sotto il target di '+esc(fmt(target-projection.projected))+' punti. ')+'Il target influenza il ranking dell’ottimizzatore tramite una probabilità approssimata, non una probabilità di vincita certificata.</div></div>':'';
+  const capNote=capUsed==null?'Cap non verificabile: servono cinque valori L10.':capUsed<=cap?'Cap L10 stimato: '+fmt(capUsed)+' / '+fmt(cap)+'; viene escluso il valore L10 più alto (MVP del modello).':'Cap L10 oltre la soglia inserita: '+fmt(capUsed)+' / '+fmt(cap)+'.';
+  const validity=roleErrors.length?'<div class="notice"><span class="notice-icon">!</span><div><strong>Ruoli da correggere:</strong> '+esc(roleErrors.join('; '))+'</div></div>':'';
   $('lineupSummary').className='';
-  $('lineupSummary').innerHTML='<div class="resource-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="resource-tile"><div class="label">Giocatori selezionati</div><div class="value">'+chosen.length+'/5</div></div><div class="resource-tile"><div class="label">Medie L5 disponibili</div><div class="value green">'+known.length+'/5</div></div><div class="resource-tile"><div class="label">Somma medie L5</div><div class="value">'+(known.length?esc(fmt(expected)):'—')+'</div><div class="foot">Scenario atteso, non garantito</div></div><div class="resource-tile"><div class="label">Cap L10 stimato</div><div class="value '+(capUsed!=null&&capUsed<=cap?'cyan':'orange')+'">'+(capUsed==null?'—':esc(fmt(capUsed))+' / '+esc(fmt(cap)))+'</div><div class="foot">MVP escluso dal cap, modello precedente</div></div><div class="resource-tile"><div class="label">Scenario prudente</div><div class="value">'+(known.length?esc(fmt(cautious)):'—')+'</div><div class="foot">L5 meno variabilità storica</div></div><div class="resource-tile"><div class="label">Scenario storico alto</div><div class="value cyan">'+(known.length?esc(fmt(upside)):'—')+'</div><div class="foot">Massimi storici disponibili</div></div></div><div class="activity-list">'+rows+'</div><div class="status-line"></div><div class="notice"><span class="notice-icon">◈</span><div><strong>Sinergia club:</strong> '+esc(clubText)+'. Il sistema non aggiunge automaticamente bonus di collezione perché la regola esatta del nuovo Set non è confermata.</div></div>'+objective+'<div class="notice" style="margin-top:12px"><span class="notice-icon">ⓘ</span><div>'+esc(capNote)+' Le medie descrivono il passato: non includono titolarità, partita imminente, bonus variabili né le regole definitive del Set in arrivo.</div></div>';
+  $('lineupSummary').innerHTML='<div class="resource-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="resource-tile"><div class="label">Giocatori selezionati</div><div class="value">'+chosen.length+'/5</div></div><div class="resource-tile"><div class="label">Medie L5 disponibili</div><div class="value green">'+known.length+'/5</div></div><div class="resource-tile"><div class="label">Somma L5 prevista</div><div class="value">'+esc(fmt(projection.base))+'</div><div class="foot">Prima del bonus simulato</div></div><div class="resource-tile"><div class="label">Bonus club simulato</div><div class="value cyan">+'+esc(fmt(projection.bonusPoints))+'</div><div class="foot">'+esc(fmt(bonusPct))+'% su giocatori dello stesso club</div></div><div class="resource-tile"><div class="label">Proiezione totale</div><div class="value">'+esc(fmt(projection.projected))+'</div><div class="foot">Non è un punteggio garantito</div></div><div class="resource-tile"><div class="label">Cap L10 stimato</div><div class="value '+(capUsed!=null&&capUsed<=cap?'cyan':'orange')+'">'+(capUsed==null?'—':esc(fmt(capUsed))+' / '+esc(fmt(cap)))+'</div><div class="foot">MVP simulato fuori cap</div></div><div class="resource-tile"><div class="label">Scenario prudente</div><div class="value">'+esc(fmt(projection.low))+'</div><div class="foot">L5 corrette per variabilità osservata</div></div><div class="resource-tile"><div class="label">Scenario storico alto</div><div class="value cyan">'+esc(fmt(projection.high))+'</div><div class="foot">Massimi osservati disponibili</div></div></div><div class="activity-list">'+rows+'</div><div class="status-line"></div>'+validity+'<div class="notice"><span class="notice-icon">◈</span><div><strong>Concentrazione club:</strong> '+esc(clubText)+'. Il bonus è una simulazione manuale e non afferma di replicare la formula ufficiale del nuovo Set.</div></div>'+objective+'<div class="notice" style="margin-top:12px"><span class="notice-icon">ⓘ</span><div>'+esc(capNote)+' Le medie descrivono il passato; non includono titolarità, avversario, bonus variabili o le regole definitive del Set in arrivo.</div></div>';
 }
+function labelsRoleError(role,cardName){return role+': '+cardName+' non risulta compatibile in base al ruolo memorizzato';}
 
 function renderResourcesForm(){const r=state.resources;$('gemsInput').value=r.gems;$('essenceInput').value=r.essence;$('setInput').value=r.set;$('collectionInput').value=r.collection;$('goalInput').value=r.goal;$('notesInput').value=r.notes||'';const ratio=r.goal>0?Math.min(100,num(r.gems)/num(r.goal)*100):0;$('goalBar').style.width=ratio+'%';$('goalCaption').textContent=`${fmt(r.gems)} / ${fmt(r.goal)} Gems`;$('goalPercent').textContent=Math.round(ratio)+'%'}
 let liveSorareItems=[];
@@ -260,6 +357,7 @@ function importSorareCards(silent=false){
       ...old,id:old.id||'sorare-'+card.slug,sorareSlug:card.slug,slug:card.slug,assetId:card.assetId||old.assetId||null,
       name:card.name||old.name||card.slug,club:card.team||old.club||'',
       position:normalizedPosition(card.position)||old.position||'Altro',
+      positionCodes:Array.isArray(card.position)?card.position:(old.positionCodes||[]),
       rarity:skin&&skin.skinName?(String(card.rarity||'Common')+' · '+skin.skinName):(card.rarity||old.rarity||'Unknown'),
       l5:card.l5??old.l5??'',l10:card.l10??old.l10??'',l15:card.l15??old.l15??'',age:card.age??old.age??'',
       imageUrl:card.imageUrl||old.imageUrl||null,playerImageUrl:card.playerImageUrl||old.playerImageUrl||null,
@@ -342,6 +440,7 @@ $('importSorareCards').addEventListener('click',()=>importSorareCards(false));
 $('autoBuildLineup').addEventListener('click',buildOptimalLineup);
 $('lineupTarget').addEventListener('input',renderLineup);
 $('lineupCap').addEventListener('input',renderLineup);
+$('lineupBonus').addEventListener('input',renderLineup);
 $('clearLineup').addEventListener('click',()=>{state.lineup=['','','','',''];persist();renderLineup();});
 $('saveLineup').addEventListener('click',()=>{persist();toast('Formazione salvata in questo browser.');});
 renderAll();
