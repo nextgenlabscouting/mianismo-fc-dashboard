@@ -47,6 +47,15 @@ const QUERY_TIERS = [
     ]
   },
   {
+    label: "scores",
+    fields: [
+      "slug assetId rarityTyped seasonYear serialNumber",
+      "anyPositions anyTeam { name }",
+      "anyPlayer { displayName }",
+      "... on Card { rawSo5Scores(last: 10) }"
+    ]
+  },
+  {
     label: "images",
     fields: [
       "slug assetId rarityTyped seasonYear serialNumber",
