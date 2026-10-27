@@ -93,10 +93,6 @@ async function sorareGraphQL(query, variables = {}) {
   if (!body.data) throw new Error("Sorare API returned no data");
   return body.data;
 }
-function average(values) {
-  const numbers = (Array.isArray(values) ? values : []).filter(value => value != null && Number.isFinite(Number(value))).map(Number);
-  return numbers.length ? Math.round(numbers.reduce((sum, value) => sum + value, 0) / numbers.length * 10) / 10 : null;
-}
 function scoreNumbers(values) {
   return (Array.isArray(values) ? values : [])
     .map(value => typeof value === "object" && value !== null
