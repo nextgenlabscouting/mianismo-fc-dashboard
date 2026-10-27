@@ -1,5 +1,5 @@
 const ENDPOINT = "https://api.sorare.com/graphql";
-const MAX_PAGES = 8;
+const MAX_PAGES = 1;
 
 // Optional fields are isolated into query tiers. If the Sorare schema changes,
 // the endpoint can still return the inventory using the documented base fields.
