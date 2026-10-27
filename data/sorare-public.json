@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "source": "Sorare GraphQL API — public read-only probe",
   "requestedSlug": "mianismo",
-  "updatedAt": "2026-10-27T03:45:54.792Z",
+  "updatedAt": "2026-10-27T11:37:19.969Z",
   "status": "ok",
   "statusLabel": "Profilo risolto",
   "profile": {
@@ -611,10 +611,6 @@
         "name": "bakery-jatta-2026-common-d9a4afcf-ca03-40ec-982b-0ae653ab94df"
       },
       {
-        "slug": "skelly-alvero-2026-common-f5244ce0-308f-4f84-a05a-307b58a794f0",
-        "name": "skelly-alvero-2026-common-f5244ce0-308f-4f84-a05a-307b58a794f0"
-      },
-      {
         "slug": "sebastiaan-bornauw-2026-common-afab1cab-75af-477c-bb42-e9bc0cc85936",
         "name": "sebastiaan-bornauw-2026-common-afab1cab-75af-477c-bb42-e9bc0cc85936"
       },
@@ -651,20 +647,8 @@
         "name": "ismael-saibari-ben-el-basra-2026-common-7cdb7399-4e88-4713-9dcf-db066025d53e"
       },
       {
-        "slug": "faik-sakar-2026-common-c25c7bb4-cbd2-46f3-aaae-4ca566e91df5",
-        "name": "faik-sakar-2026-common-c25c7bb4-cbd2-46f3-aaae-4ca566e91df5"
-      },
-      {
-        "slug": "eric-junior-dina-ebimbe-2026-common-e5dafa4e-6280-4928-b9bf-7157e85ab1a4",
-        "name": "eric-junior-dina-ebimbe-2026-common-e5dafa4e-6280-4928-b9bf-7157e85ab1a4"
-      },
-      {
         "slug": "mert-ayhan-2026-common-e7a40466-1cb5-461f-87db-30c61e0a55a5",
         "name": "mert-ayhan-2026-common-e7a40466-1cb5-461f-87db-30c61e0a55a5"
-      },
-      {
-        "slug": "max-finkgrafe-2026-common-ba45fcf5-7f77-47d0-ba34-86a657b6e2b7",
-        "name": "max-finkgrafe-2026-common-ba45fcf5-7f77-47d0-ba34-86a657b6e2b7"
       },
       {
         "slug": "calvin-marc-brackelmann-2026-common-d3868fd9-1dbe-4cad-9491-482ca4b41154",
@@ -799,10 +783,6 @@
         "name": "lucas-calodat-2026-common-9fc71989-2400-44cc-8917-fe90953d563b"
       },
       {
-        "slug": "merwan-ifnaoui-2026-common-a922c072-f224-4a7a-82a5-a3a979b555be",
-        "name": "merwan-ifnaoui-2026-common-a922c072-f224-4a7a-82a5-a3a979b555be"
-      },
-      {
         "slug": "gautier-lloris-2026-common-a4ba476c-e77b-46bd-bbf0-705ac11e81d2",
         "name": "gautier-lloris-2026-common-a4ba476c-e77b-46bd-bbf0-705ac11e81d2"
       },
@@ -821,10 +801,6 @@
       {
         "slug": "angel-gomes-2026-common-37494cca-475d-4c39-ae25-1d637d21ebb8",
         "name": "angel-gomes-2026-common-37494cca-475d-4c39-ae25-1d637d21ebb8"
-      },
-      {
-        "slug": "ryan-rodin-2026-common-7e1ddd8a-893d-4eda-b61d-4a686d769638",
-        "name": "ryan-rodin-2026-common-7e1ddd8a-893d-4eda-b61d-4a686d769638"
       },
       {
         "slug": "zachary-athekame-2026-common-d9ba4c88-3301-40ea-80f7-7b0fa23ab2ae",
@@ -1181,10 +1157,6 @@
       {
         "slug": "peio-canales-urtasun-2026-common-89cc4925-842f-498e-8d3c-9114157ccf0d",
         "name": "peio-canales-urtasun-2026-common-89cc4925-842f-498e-8d3c-9114157ccf0d"
-      },
-      {
-        "slug": "milosz-piekutowski-2026-common-52adb2c1-f2fa-4903-a904-ce4978f1fbfb",
-        "name": "milosz-piekutowski-2026-common-52adb2c1-f2fa-4903-a904-ce4978f1fbfb"
       },
       {
         "slug": "djene-dakonam-ortega-2026-common-8c1f2d46-ab92-4163-a651-a81fffbdfb5e",
@@ -1613,6 +1585,34 @@
       {
         "slug": "kevin-lomonaco-2026-common-28035a48-3a60-4b38-8140-59a86354396e",
         "name": "kevin-lomonaco-2026-common-28035a48-3a60-4b38-8140-59a86354396e"
+      },
+      {
+        "slug": "francisco-roman-alarcon-suarez-2026-common-6318ad5f-a31b-49e8-a5ae-fc3f8d4cd017",
+        "name": "francisco-roman-alarcon-suarez-2026-common-6318ad5f-a31b-49e8-a5ae-fc3f8d4cd017"
+      },
+      {
+        "slug": "nicolas-gerrit-kuhn-2026-common-3ab1b1d6-5b50-4404-b6b7-29fe2dcf2c6b",
+        "name": "nicolas-gerrit-kuhn-2026-common-3ab1b1d6-5b50-4404-b6b7-29fe2dcf2c6b"
+      },
+      {
+        "slug": "lucien-agoume-2026-common-45fc63f1-b7dc-45ba-8d66-8c0bfaad8b7b",
+        "name": "lucien-agoume-2026-common-45fc63f1-b7dc-45ba-8d66-8c0bfaad8b7b"
+      },
+      {
+        "slug": "arijon-ibrahimovic-2026-common-04850125-441b-4bb4-b59e-84b624acf79b",
+        "name": "arijon-ibrahimovic-2026-common-04850125-441b-4bb4-b59e-84b624acf79b"
+      },
+      {
+        "slug": "anthony-rouault-2026-common-29c2092f-17d9-4453-9f95-030a4e7516cb",
+        "name": "anthony-rouault-2026-common-29c2092f-17d9-4453-9f95-030a4e7516cb"
+      },
+      {
+        "slug": "dario-esteban-osorio-osorio-2026-common-f8fd259b-a0df-4068-8f96-db4d81443638",
+        "name": "dario-esteban-osorio-osorio-2026-common-f8fd259b-a0df-4068-8f96-db4d81443638"
+      },
+      {
+        "slug": "basar-onal-2026-common-11f82563-c603-434b-b5c0-647db77c8d07",
+        "name": "basar-onal-2026-common-11f82563-c603-434b-b5c0-647db77c8d07"
       }
     ],
     "truncated": true,
