@@ -33,6 +33,7 @@ const checks = [
   [/const CARDS_PAGE_SIZE=72/, 'paginazione del catalogo compatta'],
   [/function openLineupPicker/, 'selettore formazione con ricerca'],
   [/function renderLineupPickerResults/, 'risultati formazione filtrati e paginati'],
+  [/current\|\|dup\|\|blocked/, 'carte HyperGlitch chiuse o non idonee al Set non selezionabili'],
   [/id="lineupPickerSearch"/, 'campo ricerca selettore formazione'],
   [/\.collection-grid/, 'griglia compatta per collezione ampia'],
   [/cardsPrevPage.*addEventListener/s, 'pulsante pagina precedente collegato'],
