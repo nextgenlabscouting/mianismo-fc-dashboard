@@ -1018,7 +1018,7 @@ function importSorareCards(silent=false){
   state.cards=merged;state.sorareProfileSlug=liveSorareProfileSlug;state.sorareInventoryStatus='complete';
   const ids=new Set(merged.map(card=>card.id));state.lineup=state.lineup.map(id=>ids.has(id)?id:'');
   persist();
-  if(!silent)toast('Inventario completo riconciliato: '+liveSorareItems.length+' carte Sorare verificate; '+added+' nuove, '+updated+' aggiornate. Le carte non più presenti sono state rimosse.');
+  if(!silent)toast('Inventario verificato: '+liveSorareItems.length+' carte correnti; nuove: '+added+'; aggiornate: '+updated+'. Le carte Sorare non più presenti sono state rimosse.');
   renderLineup();
 }
 async function loadSorarePublicData(){

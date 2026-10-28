@@ -52,7 +52,7 @@ const newCard = {
   assert.equal(state.cards[0].source, "sorare");
   assert.equal(calls.persisted, 1);
   assert.equal(calls.renders, 1);
-  assert.match(calls.toasts[0], /1 nuove carte, 0 aggiornate/);
+  assert.match(calls.toasts[0], /nuove: 1; aggiornate: 0/);
 }
 
 {
@@ -69,7 +69,7 @@ const newCard = {
   importer(false);
   assert.equal(state.cards.length, 1, "Una carta esistente va aggiornata, non duplicata");
   assert.equal(state.cards[0].name, "Player One Updated");
-  assert.match(calls.toasts[0], /0 nuove carte, 1 aggiornate/);
+  assert.match(calls.toasts[0], /nuove: 0; aggiornate: 1/);
 }
 
 {
