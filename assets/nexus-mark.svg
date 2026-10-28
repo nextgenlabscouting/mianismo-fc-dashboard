@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="title desc">
+<title id="title">NEXUS</title><desc id="desc">Angular N monogram in cyan and green inside a segmented orbital ring.</desc>
+<defs><linearGradient id="nx" x1="20" y1="12" x2="108" y2="116" gradientUnits="userSpaceOnUse"><stop stop-color="#68F4FF"/><stop offset=".46" stop-color="#16C8EF"/><stop offset=".77" stop-color="#47F2C3"/><stop offset="1" stop-color="#A3FF5F"/></linearGradient><filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<circle cx="64" cy="64" r="56" stroke="url(#nx)" stroke-width="2" stroke-dasharray="140 24 55 20" opacity=".78"/><circle cx="64" cy="64" r="47" stroke="url(#nx)" stroke-width="1" stroke-dasharray="38 15 90 18" opacity=".42"/>
+<circle cx="64" cy="8" r="2.4" fill="#68F4FF" filter="url(#glow)"/><circle cx="8" cy="64" r="2.1" fill="#16C8EF" filter="url(#glow)"/>
+<path d="M30 90V35H41L88 76V37H103V96H91L45 56V90H30Z" fill="url(#nx)" filter="url(#glow)"/><path d="M45 35H56L103 76V88L45 40V35Z" fill="#071522" opacity=".42"/><path d="M88 37L103 25V76L88 90V37Z" fill="url(#nx)" opacity=".96"/><path d="M30 35L45 35V56L30 69V35Z" fill="#7BF7FF" opacity=".4"/>
+</svg>
