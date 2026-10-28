@@ -413,7 +413,7 @@ function importSorareCards(silent=false){
       name:card.name||old.name||card.slug,club:card.team||old.club||'',
       position:normalizedPosition(card.position)||old.position||'Altro',
       positionCodes:Array.isArray(card.position)?card.position:(old.positionCodes||[]),
-      rarity:skin&&skin.skinName?(String(card.rarity||'Common')+' · '+skin.skinName):(card.rarity||old.rarity||'Unknown'),
+      rarity:card.rarity||old.rarity||'Unknown',rarityTyped:card.rarityTyped||old.rarityTyped||null,
       l5:card.l5??old.l5??'',l10:card.l10??old.l10??'',l15:card.l15??old.l15??'',age:card.age??old.age??'',
       imageUrl:card.imageUrl||old.imageUrl||null,playerImageUrl:card.playerImageUrl||old.playerImageUrl||null,
       skinEdition:skin,variantName:skin?.variantName||skin?.variant||old.variantName||null,
