@@ -13,7 +13,8 @@ const checks = [
   [/MAX_CLIENT_PAGES=100/, 'limite di sicurezza paginazione API'],
   [/seenCursors\.has\(next\)/, 'rilevamento cursori ripetuti'],
   [/cardsQualityGood=hasCardsResponse/, 'controllo qualità prima dell’importazione'],
-  [/eligibleCandidates=state\.cards\.filter\(card=>!isEndedHyperGlitch\(card\)\)/, 'esclusione carte HyperGlitch dall’ottimizzatore'],
+  [/eligibleCandidates=state\.cards\.filter\(isTargetSetCard\)/, 'ottimizzatore limitato al Set corrente verificato'],
+  [/function currentTargetSet\(\)/, 'nessuna formazione senza Set corrente confermato'],
   [/legacyEssenceExpired=true/, 'migrazione Essence HyperGlitch scaduta'],
   [/reportItems=items\.slice\(0,60\)/, 'limite rendering del pannello tecnico'],
   [/Dati conservati/, 'stato stale visibile']
