@@ -1009,7 +1009,7 @@ function importSorareCards(silent=false){
       season:card.season??old.season??null,serialNumber:card.serialNumber??old.serialNumber??null,
       edition:card.edition||old.edition||null,setName:card.set?.name||old.setName||null,source:'sorare'
     };
-    if(idx===undefined){indexBySlug.set(card.slug,merged.length);merged.push(item);if(previousSorare.has(card.slug))updated++;else added++;}else{merged[idx]=item;updated++;}
+    if(idx===undefined){indexBySlug.set(card.slug,merged.length);merged.push(item);added++;}else{merged[idx]=item;updated++;}
   }
   state.cards=merged;state.sorareProfileSlug=liveSorareProfileSlug;persist();
   if(!silent)toast('Import completato: '+added+' nuove carte, '+updated+' aggiornate.');
