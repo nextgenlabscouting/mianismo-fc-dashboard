@@ -46,4 +46,32 @@ const checks = [
 for (const [pattern, label] of checks) {
   assert.match(html, pattern, 'Manca il controllo UI: ' + label);
 }
-console.log('Dashboard regression checks passed (' + (checks.length + 1) + ' checks).');
+
+const helperStart = scripts[0][1].indexOf('function updateLoyaltyRewardEstimate(){');
+const helperEnd = scripts[0][1].indexOf('\nfunction renderResourcesForm(){', helperStart);
+assert.ok(helperStart >= 0 && helperEnd > helperStart, 'Il calcolo loyalty deve essere estraibile per test');
+const helperSource = scripts[0][1].slice(helperStart, helperEnd);
+const elements = {
+  collectionInput: { value: '80' },
+  legacyGemsSpentBracket: { value: '200-349' },
+  loyaltyEssenceEstimate: { textContent: '' },
+  loyaltyGemsEstimate: { textContent: '' },
+  loyaltyRewardDetail: { textContent: '' }
+};
+const updateEstimate = new Function('
+, 'state', 'num', 'fmt', helperSource + '\nreturn updateLoyaltyRewardEstimate;')(
+  id => elements[id] || { value: '' },
+  { resources: { collection: 80, legacyGemsSpentBracket: '200-349' } },
+  value => Number.isFinite(Number(value)) ? Number(value) : 0,
+  value => Number(value).toLocaleString('it-IT', { maximumFractionDigits: 1 })
+);
+updateEstimate();
+assert.equal(elements.loyaltyEssenceEstimate.textContent, '8.000 Essence');
+assert.equal(elements.loyaltyGemsEstimate.textContent, '25 Gems');
+elements.collectionInput.value = '65';
+elements.legacyGemsSpentBracket.value = '';
+updateEstimate();
+assert.equal(elements.loyaltyEssenceEstimate.textContent, '6.000 Essence');
+assert.equal(elements.loyaltyGemsEstimate.textContent, '0+ Gems (fascia da verificare)');
+
+console.log('Dashboard regression checks passed (' + (checks.length + 5) + ' assertions).');
