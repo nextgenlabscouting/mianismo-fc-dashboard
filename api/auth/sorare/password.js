@@ -111,7 +111,7 @@ module.exports = async function handler(req, res) {
     }
     if (Array.isArray(result.errors) && result.errors.length) {
       const message = result.errors.map(e => e?.message).filter(Boolean).join(" ");
-      if (/2fa[\\s_-]*missing|two[\\s_-]*factor[\\s_-]*missing|otp[\\s_-]*session[\\s_-]*challenge[\\s_-]*missing/i.test(message)) {
+      if (/2fa[\s_-]*missing|two[\s_-]*factor[\s_-]*missing|otp[\s_-]*session[\s_-]*challenge[\s_-]*missing/i.test(message)) {
         return res.status(409).json({ error: "Sorare segnala una verifica 2FA ma non ha restituito la sfida OTP. Non è possibile completare il secondo passaggio senza quella sfida: riavvia l'accesso e riprova. Se continua, accedi direttamente su sorare.com e completa eventuali avvisi di sicurezza." });
       }
       return res.status(401).json({ error: /invalid|password|credential|email/i.test(message) ? "Email o password non corrette." : "Sorare ha rifiutato l'accesso: " + message.slice(0, 180) });
