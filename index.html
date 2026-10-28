@@ -161,7 +161,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
 <script>
 (function(){
 'use strict';
-const KEY='nexusSorareDashboardV2';
+const KEY='mianismoFcDashboardV1';
 const initial={cards:[],lineup:['','','','',''],resources:{gems:320,essence:0,set:'Nuovo Set (in attesa)',collection:80,goal:500,notes:'',legacyEssenceExpired:false,legacyGemsSpentBracket:'200-349'},lastSaved:null};
 let state=loadState();
 let cardsPage=1;const CARDS_PAGE_SIZE=60;
@@ -175,6 +175,7 @@ function fmt(v){return num(v).toLocaleString('it-IT',{maximumFractionDigits:1})}
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
 function goto(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));const titles={overview:['La tua stagione, sotto controllo.','Il tuo account Sorare, le carte e l’analisi delle performance in un’unica piattaforma.'],cards:['La tua collezione.','Organizza le carte e conserva le statistiche che vuoi confrontare.'],lineup:['Costruisci la tua formazione.','Componi una bozza e confronta le medie inserite.'],resources:['Gestisci ogni risorsa.','Saldo, obiettivi e note operative in un unico pannello.'],sorare:['Sorare Sync.','Accesso OAuth Sorare, inventario automatico e statistiche aggiornate ogni 2 minuti.']};$('pageTitle').textContent=titles[page][0];$('pageSubtitle').textContent=titles[page][1];window.scrollTo({top:0,behavior:'smooth'});if(page==='lineup')renderLineup()}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.page)));document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.goto)));
+function cardVisualUrl(c){return c.imageUrl||c.playerImageUrl||c.avatarUrl||''}
 function cardInitials(name){return String(name||'?').split(/\\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase()}
 function scoreClass(value){if(value===''||value==null||!Number.isFinite(Number(value)))return 'score-neutral';const n=Number(value);return n>=70?'score-green':n>=50?'score-cyan':n>=35?'score-orange':'score-red'}
 function roleClass(position){const p=String(position||'').toLowerCase();return /portiere|goalkeeper|keeper/.test(p)?'role-gk':/difensore|defender/.test(p)?'role-df':/centrocampista|midfielder/.test(p)?'role-md':/attaccante|forward|striker/.test(p)?'role-fw':'role-other'}
@@ -671,6 +672,7 @@ function bindCoreControls(){
   $("resourcesForm").addEventListener("submit",saveResourcesFromForm);
   $("resetResources").addEventListener("click",resetResources);
   $("cardForm").addEventListener("submit",saveCardFromForm);
+  $("addCardTop").addEventListener("click",startSorareLogin);
   $("addCardPage").addEventListener("click",()=>openModal());
   $("closeModal").addEventListener("click",closeModal);
   $("cancelModal").addEventListener("click",closeModal);
@@ -773,6 +775,8 @@ function importSorareCards(silent=false){
       rarityTyped:card.rarityTyped||old.rarityTyped||null,
       l5:card.l5??old.l5??'',l10:card.l10??old.l10??'',l15:card.l15??old.l15??'',age:card.age??old.age??'',
       imageUrl:card.imageUrl||old.imageUrl||null,playerImageUrl:card.playerImageUrl||old.playerImageUrl||null,
+      teamImageUrl:card.teamImageUrl||old.teamImageUrl||null,teamSlug:card.teamSlug||old.teamSlug||null,
+      activeTeamImageUrl:card.activeTeamImageUrl||old.activeTeamImageUrl||null,activeTeamSlug:card.activeTeamSlug||old.activeTeamSlug||null,
       skinEdition:skin||old.skinEdition||null,variantName:skin?.variantName||skin?.variant||old.variantName||null,
       skin:skin?.skin||old.skin||null,bonus:skin?.bonus??old.bonus??null,
       power:card.power??old.power??null,grade:card.grade??old.grade??null,
