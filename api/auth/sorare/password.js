@@ -44,7 +44,7 @@ module.exports = async function handler(req, res) {
   if (!challenge && (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !/^\$2[aby]\$\d{2}\$/.test(password))) {
     return res.status(400).json({ error: "Email o hash password non validi." });
   }
-  if (challenge && (!/^[a-f0-9]{16,128}$/i.test(challenge) || !/^\d{4,10}$/.test(otp))) {
+  if (challenge && (!/^[a-z0-9_-]{8,256}$/i.test(challenge) || !/^\d{4,10}$/.test(otp))) {
     return res.status(400).json({ error: "Inserisci il codice di verifica Sorare valido." });
   }
 
