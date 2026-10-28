@@ -1,12 +1,14 @@
 const SORARE_ENDPOINT = "https://api.sorare.com/graphql";
+const { getValidSession } = require("../auth/sorare/session-lib");
 
-async function sorareGraphQL(query, variables = {}) {
+async function sorareGraphQL(query, variables = {}, accessToken = null) {
   const response = await fetch(SORARE_ENDPOINT, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      "User-Agent": "MIANISMO-FC-Dashboard/1.0",
+      "User-Agent": "NEXUS-Sorare-Intelligence/3.0",
+      ...(accessToken ? { Authorization: "Bearer " + accessToken } : {}),
       ...(process.env.SORARE_API_KEY ? { APIKEY: process.env.SORARE_API_KEY } : {})
     },
     body: JSON.stringify({ query, variables }),
@@ -30,8 +32,9 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed. Use GET." });
   }
 
+  const session = await getValidSession(req, res);
   const rawSlug = Array.isArray(req.query.slug) ? req.query.slug[0] : req.query.slug;
-  const slug = (rawSlug || "mianismo").trim();
+  const slug = (rawSlug || session?.profile?.slug || "mianismo").trim();
   if (!/^[a-zA-Z0-9_-]{1,80}$/.test(slug)) {
     return res.status(400).json({ error: "Invalid profile slug." });
   }
@@ -40,12 +43,13 @@ module.exports = async function handler(req, res) {
     const query = `query PublicUser($slug: String!) {
       user(slug: $slug) { slug nickname }
     }`;
-    const data = await sorareGraphQL(query, { slug });
+    const data = await sorareGraphQL(query, { slug }, session?.accessToken || null);
     const user = data.user || null;
 
     return res.status(200).json({
       status: user ? "ok" : "not_found",
-      source: "Sorare public GraphQL API",
+      source: session ? "Sorare OAuth GraphQL API" : "Sorare public GraphQL API",
+      authenticated: Boolean(session),
       profile: user ? { slug: user.slug || slug, nickname: user.nickname || null } : null,
       apiKeyConfigured: Boolean(process.env.SORARE_API_KEY),
       fetchedAt: new Date().toISOString()
