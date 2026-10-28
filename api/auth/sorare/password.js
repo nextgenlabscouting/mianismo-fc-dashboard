@@ -48,7 +48,7 @@ async function signIn(input) {
       otpSessionChallenge: challenge ? String(challenge) : null,
       errors: Array.isArray(payload.errors)
         ? payload.errors
-        : (apiError ? [{ message: apiError }] : [])
+        : (graphErrors.length ? graphErrors : (apiError ? [{ message: apiError }] : []))
     };
   }
 
