@@ -886,7 +886,7 @@ async function loadSorarePublicData(){
       if(!Array.isArray(chunk.items)||chunk.items.length===0){pageError='La paginazione ha segnalato altre carte ma ha restituito una pagina vuota.';break;}
       seenCursors.add(next);
       after=next;
-      // Sorare's anonymous limit is 20 requests/min; OAuth permits 60/min. Pace page reads to avoid 429s.
+      // Sorare's anonymous limit is 20 requests/min; authenticated JWT permits 60/min. Pace page reads to avoid 429s.
       await new Promise(resolve=>setTimeout(resolve,chunk.authenticated?1200:3300));
       if(page===MAX_CLIENT_PAGES-1)pageError='Raggiunto il limite prudenziale di '+MAX_CLIENT_PAGES+' pagine; inventario parziale.';
     }
@@ -943,7 +943,7 @@ async function loadSorarePublicData(){
         detail:cardsData.error||pageError||''
       },
       updatedAt:cardsData.fetchedAt||new Date().toISOString(),
-      message:profileOk?(isSorareAuthenticated?'Accesso OAuth Sorare verificato.':'Profilo Sorare pubblico verificato.'):'Non è stato possibile verificare il profilo Sorare.',
+      message:profileOk?(isSorareAuthenticated?'Accesso diretto Sorare verificato.':'Profilo Sorare pubblico verificato.'):'Non è stato possibile verificare il profilo Sorare.',
       detail:cardsOk?'Immagini, varianti e statistiche mostrate solo quando esposte dall’API.':'Dettaglio API: '+(cardsData.error||profile.error||'verifica i log del backend.')
     });
     if(cardsOk&&allCards.length)importSorareCards(true);
