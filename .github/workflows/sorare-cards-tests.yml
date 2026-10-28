@@ -6,11 +6,15 @@ on:
     paths:
       - "api/public/cards.js"
       - "scripts/test-cards-api.cjs"
+      - "scripts/sorare-public-sync.mjs"
+      - "scripts/test-sorare-sync.mjs"
       - ".github/workflows/sorare-cards-tests.yml"
   pull_request:
     paths:
       - "api/public/cards.js"
       - "scripts/test-cards-api.cjs"
+      - "scripts/sorare-public-sync.mjs"
+      - "scripts/test-sorare-sync.mjs"
       - ".github/workflows/sorare-cards-tests.yml"
   workflow_dispatch:
 
@@ -26,3 +30,5 @@ jobs:
           node-version: "22"
       - name: Run API regression tests
         run: node scripts/test-cards-api.cjs
+      - name: Run Sorare sync regression tests
+        run: node scripts/test-sorare-sync.mjs
