@@ -714,7 +714,7 @@ async function startSorareLogin(){
 function renderAnalytics(){
  const cards=state.cards||[];
  const roles=['Portiere','Difensore','Centrocampista','Attaccante','Altro'];
- const groups=roles.map(role=>{const list=cards.filter(c=>roleClass(c.position)===roleClass(role));const scores=list.map(c=>Number(c.l5)).filter(Number.isFinite);return {role,count:list.length,avg:scores.length?scores.reduce((a,b)=>a+b,0)/scores.length:null,scored:scores.length};});
+ const groups=roles.map(role=>{const list=cards.filter(c=>roleClass(c.position)===roleClass(role));const scores=list.filter(c=>c.l5!==''&&c.l5!=null&&Number.isFinite(Number(c.l5))).map(c=>Number(c.l5));return {role,count:list.length,avg:scores.length?scores.reduce((a,b)=>a+b,0)/scores.length:null,scored:scores.length};});
  const maximum=Math.max(1,...groups.map(g=>g.count));
  $('analyticsCardTotal').textContent=cards.length+' CARTE';
  $('roleDistribution').innerHTML=groups.map(g=>'<div class="telemetry-row"><span class="telemetry-label '+roleClass(g.role)+'">'+g.role+'</span><div class="telemetry-track"><i class="'+roleClass(g.role)+'" style="width:'+Math.round(g.count/maximum*100)+'%"></i></div><strong>'+g.count+'</strong></div>').join('')||'<div class="empty">Nessuna carta sincronizzata.</div>';
