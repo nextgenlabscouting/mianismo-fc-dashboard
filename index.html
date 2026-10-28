@@ -162,6 +162,67 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
  .hero:not(.edge-hero) .hero-mark span{display:none}
 }
 
+
+/* Sorare-style compact card collection */
+.collection-grid{grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
+.collection-card{min-width:0;padding:8px;border-radius:11px;display:flex;flex-direction:column;gap:7px}
+.collection-card:after{display:none}
+.compact-card-art{position:relative;height:128px;min-height:128px;display:grid;place-items:center;overflow:hidden;border-radius:8px;background:radial-gradient(ellipse at 50% 20%,#243b4c,#0b1420 72%);border:1px solid #263e51}
+.compact-card-art img{display:block;width:100%;height:100%;object-fit:contain;padding:3px}
+.compact-card-fallback{display:grid;place-items:center;width:100%;height:100%;font-size:27px;font-weight:900;color:var(--cyan);background:linear-gradient(145deg,#102434,#101823)}
+.compact-card-rarity{position:absolute;left:5px;top:5px;max-width:calc(100% - 10px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:8px;font-weight:900;text-transform:uppercase;border:1px solid #426075;background:#07111de8;color:#c4e9f6;border-radius:5px;padding:3px 5px}
+.compact-card-serial{position:absolute;right:5px;bottom:5px;background:#07111de8;border:1px solid #344a5d;border-radius:5px;padding:2px 4px;color:#b7c8d7;font-size:8px}
+.compact-card-body{display:grid;gap:3px;min-width:0}
+.compact-card-name{font-size:12px;line-height:1.25;font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.compact-card-team{font-size:10px;color:#93a7bb;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.compact-card-position{font-size:9px;letter-spacing:.04em;color:#6fd9e6;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.compact-card-scores{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:3px}
+.compact-card-scores span{display:flex;align-items:center;justify-content:space-between;gap:5px;background:#0b1622;border:1px solid #1d3042;border-radius:5px;padding:4px 5px;font-size:8px;color:#7e96ab}
+.compact-card-scores b{font-size:10px;color:#e5f3ff}
+.compact-card-edition{font-size:8px;color:#788fa5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.compact-actions{margin-top:auto;gap:5px}
+.compact-actions .btn{padding:6px 4px;font-size:9px;min-width:0}
+.cards-sync-notice{margin:0 0 12px;font-size:11px;line-height:1.65}
+@media(max-width:1600px){.collection-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(max-width:1250px){.collection-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:1000px){.collection-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:700px){.collection-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.compact-card-art{height:114px;min-height:114px}.compact-card-name{font-size:11px}.compact-actions{flex-direction:column}.compact-actions .btn{width:100%}}
+@media(max-width:460px){.collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.compact-card-art{height:145px;min-height:145px}.compact-actions{flex-direction:row}.compact-actions .btn{width:auto}}
+/* Searchable paginated lineup selector */
+.lineup-picker-modal{width:min(1000px,100%);max-height:calc(100vh - 36px);display:flex;flex-direction:column;gap:12px;padding:18px;overflow:hidden}
+.lineup-picker-modal .modal-head{margin-bottom:0}
+.lineup-picker-toolbar{display:grid;grid-template-columns:minmax(180px,1.5fr) minmax(120px,.65fr) minmax(120px,.65fr) auto;gap:8px;align-items:center}
+.lineup-picker-toolbar .input,.lineup-picker-toolbar .select{width:100%;font-size:12px}
+.picker-set-only{display:flex;align-items:center;gap:7px;color:#9fb3c7;font-size:10px;white-space:nowrap}
+.picker-set-only input{accent-color:var(--green);width:14px;height:14px}
+.lineup-picker-results-head,.lineup-picker-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;color:#8fa4b9;font-size:10px}
+.lineup-picker-results-head span:first-child{color:var(--cyan);font-weight:850}
+.lineup-picker-results{overflow:auto;min-height:100px;max-height:50vh;display:grid;align-content:start;gap:6px;padding-right:3px}
+.lineup-picker-row{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid #263d51;background:linear-gradient(110deg,#101d2b,#0a1420);padding:7px 9px;border-radius:9px;min-width:0}
+.lineup-picker-row:hover{border-color:#4a7489}.lineup-picker-row.is-current{border-color:#b7ff42;background:#101e1a}
+.picker-card-thumb{width:48px;height:60px;background:#101f2b;border-radius:6px;overflow:hidden;display:grid;place-items:center}
+.picker-card-thumb img{width:100%;height:100%;object-fit:contain}
+.picker-thumb-fallback,.slot-thumb-fallback{width:100%;height:100%;display:grid;place-items:center;color:var(--cyan);font-weight:900;font-size:16px}
+.picker-card-main{min-width:0;display:grid;gap:3px}
+.picker-player-name{font-size:12px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.picker-player-club{font-size:10px;color:#879eb4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.picker-player-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.picker-player-meta .tag{font-size:8px;padding:3px 5px}
+.picker-set-badge{font-size:8px;font-weight:850;color:#ffc56c;border:1px solid #674b2e;background:#251a12;border-radius:5px;padding:3px 5px}
+.picker-set-badge.is-valid{color:#b7ff42;border-color:#39562c;background:#142312}.picker-set-badge.is-ended{color:#ff8c9a;border-color:#663843;background:#2a141d}
+.picker-select-btn{min-width:108px}.picker-select-btn:disabled{opacity:.48;cursor:default;transform:none;box-shadow:none}
+.lineup-picker-footer{padding-top:5px;border-top:1px solid #203247}.lineup-picker-footer .toolbar-right{gap:6px}
+.slots{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.slot{display:flex;flex-direction:column;gap:9px;padding:12px}.slot-label{color:#7ddce7}
+.selected-lineup-player{display:grid;grid-template-columns:58px minmax(0,1fr);gap:9px;align-items:center;min-width:0}
+.selected-lineup-thumb{width:58px;height:72px;overflow:hidden;border-radius:7px;background:#0a1520;display:grid;place-items:center;border:1px solid #2a4658}
+.selected-lineup-thumb img{width:100%;height:100%;object-fit:contain}.selected-lineup-copy{min-width:0;display:grid;gap:3px}
+.selected-lineup-copy strong{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.selected-lineup-copy span{font-size:10px;color:#96acc0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.selected-lineup-copy small{font-size:9px;color:#728aa0}.selected-lineup-copy em{font-size:8px;color:#b7ff42;font-style:normal}.selected-lineup-copy em.is-ended{color:#ff8493}
+.slot-placeholder{min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;border:1px dashed #334a5f;border-radius:8px;color:#728ba1}
+.slot-placeholder span{font-size:20px;color:var(--cyan)}.slot-placeholder strong{font-size:11px;color:#c6d4e2}.slot-placeholder small{font-size:9px}
+.slot-actions{display:flex;gap:6px}.slot-actions .btn{flex:1}.slot-info{margin-top:0;line-height:1.45}
+@media(max-width:900px){.lineup-picker-toolbar{grid-template-columns:minmax(0,1fr) minmax(120px,1fr)}.picker-set-only{white-space:normal}.lineup-picker-results{max-height:46vh}}
+@media(max-width:700px){.lineup-picker-modal{width:100%;max-height:calc(100vh - 18px);padding:12px;gap:10px}.lineup-picker-toolbar{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.lineup-picker-toolbar #lineupPickerSearch{grid-column:1/-1}.lineup-picker-row{grid-template-columns:40px minmax(0,1fr);gap:8px;padding:7px}.picker-card-thumb{width:40px;height:52px}.picker-select-btn{grid-column:2;justify-self:start;min-width:96px}.lineup-picker-results-head{align-items:flex-start;flex-direction:column;gap:3px}.slots{grid-template-columns:1fr}.lineup-picker-footer .btn{min-width:0;padding:7px 8px}}
+
 </style>
 </head>
 <body>
@@ -238,7 +299,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
   </section>
 
   <section class="page" id="page-cards">
-    <div class="panel"><div class="panel-head"><div><h3 class="panel-title">Archivio carte</h3><p class="panel-sub">Un registro personale della tua collezione Sorare.</p></div><button class="btn btn-small" id="addCardPage">＋ Aggiunta manuale (facoltativa)</button></div><div class="toolbar"><div class="toolbar-left"><input class="input" id="cardSearch" placeholder="Cerca giocatore, club o campionato…" aria-label="Cerca carte"><select class="select" id="positionFilter" aria-label="Filtra per ruolo"><option value="">Tutti i ruoli</option><option>Portiere</option><option>Difensore</option><option>Centrocampista</option><option>Attaccante</option><option>Altro</option></select><select class="select" id="rarityFilter" aria-label="Filtra per rarità"><option value="">Tutte le rarità</option></select><select class="select" id="variantFilter" aria-label="Filtra per variante"><option value="">Tutte le varianti</option></select></div><div class="toolbar-right"><button class="btn btn-small" id="exportData">Esporta backup</button><button class="btn btn-small" id="importData">Importa backup</button><input type="file" id="importFile" accept="application/json" class="hide"></div></div><div id="cardsGrid" class="cards-grid"></div><div id="cardsPagination" class="toolbar" style="display:none;justify-content:space-between;align-items:center;margin-top:14px"><span class="muted" id="cardsPageLabel">Pagina 1</span><div class="toolbar-right"><button class="btn btn-small" id="cardsPrevPage" type="button">Precedente</button><button class="btn btn-small" id="cardsNextPage" type="button">Successiva</button></div></div><div id="cardsEmpty" class="empty"><span class="empty-icon">▧</span><strong>Nessuna carta in archivio</strong><p>Inserisci la prima carta. I dati saranno salvati nel browser su questo dispositivo.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button></div></div>
+    <div class="panel"><div class="panel-head"><div><h3 class="panel-title">Archivio carte</h3><p class="panel-sub">Un registro personale della tua collezione Sorare.</p></div><button class="btn btn-small" id="addCardPage">＋ Aggiunta manuale (facoltativa)</button></div><div class="toolbar"><div class="toolbar-left"><input class="input" id="cardSearch" placeholder="Cerca giocatore, club o campionato…" aria-label="Cerca carte"><select class="select" id="positionFilter" aria-label="Filtra per ruolo"><option value="">Tutti i ruoli</option><option>Portiere</option><option>Difensore</option><option>Centrocampista</option><option>Attaccante</option><option>Altro</option></select><select class="select" id="rarityFilter" aria-label="Filtra per rarità"><option value="">Tutte le rarità</option></select><select class="select" id="variantFilter" aria-label="Filtra per variante"><option value="">Tutte le varianti</option></select><select class="select" id="cardsSort" aria-label="Ordina le carte"><option value="name">Nome A–Z</option><option value="l5">Media L5 ↓</option><option value="l10">Media L10 ↓</option><option value="club">Club A–Z</option></select></div><div class="toolbar-right"><button class="btn btn-small" id="exportData">Esporta backup</button><button class="btn btn-small" id="importData">Importa backup</button><input type="file" id="importFile" accept="application/json" class="hide"></div></div><div id="cardsSyncNotice" class="hide"></div><div id="cardsGrid" class="cards-grid collection-grid"></div><div id="cardsPagination" class="toolbar" style="display:none;justify-content:space-between;align-items:center;margin-top:14px"><span class="muted" id="cardsPageLabel">Pagina 1</span><div class="toolbar-right"><button class="btn btn-small" id="cardsPrevPage" type="button">Precedente</button><button class="btn btn-small" id="cardsNextPage" type="button">Successiva</button></div></div><div id="cardsEmpty" class="empty"><span class="empty-icon">▧</span><strong>Nessuna carta in archivio</strong><p>Inserisci la prima carta. I dati saranno salvati nel browser su questo dispositivo.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button></div></div>
   </section>
   <section class="page" id="page-lineup">
     <div class="grid lineup-layout"><div class="panel"><div class="panel-head"><div><h3 class="panel-title">Set Strategy Lab</h3><p class="panel-sub">Ottimizza una squadra per target punti e cap L10 usando lo storico disponibile.</p></div><span class="tag">5 giocatori · modello provvisorio</span></div><div class="notice" style="margin-bottom:15px"><span class="notice-icon">ⓘ</span><div>Il modello usa il riferimento del Set precedente (cap L10 120, MVP escluso); il regolamento del nuovo Set è ancora da verificare. <strong>Le carte HyperGlitch sono escluse dall’ottimizzatore</strong>: Sorare ha dichiarato che non sono più idonee alle formazioni dopo la chiusura del Set del 27/10/2026 alle 17:00 CET. Anche l’idoneità delle carte di altri Set va verificata prima di inviare una formazione.</div></div><div class="toolbar" style="margin-top:0"><div class="field" style="max-width:190px"><label for="lineupTarget">Target punti (livello)</label><input class="input" id="lineupTarget" type="number" min="0" max="1000" step="1" placeholder="Es. 300"></div><div class="field" style="max-width:190px"><label for="lineupCap">Cap L10 (MVP escluso)</label><input class="input" id="lineupCap" type="number" min="0" max="500" step="1" value="120"></div><div class="field" style="max-width:190px"><label for="lineupBonus">Bonus club simulato (%)</label><input class="input" id="lineupBonus" type="number" min="0" max="5" step="0.5" value="0"><small>Scenario, formula del nuovo Set da verificare</small></div><div class="toolbar-right"><button class="btn btn-primary" id="autoBuildLineup" type="button">Ottimizza squadra Set</button></div></div><div class="slots" id="lineupSlots"></div><div class="status-line"></div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><div class="muted" style="font-size:11px">Media L5 inserita (carte selezionate)</div><div class="resource-big" id="lineupAverage">—</div></div><div><button class="btn btn-small" id="clearLineup">Svuota formazione</button><button class="btn btn-primary btn-small" id="saveLineup">Salva formazione</button></div></div></div><div class="panel"><div class="panel-head"><div><h3 class="panel-title">Valutazione della bozza</h3><p class="panel-sub">Solo dati presenti nella tua dashboard.</p></div></div><div id="lineupSummary" class="empty"><span class="empty-icon">⚽</span><strong>Seleziona le carte</strong><p>Quando compili gli slot, qui vedrai i dettagli della formazione scelta.</p></div></div></div>
@@ -270,6 +331,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
 </div>
 <nav class="mobile-nav" id="mobileNav"><button class="active" data-page="overview"><span>◫</span>Home</button><button data-page="cards"><span>▧</span>Carte</button><button data-page="analytics"><span>⌁</span>Edge</button><button data-page="lineup"><span>⚽</span>Formazione</button><button data-page="resources"><span>◈</span>Risorse</button><button data-page="sorare"><span>↻</span>Sync</button></nav>
 <div class="modal-wrap" id="cardModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><div class="modal-head"><h3 id="modalTitle">Aggiungi una carta</h3><button class="close-btn" id="closeModal" aria-label="Chiudi">✕</button></div><form id="cardForm"><input type="hidden" id="editId"><div class="form-grid"><div class="field"><label for="playerName">Nome giocatore *</label><input class="input" id="playerName" required maxlength="80" placeholder="Es. Nome Cognome"></div><div class="field"><label for="playerClub">Club</label><input class="input" id="playerClub" maxlength="80" placeholder="Nome della squadra"></div><div class="field"><label for="playerLeague">Campionato</label><select class="select" id="playerLeague"><option value="">Seleziona…</option><option>Premier League</option><option>Bundesliga</option><option>La Liga</option><option>Ligue 1</option><option>Serie A</option><option>Altro</option></select></div><div class="field"><label for="playerPosition">Ruolo</label><select class="select" id="playerPosition"><option>Portiere</option><option selected>Difensore</option><option>Centrocampista</option><option>Attaccante</option><option>Altro</option></select></div><div class="field"><label for="playerRarity">Rarità</label><select class="select" id="playerRarity"><option>Limited</option><option>Common</option><option>Rare</option><option>Super Rare</option><option>Unique</option><option>Altro</option></select></div><div class="field"><label for="playerL5">Media L5 (se nota)</label><input class="input" id="playerL5" type="number" min="0" max="100" step="0.1" placeholder="Es. 48.6"></div><div class="field"><label for="playerL15">Media L10 (se nota)</label><input class="input" id="playerL15" type="number" min="0" max="100" step="0.1" placeholder="Es. 45.2"></div><div class="field"><label for="playerAge">Età (facoltativa)</label><input class="input" id="playerAge" type="number" min="1" max="100" placeholder="Età"></div><div class="field full"><label for="playerNote">Note</label><input class="input" id="playerNote" maxlength="250" placeholder="Es. titolare, rigorista, avversario difficile…"></div></div><div class="form-actions"><button type="button" class="btn" id="cancelModal">Annulla</button><button type="submit" class="btn btn-primary">Salva carta</button></div></form></div></div>
+<div class="modal-wrap lineup-picker-wrap" id="lineupPickerModal" role="dialog" aria-modal="true" aria-labelledby="lineupPickerTitle"><div class="modal lineup-picker-modal"><div class="modal-head"><div><h3 id="lineupPickerTitle">Seleziona un giocatore</h3><p class="panel-sub" id="lineupPickerSubtitle">Carte compatibili con questo ruolo.</p></div><button class="close-btn" id="closeLineupPicker" type="button" aria-label="Chiudi selettore">✕</button></div><div class="lineup-picker-toolbar"><input class="input" id="lineupPickerSearch" type="search" autocomplete="off" placeholder="Cerca giocatore, club, carta o seriale…" aria-label="Cerca nella collezione"><select class="select" id="lineupPickerRarity" aria-label="Filtra rarità"><option value="">Tutte le rarità</option></select><select class="select" id="lineupPickerSort" aria-label="Ordina risultati"><option value="l5">L5 più alta</option><option value="l10">L10 più alta</option><option value="name">Nome A–Z</option></select><label class="picker-set-only"><input id="lineupPickerTargetOnly" type="checkbox" disabled> Solo Set selezionato</label></div><div class="lineup-picker-results-head"><span id="lineupPickerResultCount">0 giocatori</span><span id="lineupPickerEligibilityNote">L’idoneità del Set è indicata su ogni carta.</span></div><div class="lineup-picker-results" id="lineupPickerResults"></div><div class="lineup-picker-footer"><span class="muted" id="lineupPickerPageLabel">0 risultati</span><div class="toolbar-right"><button class="btn btn-small" type="button" id="lineupPickerPrev">Precedente</button><button class="btn btn-small" type="button" id="lineupPickerNext">Successiva</button></div></div></div></div>
 <input type="file" id="unusedFile" class="hide" aria-hidden="true"><div class="toast" id="toast" role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
 <script>
@@ -278,16 +340,17 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
 const KEY='nexusSorareIntelligenceV1';
 const initial={cards:[],lineup:['','','','',''],resources:{gems:null,essence:null,set:'',collection:null,goal:500,notes:'',legacyEssenceExpired:false,legacyGemsSpentBracket:''},resourcesConfirmedByUser:false,sorareInventoryStatus:'unverified',lastSaved:null};
 let state=loadState();
-let cardsPage=1;const CARDS_PAGE_SIZE=60;
+let cardsPage=1;const CARDS_PAGE_SIZE=72;let lineupPickerSlot=-1,lineupPickerPage=1;const LINEUP_PICKER_PAGE_SIZE=40;
 let activeSorareSlug='',liveSorareProfileSlug='',isSorareAuthenticated=false,sorareSyncRunning=false;
-function loadState(){try{const raw=localStorage.getItem(KEY)||localStorage.getItem('mianismoFcDashboardV1')||'null';const v=JSON.parse(raw);if(v&&typeof v==='object'){if(!localStorage.getItem(KEY))try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}const merged={...structuredClone(initial),...v,resources:{...initial.resources,...(v.resources||{})},cards:Array.isArray(v.cards)?v.cards:[],lineup:Array.isArray(v.lineup)?v.lineup:['','','','',''],sorareProfileSlug:v.sorareProfileSlug||(Array.isArray(v.cards)&&v.cards.some(card=>card?.source==='sorare')?'mianismo':'')};merged.resourcesConfirmedByUser=v.resourcesConfirmedByUser===true;if(!merged.resourcesConfirmedByUser)merged.resources={...merged.resources,gems:null,essence:null,set:'',collection:null,legacyGemsSpentBracket:''};if(/hyperglitch/i.test(String(merged.resources.set||''))&&Date.now()>=Date.parse('2026-10-27T16:00:00Z')){merged.resources.essence=null;merged.resources.set='';merged.resources.legacyEssenceExpired=true;}if(merged.sorareInventoryStatus!=='complete')merged.sorareInventoryStatus='unverified';return merged;}}catch(e){}return structuredClone(initial)}
+function loadState(){try{const raw=localStorage.getItem(KEY)||localStorage.getItem('mianismoFcDashboardV1')||'null';const v=JSON.parse(raw);if(v&&typeof v==='object'){if(!localStorage.getItem(KEY))try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}const merged={...structuredClone(initial),...v,resources:{...initial.resources,...(v.resources||{})},cards:Array.isArray(v.cards)?v.cards:[],lineup:Array.isArray(v.lineup)?v.lineup:['','','','',''],sorareProfileSlug:typeof v.sorareProfileSlug==='string'?v.sorareProfileSlug:''};merged.resourcesConfirmedByUser=v.resourcesConfirmedByUser===true;if(!merged.resourcesConfirmedByUser)merged.resources={...merged.resources,gems:null,essence:null,set:'',collection:null,legacyGemsSpentBracket:''};if(/hyperglitch/i.test(String(merged.resources.set||''))&&Date.now()>=Date.parse('2026-10-27T16:00:00Z')){merged.resources.essence=null;merged.resources.set='';merged.resources.legacyEssenceExpired=true;}const hasSavedSorare=Boolean(merged.sorareProfileSlug)&&merged.cards.some(card=>card?.source==='sorare'&&card?.sorareSlug);if(!hasSavedSorare)merged.sorareInventoryStatus='unverified';else if(merged.sorareInventoryStatus!=='complete')merged.sorareInventoryStatus='stale';return merged;}}catch(e){}return structuredClone(initial)}
 function persist(){state.lastSaved=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify(state));$('syncLabel').textContent='Salvato in questo browser';}catch(e){$('syncLabel').textContent='Salvataggio non disponibile';toast('Impossibile salvare in questo browser. Esporta un backup.');}renderAll()}
 function $(id){return document.getElementById(id)}
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function num(v){return Number.isFinite(Number(v))?Number(v):0}
 function fmt(v){return num(v).toLocaleString('it-IT',{maximumFractionDigits:1})}
 function fmtKnown(v){return v===null||v===undefined||v===''?'—':fmt(v)}
-function collectionCards(){const cards=Array.isArray(state.cards)?state.cards:[];return state.sorareInventoryStatus==='complete'?cards:cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug)}
+function hasSavedSorareInventory(){return Boolean(state.sorareProfileSlug)&&Array.isArray(state.cards)&&state.cards.some(card=>card?.source==='sorare'&&card?.sorareSlug)}
+function collectionCards(){const cards=Array.isArray(state.cards)?state.cards:[];const showCache=(state.sorareInventoryStatus==='complete'||state.sorareInventoryStatus==='stale')&&Boolean(state.sorareProfileSlug);return showCache?cards:cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug)}
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
 function goto(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));const titles={overview:['La tua stagione, sotto controllo.','Il tuo account Sorare, le carte e l’analisi delle performance in un’unica piattaforma.'],cards:['La tua collezione.','Organizza le carte e conserva le statistiche che vuoi confrontare.'],analytics:['NEXUS Edge Lab.','Segnali, volatilità e copertura dei dati calcolati dalla tua collezione.'],lineup:['Costruisci la tua formazione.','Componi una bozza e confronta le medie inserite.'],resources:['Gestisci ogni risorsa.','Saldo, obiettivi e note operative in un unico pannello.'],sorare:['Sorare Sync.','Accesso diretto email/password, inventario automatico e statistiche aggiornate ogni 2 minuti.']};$('pageTitle').textContent=titles[page][0];$('pageSubtitle').textContent=titles[page][1];window.scrollTo({top:0,behavior:'smooth'});if(page==='lineup')renderLineup();if(page==='analytics')renderEdgeLab()}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.page)));document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.goto)));
@@ -299,24 +362,14 @@ function teamMark(c){const url=c.teamImageUrl||c.activeTeamImageUrl||'';const te
 function scoreBars(c){const raw=Array.isArray(c.playerRawScores)&&c.playerRawScores.length?c.playerRawScores:Array.isArray(c.rawScores)?c.rawScores:[];const values=raw.slice(0,10).reverse().map(Number).filter(Number.isFinite);if(!values.length)return '<div class="score-empty">Storico punteggi non esposto dall’API</div>';return '<div class="score-bars" aria-label="Ultimi punteggi">'+values.map(v=>'<span class="score-bar '+scoreClass(v)+'" style="height:'+Math.max(5,Math.min(100,v))+'%" title="Score '+esc(fmt(v))+'"></span>').join('')+'</div>'}
 function variantBonusLabel(value){const multiplier=Number(value);if(!Number.isFinite(multiplier))return 'Bonus variante API';const pct=Math.round((multiplier-1)*100);return 'Bonus variante API '+(pct>0?'+':'')+pct+'%';}
 function cardHTML(c){
- const visual=c.imageUrl||c.playerImageUrl||c.avatarUrl||'',hasCardImage=!!c.imageUrl,position=c.position||'Ruolo n.d.';
- const scoreL5=c.l5!==''&&c.l5!=null?fmt(c.l5):'—',scoreL10=c.l10!==''&&c.l10!=null?fmt(c.l10):'—';
- const role=roleClass(position),team=c.club||c.activeTeam||'Club non indicato';
- return `<article class="player-card" data-card-id="${esc(c.id)}">
-  <div class="card-artwork ${hasCardImage?'is-card-art':'is-player-art'}">${visual?'<img src="'+esc(visual)+'" alt="'+esc(hasCardImage?'Carta Sorare di '+c.name:'Ritratto di '+c.name)+'" loading="lazy">':'<div class="fallback-player">'+esc(cardInitials(c.name))+'</div>'}<span class="artwork-type">${hasCardImage?'SORARE CARD':visual?'PLAYER IMAGE':'NO IMAGE'}</span></div>
-  <div class="card-main">
-   <div class="card-identity"><div class="club-mark" title="${esc(team)}">${teamMark(c)}</div><div class="identity-copy"><div class="player-name">${esc(c.name||'Giocatore non identificato')}</div><div class="player-club">${esc(team)}${c.season?' · '+esc(c.season):''}</div></div><span class="rarity">${esc(c.rarity||'Rarità n.d.')}</span></div>
-   <div class="card-metrics">
-    <div class="metric ${scoreClass(c.l5)}"><span>MEDIA L5</span><strong>${scoreL5}</strong></div>
-    <div class="metric ${scoreClass(c.l10)}"><span>MEDIA L10</span><strong>${scoreL10}</strong></div>
-    <div class="metric metric-role ${role}"><span>RUOLO</span><strong>${esc(position)}</strong></div>
-   </div>
-   <div class="performance-row"><span>FORMA RECENTE <small>· ultimi 10 punteggi esposti</small></span>${scoreBars(c)}</div>
-   <div class="card-tags">${!hasCardImage&&visual?'<span class="tag">Ritratto giocatore</span>':''}${c.league?'<span class="tag">'+esc(c.league)+'</span>':''}${c.age?'<span class="tag">'+esc(c.age)+' anni</span>':''}${c.l15!==''&&c.l15!=null?'<span class="tag">L15 '+esc(fmt(c.l15))+'</span>':''}${c.skinEdition?.skinName?'<span class="tag">'+esc(c.skinEdition.skinName)+'</span>':''}${c.skinEdition?.variantName?'<span class="tag">'+esc(c.skinEdition.variantName)+'</span>':''}${c.bonus!=null?'<span class="tag">'+esc(variantBonusLabel(c.bonus))+'</span>':''}${c.serialNumber!=null?'<span class="tag">N° '+esc(c.serialNumber)+'</span>':''}${c.upcomingGames?.[0]?.date?'<span class="tag">Prossima: '+esc(new Date(c.upcomingGames[0].date).toLocaleDateString('it-IT',{day:'2-digit',month:'short'}))+'</span>':''}${c.power!=null?'<span class="tag">Power '+esc(c.power)+'</span>':''}${c.grade?'<span class="tag">Grade '+esc(c.grade)+'</span>':''}</div>
-   ${c.note?'<div class="muted" style="font-size:11px;margin-top:9px">'+esc(c.note)+'</div>':''}
-   <div class="card-actions"><button class="btn btn-small" data-edit="${esc(c.id)}">Dettagli / note</button><button class="btn btn-small" data-delete="${esc(c.id)}">Rimuovi</button></div>
-  </div>
- </article>`;
+ const image=safeImageUrl(cardVisualUrl(c)),hasCardImage=Boolean(c.imageUrl);
+ const positionText=Array.isArray(c.position)?c.position.join(" / "):(c.position||"Ruolo n.d.");
+ const team=c.club||c.activeTeam||"Club non indicato";
+ const l5=c.l5!==""&&c.l5!=null?fmt(c.l5):"—",l10=c.l10!==""&&c.l10!=null?fmt(c.l10):"—";
+ const artwork=image?'<img src="'+esc(image)+'" alt="'+esc(hasCardImage?"Carta Sorare di "+(c.name||"giocatore"):"Ritratto di "+(c.name||"giocatore"))+'" loading="lazy">':'<div class="compact-card-fallback">'+esc(cardInitials(c.name))+'</div>';
+ const rarity=c.rarity||c.rarityTyped||"Rarità n.d.";
+ const edition=c.skinEdition?.variantName||c.skinEdition?.skinName||c.edition||c.specialEdition||"";
+ return '<article class="player-card collection-card" data-card-id="'+esc(c.id)+'"><div class="compact-card-art '+(hasCardImage?"is-card":"is-player")+'">'+artwork+'<span class="compact-card-rarity">'+esc(rarity)+'</span>'+(c.serialNumber!=null?'<span class="compact-card-serial">#'+esc(c.serialNumber)+'</span>':'')+'</div><div class="compact-card-body"><div class="compact-card-name" title="'+esc(c.name||"Giocatore non identificato")+'">'+esc(c.name||"Giocatore non identificato")+'</div><div class="compact-card-team" title="'+esc(team)+'">'+esc(team)+'</div><div class="compact-card-position">'+esc(positionText)+'</div><div class="compact-card-scores"><span>L5 <b>'+esc(l5)+'</b></span><span>L10 <b>'+esc(l10)+'</b></span></div>'+(edition?'<div class="compact-card-edition" title="'+esc(edition)+'">'+esc(edition)+'</div>':'')+'</div><div class="card-actions compact-actions"><button class="btn btn-small" data-edit="'+esc(c.id)+'">Dettagli</button><button class="btn btn-small" data-delete="'+esc(c.id)+'">Rimuovi</button></div></article>';
 }
 function isEndedHyperGlitch(card){const source=[card?.setName,card?.set?.name,card?.edition,card?.specialEdition,card?.sorareSlug,card?.slug].filter(Boolean).join(' ').toLowerCase();return /hyper\s?glitch|glitch_(standard|shiny|holo|legendary)/i.test(source)}
 function currentTargetSet(){const name=String(state.resources?.set||'').trim();return !name||/nuovo set|in attesa|hyper\s?glitch/i.test(name)?'':name.toLocaleLowerCase();}
@@ -330,47 +383,53 @@ function cardVariantLabel(card){
   return '';
 }
 function renderCards(){
-  const cards=collectionCards();
-  const q=$('cardSearch').value.trim().toLowerCase(),pos=$('positionFilter').value;
-  const raritySelect=$('rarityFilter'),variantSelect=$('variantFilter');
-  const oldRarity=raritySelect.value,oldVariant=variantSelect.value;
-  const rarities=[...new Set(cards.map(card=>String(card.rarityTyped||card.rarity||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-  const variants=[...new Set(cards.map(cardVariantLabel).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-  raritySelect.innerHTML='<option value="">Tutte le rarità</option>'+rarities.map(value=>'<option value="'+esc(value)+'">'+esc(value)+'</option>').join('');
-  variantSelect.innerHTML='<option value="">Tutte le varianti</option>'+variants.map(value=>'<option value="'+esc(value)+'">'+esc(value)+'</option>').join('');
-  raritySelect.value=rarities.includes(oldRarity)?oldRarity:'';
-  variantSelect.value=variants.includes(oldVariant)?oldVariant:'';
-  const rarity=raritySelect.value,variant=variantSelect.value;
-  const list=cards.filter(card=>{
-    const matchesQuery=!q||[card.name,card.club,card.league,card.rarity,card.rarityTyped,card.position,card.edition,cardVariantLabel(card),card.setName].some(value=>String(value||'').toLowerCase().includes(q));
-    const matchesPosition=!pos||card.position===pos||(Array.isArray(card.positionCodes)&&card.positionCodes.some(value=>String(value).toLowerCase()===pos.toLowerCase()));
-    const matchesRarity=!rarity||String(card.rarityTyped||card.rarity||'').toLowerCase()===rarity.toLowerCase();
-    const matchesVariant=!variant||cardVariantLabel(card)===variant;
-    return matchesQuery&&matchesPosition&&matchesRarity&&matchesVariant;
-  });
-  const totalPages=Math.max(1,Math.ceil(list.length/CARDS_PAGE_SIZE));
-  cardsPage=Math.max(1,Math.min(cardsPage,totalPages));
-  const pageItems=list.slice((cardsPage-1)*CARDS_PAGE_SIZE,cardsPage*CARDS_PAGE_SIZE);
-  $('cardsGrid').innerHTML=pageItems.map(cardHTML).join('');
-  const pagination=$('cardsPagination');
-  if(pagination){
-    pagination.style.display=list.length>CARDS_PAGE_SIZE?'flex':'none';
-    $('cardsPageLabel').textContent=list.length?((cardsPage-1)*CARDS_PAGE_SIZE+1)+'–'+Math.min(cardsPage*CARDS_PAGE_SIZE,list.length)+' di '+list.length+' carte':'0 carte';
-    $('cardsPrevPage').disabled=cardsPage<=1;
-    $('cardsNextPage').disabled=cardsPage>=totalPages;
-  }
-  $('cardsEmpty').classList.toggle('hide',list.length>0);
-  if(cards.length&&list.length===0){
-    $('cardsEmpty').classList.remove('hide');
-    $('cardsEmpty').innerHTML='<span class="empty-icon">⌕</span><strong>Nessuna carta corrispondente</strong><p>Prova a cambiare ricerca o filtri.</p>';
-  }else if(cards.length===0){
-    const unverified=state.sorareInventoryStatus!=='complete'&&state.cards.some(card=>card?.source==='sorare'||card?.sorareSlug);
-    $('cardsEmpty').innerHTML=unverified?'<span class="empty-icon">↻</span><strong>Inventario Sorare da verificare</strong><p>Le vecchie carte sincronizzate sono nascoste finché NEXUS non legge l’inventario completo dell’account collegato.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button>':'<span class="empty-icon">▧</span><strong>Nessuna carta in archivio</strong><p>Collega Sorare e attendi una sincronizzazione completa dell’inventario.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button>';
-    if($('addEmptyCard'))$('addEmptyCard').onclick=()=>loadSorarePublicData();
-  }
-  document.querySelectorAll('[data-edit]').forEach(button=>button.onclick=()=>openModal(state.cards.find(card=>card.id===button.dataset.edit)));
-  document.querySelectorAll('[data-delete]').forEach(button=>button.onclick=()=>deleteCard(button.dataset.delete));
-  $('navCardCount').textContent=cards.length;
+ const cards=collectionCards(),q=$('cardSearch').value.trim().toLowerCase(),pos=$('positionFilter').value;
+ const raritySelect=$('rarityFilter'),variantSelect=$('variantFilter'),sortSelect=$('cardsSort'),oldRarity=raritySelect.value,oldVariant=variantSelect.value;
+ const rarities=[...new Set(cards.map(c=>String(c.rarityTyped||c.rarity||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+ const variants=[...new Set(cards.map(cardVariantLabel).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+ raritySelect.innerHTML='<option value="">Tutte le rarità</option>'+rarities.map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join('');
+ variantSelect.innerHTML='<option value="">Tutte le varianti</option>'+variants.map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join('');
+ raritySelect.value=rarities.includes(oldRarity)?oldRarity:'';variantSelect.value=variants.includes(oldVariant)?oldVariant:'';
+ const rarity=raritySelect.value,variant=variantSelect.value,sort=sortSelect?.value||'name';
+ const positionsFor=c=>[...(Array.isArray(c.positionCodes)?c.positionCodes:[]),...(Array.isArray(c.position)?c.position:[c.position])].map(v=>String(v||'').toLowerCase());
+ const roleMap={'portiere':['portiere','goalkeeper','keeper','gk'],'difensore':['difensore','defender','df','def'],'centrocampista':['centrocampista','midfielder','md','mid'],'attaccante':['attaccante','forward','fw','st'],'altro':['altro']};
+ const list=cards.filter(c=>{
+  const vals=[c.name,c.club,c.activeTeam,c.league,c.rarity,c.rarityTyped,c.position,c.positionCodes,c.edition,cardVariantLabel(c),c.setName,c.slug,c.sorareSlug,c.assetId];
+  const matchQ=!q||vals.some(v=>String(v||'').toLowerCase().includes(q));
+  const p=positionsFor(c),matchP=!pos||p.some(v=>(roleMap[pos.toLowerCase()]||[pos.toLowerCase()]).some(key=>v===key||v.includes(key)));
+  return matchQ&&matchP&&(!rarity||String(c.rarityTyped||c.rarity||'').toLowerCase()===rarity.toLowerCase())&&(!variant||cardVariantLabel(c)===variant);
+ });
+ const getScore=c=>{const st=cardScoreStats(c);return sort==='l10'?st.capL10:st.expected;};
+ list.sort((x,y)=>{
+  if(sort==='l5'||sort==='l10'){const a=getScore(x),b=getScore(y);if(a==null&&b==null)return 0;if(a==null)return 1;if(b==null)return -1;return b-a;}
+  if(sort==='club')return String(x.club||x.activeTeam||'').localeCompare(String(y.club||y.activeTeam||''),'it');
+  return String(x.name||'').localeCompare(String(y.name||''),'it',{sensitivity:'base'});
+ });
+ const pages=Math.max(1,Math.ceil(list.length/CARDS_PAGE_SIZE));cardsPage=Math.max(1,Math.min(cardsPage,pages));
+ const pageItems=list.slice((cardsPage-1)*CARDS_PAGE_SIZE,cardsPage*CARDS_PAGE_SIZE);
+ $('cardsGrid').className='cards-grid collection-grid';$('cardsGrid').innerHTML=pageItems.map(cardHTML).join('');
+ $('cardsPagination').style.display=list.length>CARDS_PAGE_SIZE?'flex':'none';
+ $('cardsPageLabel').textContent=list.length?((cardsPage-1)*CARDS_PAGE_SIZE+1)+'–'+Math.min(cardsPage*CARDS_PAGE_SIZE,list.length)+' di '+list.length+' carte':'0 carte';
+ $('cardsPrevPage').disabled=cardsPage<=1;$('cardsNextPage').disabled=cardsPage>=pages;
+ const notice=$('cardsSyncNotice');
+ if(state.sorareInventoryStatus==='stale'&&hasSavedSorareInventory()){
+  notice.className='notice cards-sync-notice';
+  notice.innerHTML='<span class="notice-icon">↻</span><div><strong>Ultimo inventario salvato · sincronizzazione live non confermata.</strong><br>Cache locale dell’account <b>'+esc(state.sorareProfileSlug)+'</b>: può essere obsoleta. <button class="btn btn-small" id="openSyncFromCards" type="button">Controlla Sorare Sync</button></div>';
+  $('openSyncFromCards').onclick=()=>goto('sorare');
+ }else if(state.sorareInventoryStatus==='unverified'&&state.cards.some(c=>c?.source==='sorare'||c?.sorareSlug)){
+  notice.className='notice cards-sync-notice';
+  notice.innerHTML='<span class="notice-icon">!</span><div><strong>Inventario non verificato.</strong><br>Riconnetti Sorare per verificare l’identità e importare la collezione.</div>';
+ }else{notice.className='hide';notice.innerHTML='';}
+ $('cardsEmpty').classList.toggle('hide',list.length>0);
+ if(cards.length&&list.length===0){$('cardsEmpty').classList.remove('hide');$('cardsEmpty').innerHTML='<span class="empty-icon">⌕</span><strong>Nessuna carta corrispondente</strong><p>Prova a cambiare ricerca o filtri.</p>';}
+ else if(!cards.length){
+  const unverified=state.sorareInventoryStatus!=='complete'&&state.cards.some(c=>c?.source==='sorare'||c?.sorareSlug);
+  $('cardsEmpty').innerHTML=unverified?'<span class="empty-icon">↻</span><strong>Inventario Sorare da verificare</strong><p>Collega l’account Sorare per verificare la collezione.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button>':'<span class="empty-icon">▧</span><strong>Nessuna carta in archivio</strong><p>Collega Sorare e attendi una sincronizzazione completa.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button>';
+  if($('addEmptyCard'))$('addEmptyCard').onclick=()=>goto('sorare');
+ }
+ document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openModal(state.cards.find(c=>c.id===b.dataset.edit)));
+ document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteCard(b.dataset.delete));
+ $('navCardCount').textContent=cards.length;
 }
 function renderWeekendRadar(){
   const container=$('weekendRadar');
@@ -407,7 +466,7 @@ function renderOverview(){
   const r=state.resources,manualResources=state.resourcesConfirmedByUser===true,inventoryVerified=state.sorareInventoryStatus==='complete';
   const sorareCards=state.cards.filter(card=>card?.source==='sorare'||card?.sorareSlug),manualCount=state.cards.length-sorareCards.length;
   $('statCards').textContent=inventoryVerified?fmt(sorareCards.length):'—';
-  $('statCardsFoot').textContent=inventoryVerified?`${sorareCards.length} carte Sorare verificate · ${manualCount} manuali locali`:`Inventario Sorare non verificato · ${manualCount} carte manuali locali`;
+  $('statCardsFoot').textContent=inventoryVerified?`${sorareCards.length} carte Sorare verificate · ${manualCount} manuali locali`:state.sorareInventoryStatus==='stale'?'Ultimo inventario locale conservato · sincronizzazione live da verificare':`Inventario Sorare non verificato · ${manualCount} carte manuali locali`;
   $('statGems').textContent=manualResources?fmtKnown(r.gems):'—';
   $('statEssence').textContent=manualResources?fmtKnown(r.essence):'—';
   $('statEssenceFoot').textContent=manualResources&&r.essence!=null?'Valore manuale · non sincronizzato via API':'Saldo non disponibile: NEXUS non lo legge dall’API Sorare';
@@ -572,18 +631,27 @@ function buildOptimalLineup(){
   renderLineup();
   toast('Bozza euristica proposta · cap simulato '+fmt(best.capUsed)+'/'+fmt(cap)+' L10 · target '+(target>0?fmt(target):'non impostato')+'. Non certifica idoneità o regole ufficiali del Set.');
 }
+function closeLineupPicker(){const modal=$('lineupPickerModal');if(modal)modal.classList.remove('open');lineupPickerSlot=-1;}
+function openLineupPicker(slot){const labels=['Portiere','Difensore','Centrocampista','Attaccante','Flex / posizione aggiuntiva'];lineupPickerSlot=Number(slot);lineupPickerPage=1;$('lineupPickerSearch').value='';$('lineupPickerRarity').value='';$('lineupPickerSort').value='l5';$('lineupPickerTargetOnly').checked=false;$('lineupPickerTitle').textContent='Seleziona '+labels[lineupPickerSlot].toLowerCase();const target=currentTargetSet();$('lineupPickerSubtitle').textContent=collectionCards().length+' carte in archivio · ruolo '+labels[lineupPickerSlot]+(target?' · Set selezionato: '+state.resources.set:' · Set non verificato');$('lineupPickerModal').classList.add('open');renderLineupPickerResults();$('lineupPickerSearch').focus();}
+function renderLineupPickerResults(){
+ const box=$('lineupPickerResults');if(!box||lineupPickerSlot<0)return;
+ const slot=lineupPickerSlot,role=['GK','DF','MD','FW',null][slot],all=collectionCards(),roleCards=all.filter(c=>{const kinds=positionKinds(c);return role?kinds.includes(role):(!kinds.length||kinds.some(k=>k!=='GK'));});
+ const select=$('lineupPickerRarity'),old=select.value,rarities=[...new Set(roleCards.map(c=>String(c.rarityTyped||c.rarity||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+ select.innerHTML='<option value="">Tutte le rarità</option>'+rarities.map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join('');select.value=rarities.includes(old)?old:'';
+ const target=currentTargetSet(),only=$('lineupPickerTargetOnly');only.disabled=!target;if(!target)only.checked=false;
+ const q=$('lineupPickerSearch').value.trim().toLocaleLowerCase(),rarity=select.value,sort=$('lineupPickerSort').value||'l5';
+ const list=roleCards.filter(c=>{if(only.checked&&!isTargetSetCard(c))return false;if(rarity&&String(c.rarityTyped||c.rarity||'').toLowerCase()!==rarity.toLowerCase())return false;const hay=[c.name,c.club,c.activeTeam,c.league,c.rarity,c.rarityTyped,c.position,c.positionCodes,c.edition,cardVariantLabel(c),c.setName,c.slug,c.sorareSlug,c.serialNumber,c.assetId].map(v=>String(v||'').toLocaleLowerCase()).join(' ');return !q||hay.includes(q);});
+ list.sort((a,b)=>{if(sort==='name')return String(a.name||'').localeCompare(String(b.name||''),'it',{sensitivity:'base'});const sa=cardScoreStats(a),sb=cardScoreStats(b),av=sort==='l10'?sa.capL10:sa.expected,bv=sort==='l10'?sb.capL10:sb.expected;if(av==null&&bv==null)return 0;if(av==null)return 1;if(bv==null)return -1;return bv-av;});
+ const pages=Math.max(1,Math.ceil(list.length/LINEUP_PICKER_PAGE_SIZE));lineupPickerPage=Math.max(1,Math.min(lineupPickerPage,pages));const page=list.slice((lineupPickerPage-1)*LINEUP_PICKER_PAGE_SIZE,lineupPickerPage*LINEUP_PICKER_PAGE_SIZE);
+ $('lineupPickerResultCount').textContent=list.length+' '+(list.length===1?'risultato':'risultati');$('lineupPickerPageLabel').textContent=list.length?((lineupPickerPage-1)*LINEUP_PICKER_PAGE_SIZE+1)+'–'+Math.min(lineupPickerPage*LINEUP_PICKER_PAGE_SIZE,list.length)+' di '+list.length:'0 risultati';$('lineupPickerPrev').disabled=lineupPickerPage<=1;$('lineupPickerNext').disabled=lineupPickerPage>=pages;$('lineupPickerEligibilityNote').textContent=target?'Il badge indica il Set memorizzato; verifica le regole ufficiali prima dell’invio.':'Set non impostato: le carte sono visibili ma non dichiarate idonee.';
+ if(!page.length){const empty=all.length?'Nessuna carta corrisponde al ruolo e ai filtri.':'Nessuna carta disponibile: collega Sorare e verifica l’inventario.';box.innerHTML='<div class="empty"><span class="empty-icon">⌕</span><strong>Nessun giocatore trovato</strong><p>'+esc(empty)+'</p>'+(all.length&&only.checked?'<button class="btn btn-small" id="disablePickerSetFilter" type="button">Mostra tutte le carte del ruolo</button>':!all.length?'<button class="btn btn-primary btn-small" id="openSorareFromPicker" type="button">Apri Sorare Sync</button>':'')+'</div>';const clear=$('disablePickerSetFilter');if(clear)clear.onclick=()=>{only.checked=false;lineupPickerPage=1;renderLineupPickerResults();};const sync=$('openSorareFromPicker');if(sync)sync.onclick=()=>{closeLineupPicker();goto('sorare');};return;}
+ box.innerHTML=page.map(c=>{const visual=safeImageUrl(cardVisualUrl(c)),pos=Array.isArray(c.position)?c.position.join(' / '):(c.position||'Ruolo n.d.'),st=cardScoreStats(c),ended=isEndedHyperGlitch(c),setName=String(c.setName||c.set?.name||'').trim(),current=state.lineup[slot]===c.id,dup=state.lineup.some((id,i)=>i!==slot&&id&&all.some(x=>x.id===id&&playerIdentity(x)===playerIdentity(c))),badge=ended?'HYPERGLITCH · SET CHIUSO':target&&(setName.toLowerCase()===target)?'SET SELEZIONATO':target&&setName?'ALTRO SET':'SET DA VERIFICARE',art=visual?'<img src="'+esc(visual)+'" alt="" loading="lazy">':'<div class="picker-thumb-fallback">'+esc(cardInitials(c.name))+'</div>';return '<article class="lineup-picker-row '+(current?'is-current':'')+'"><div class="picker-card-thumb">'+art+'</div><div class="picker-card-main"><div class="picker-player-name">'+esc(c.name||'Giocatore non identificato')+'</div><div class="picker-player-club">'+esc(c.club||c.activeTeam||'Club n.d.')+' · '+esc(pos)+'</div><div class="picker-player-meta"><span class="tag">'+esc(c.rarity||c.rarityTyped||'Rarità n.d.')+'</span><span class="tag">L5 '+(st.expected==null?'—':esc(fmt(st.expected)))+'</span><span class="tag">L10 '+(st.capL10==null?'—':esc(fmt(st.capL10)))+'</span><span class="picker-set-badge '+(ended?'is-ended':target&&setName.toLowerCase()===target?'is-valid':'')+'">'+esc(badge)+'</span></div></div><button class="btn btn-small picker-select-btn" type="button" data-picker-select="'+esc(c.id)+'" '+(current||dup?'disabled':'')+'>'+(current?'Selezionata':dup?'Giocatore già scelto':'Seleziona')+'</button></article>';}).join('');
+}
 function renderLineup(){
-  const availableCards=collectionCards();
-  const slots=$('lineupSlots'),labels=['Portiere','Difensore','Centrocampista','Attaccante','Flex / posizione aggiuntiva'];
-  slots.innerHTML=labels.map((label,i)=>{
-    const id=state.lineup[i]||'',card=availableCards.find(x=>x.id===id),stats=card?cardScoreStats(card):null;
-    const pos=card?(Array.isArray(card.positionCodes)&&card.positionCodes.length?card.positionCodes.join(', '):(Array.isArray(card.position)?card.position.join(', '):card.position||'Ruolo n.d.')):'';
-    const l10=stats&&stats.capL10!=null?fmt(stats.capL10):'n.d.',l5=stats&&stats.expected!=null?fmt(stats.expected):'n.d.';
-    const slotOptions=availableCards.filter(x=>isTargetSetCard(x)||x.id===id);
-    const options=slotOptions.map(x=>'<option value="'+esc(x.id)+'" '+(x.id===id?'selected ':'')+(isEndedHyperGlitch(x)?'disabled ':'')+'>'+esc(x.name)+(x.club?' · '+esc(x.club):'')+(isEndedHyperGlitch(x)?' · HyperGlitch non idonea':'')+'</option>').join('');
-    return '<div class="slot '+(card?'filled':'')+'"><div class="slot-label">'+label+'</div><select class="select lineup-select" data-slot="'+i+'"><option value="">Seleziona una carta…</option>'+options+'</select><div class="slot-info">'+(card?esc(pos)+' · L5 '+esc(l5)+' · L10 '+esc(l10):'Nessun giocatore selezionato')+'</div></div>';
-  }).join('');
-  slots.querySelectorAll('select').forEach(sel=>sel.onchange=()=>{state.lineup[Number(sel.dataset.slot)]=sel.value;persist();renderLineup();});
+ const availableCards=collectionCards(),slots=$('lineupSlots'),labels=['Portiere','Difensore','Centrocampista','Attaccante','Flex / posizione aggiuntiva'];
+ slots.innerHTML=labels.map((label,i)=>{const id=state.lineup[i]||'',card=availableCards.find(x=>x.id===id),stats=card?cardScoreStats(card):null,pos=card?(Array.isArray(card.positionCodes)&&card.positionCodes.length?card.positionCodes.join(', '):(Array.isArray(card.position)?card.position.join(', '):card.position||'Ruolo n.d.')):'',l10=stats&&stats.capL10!=null?fmt(stats.capL10):'n.d.',l5=stats&&stats.expected!=null?fmt(stats.expected):'n.d.',visual=card?safeImageUrl(cardVisualUrl(card)):null,art=visual?'<img src="'+esc(visual)+'" alt="" loading="lazy">':'<div class="slot-thumb-fallback">'+esc(cardInitials(card?.name||label))+'</div>',status=card?(isEndedHyperGlitch(card)?'HyperGlitch · Set chiuso':isTargetSetCard(card)?'Set selezionato':'Idoneità Set da verificare'):'';
+  return '<div class="slot '+(card?'filled':'')+'"><div class="slot-label">'+label+'</div>'+(card?'<div class="selected-lineup-player"><div class="selected-lineup-thumb">'+art+'</div><div class="selected-lineup-copy"><strong>'+esc(card.name)+'</strong><span>'+esc(card.club||card.activeTeam||'Club n.d.')+'</span><small>'+esc(pos)+' · L5 '+esc(l5)+' · L10 '+esc(l10)+'</small><em class="'+(isEndedHyperGlitch(card)?'is-ended':'')+'">'+esc(status)+'</em></div></div>':'<div class="slot-placeholder"><span>＋</span><strong>Seleziona un giocatore</strong><small>'+availableCards.length+' carte in archivio · ruolo da rispettare</small></div>')+'<div class="slot-actions"><button class="btn btn-primary btn-small" type="button" data-open-lineup-picker="'+i+'">'+(card?'Cambia giocatore':'Scegli giocatore')+'</button>'+(card?'<button class="btn btn-small" type="button" data-clear-slot="'+i+'">Rimuovi</button>':'')+'</div><div class="slot-info">'+(card?'Carta selezionata per la bozza; lo stato ufficiale del Set deve essere verificato.':'Elenco filtrato per ruolo, con ricerca e ordinamento.')+'</div></div>';
+ }).join('');
   const chosen=state.lineup.map(id=>availableCards.find(card=>card.id===id)).filter(Boolean);
   const rawBonus=Number($('lineupBonus')?.value??0),bonusPct=Math.max(0,Math.min(5,Number.isFinite(rawBonus)?rawBonus:0));
   const target=Number($('lineupTarget')?.value||0),stats=chosen.map(cardScoreStats);
@@ -1000,7 +1068,7 @@ function renderSorareReport(data){
   $('sorareCardFoot').textContent=liveSorareComplete?('Inventario completo verificato'+(quality?' · '+(quality.withCardImage||0)+' immagini carta · '+(quality.withPlayerImage||0)+' ritratti · '+(quality.withVariant||0)+' varianti · '+(quality.withRecentScores||0)+' con storico':'')+(tierLabel?' · query '+tierLabel:'')+fallbackLabel):(items.length?'Lettura parziale: '+items.length+' record ricevuti; totale non verificato e importazione bloccata':data?.cards?.message||'Non ancora verificato');
   $('sorareUpdated').textContent=data?.updatedAt?new Date(data.updatedAt).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'}):'Mai';
   $('sorareCardBadge').textContent=liveSorareComplete?`${items.length} carte verificate`:items.length?`${items.length} record parziali`:'Inventario non verificato';
-  if(items.length){$('sorareCardsList').className='cards-grid';const reportItems=items.slice(0,60);$('sorareCardsList').innerHTML=reportItems.map((c,i)=>`<article class="player-card" style="padding:10px"><div style="height:175px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 20%,#263e4b,#101927 70%);border-radius:12px;overflow:hidden;margin-bottom:10px">${c.imageUrl?`<img src="${esc(c.imageUrl)}" alt="${esc(c.name||'Carta Sorare')}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:c.playerImageUrl?`<img src="${esc(c.playerImageUrl)}" alt="${esc(c.name||'Giocatore')}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:'<span style="font-size:40px;color:#a3ff5f">⚽</span>'}</div><div class="player-name">${esc(c.name||c.slug||'Carta Sorare')}</div><div class="player-club">${esc(c.team||'Sorare')}${c.season?' · '+esc(c.season):''}</div><div class="card-tags" style="margin-top:8px"><span class="tag">${esc(c.rarity||'Rarità n.d.')}</span>${c.serialNumber!=null?`<span class="tag">N° ${esc(c.serialNumber)}</span>`:''}${c.edition?`<span class="tag">${esc(c.edition)}</span>`:''}${c.skinEdition?.skinName?`<span class="tag">${esc(c.skinEdition.skinName)}</span>`:''}${c.skinEdition?.variantName?`<span class="tag">${esc(c.skinEdition.variantName)}</span>`:''}${c.skinEdition?.bonus!=null?`<span class="tag">${esc(variantBonusLabel(c.skinEdition.bonus))}</span>`:''}<span class="tag">L5 ${c.l5!=null?esc(fmt(c.l5)):'n.d.'}</span><span class="tag">L10 ${c.l10!=null?esc(fmt(c.l10)):'n.d.'}</span>${c.upcomingGames?.[0]?.date?`<span class="tag">Match ${esc(new Date(c.upcomingGames[0].date).toLocaleDateString('it-IT',{day:'2-digit',month:'short'}))}</span>`:''}</div><details style="margin-top:8px;color:#91a1b8;font-size:10px"><summary>Dettagli tecnici</summary><p style="overflow-wrap:anywhere">${esc(c.slug||'')}</p></details></article>`).join('')+(data.cards.truncated?'<div class="notice" style="grid-column:1/-1"><span class="notice-icon">ⓘ</span><div>Elenco parziale: la richiesta ha raggiunto il limite di pagine previsto.</div></div>':'');}
+  if(items.length){$('sorareCardsList').className='cards-grid collection-grid';const reportItems=items.slice(0,60);$('sorareCardsList').innerHTML=reportItems.map((c,i)=>`<article class="player-card" style="padding:10px"><div style="height:112px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 20%,#263e4b,#101927 70%);border-radius:12px;overflow:hidden;margin-bottom:10px">${c.imageUrl?`<img src="${esc(c.imageUrl)}" alt="${esc(c.name||'Carta Sorare')}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:c.playerImageUrl?`<img src="${esc(c.playerImageUrl)}" alt="${esc(c.name||'Giocatore')}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:'<span style="font-size:40px;color:#a3ff5f">⚽</span>'}</div><div class="player-name">${esc(c.name||c.slug||'Carta Sorare')}</div><div class="player-club">${esc(c.team||'Sorare')}${c.season?' · '+esc(c.season):''}</div><div class="card-tags" style="margin-top:8px"><span class="tag">${esc(c.rarity||'Rarità n.d.')}</span>${c.serialNumber!=null?`<span class="tag">N° ${esc(c.serialNumber)}</span>`:''}${c.edition?`<span class="tag">${esc(c.edition)}</span>`:''}${c.skinEdition?.skinName?`<span class="tag">${esc(c.skinEdition.skinName)}</span>`:''}${c.skinEdition?.variantName?`<span class="tag">${esc(c.skinEdition.variantName)}</span>`:''}${c.skinEdition?.bonus!=null?`<span class="tag">${esc(variantBonusLabel(c.skinEdition.bonus))}</span>`:''}<span class="tag">L5 ${c.l5!=null?esc(fmt(c.l5)):'n.d.'}</span><span class="tag">L10 ${c.l10!=null?esc(fmt(c.l10)):'n.d.'}</span>${c.upcomingGames?.[0]?.date?`<span class="tag">Match ${esc(new Date(c.upcomingGames[0].date).toLocaleDateString('it-IT',{day:'2-digit',month:'short'}))}</span>`:''}</div><details style="margin-top:8px;color:#91a1b8;font-size:10px"><summary>Dettagli tecnici</summary><p style="overflow-wrap:anywhere">${esc(c.slug||'')}</p></details></article>`).join('')+(data.cards.truncated?'<div class="notice" style="grid-column:1/-1"><span class="notice-icon">ⓘ</span><div>Elenco parziale: la richiesta ha raggiunto il limite di pagine previsto.</div></div>':'');}
   else {$('sorareCardsList').className='empty';$('sorareCardsList').innerHTML=`<span class="empty-icon">${status==='error'?'!':'↻'}</span><strong>${esc(data?.cards?.message||data?.message||'Nessuna carta disponibile nel report')}</strong><p>${esc(data?.cards?.detail||'Dopo la prima esecuzione potremo vedere quali campi pubblici sono accessibili.')}</p>`;}
   const diagnosticText=(Array.isArray(data?.cards?.diagnostic?.fallbackErrors)?data.cards.diagnostic.fallbackErrors:[]).map(item=>(item.tier||'query')+': '+(item.error||'errore')).join(' · ').slice(0,500);
   const pageError=data?.cards?.detail;
@@ -1062,7 +1130,7 @@ async function loadSorarePublicData(){
     updateSorareAuthUI(session);
     if(!session.authenticated||!session.profile?.slug){
       activeSorareSlug='';liveSorareProfileSlug='';liveSorareItems=[];liveSorareComplete=false;
-      state.sorareInventoryStatus='unverified';renderAll();
+      state.sorareInventoryStatus=hasSavedSorareInventory()?'stale':'unverified';renderAll();
       renderSorareReport({
         status:'not_authenticated',requestedSlug:'',
         profile:{found:false,slug:'',nickname:null},
@@ -1167,11 +1235,11 @@ async function loadSorarePublicData(){
     if(inventoryComplete){
       importSorareCards(true);
     }else{
-      liveSorareComplete=false;state.sorareInventoryStatus='unverified';renderAll();
+      liveSorareComplete=false;state.sorareInventoryStatus=hasSavedSorareInventory()?'stale':'unverified';renderAll();
     }
   }catch(error){
     activeSorareSlug='';liveSorareProfileSlug='';liveSorareItems=[];liveSorareComplete=false;
-    state.sorareInventoryStatus='unverified';renderAll();
+    state.sorareInventoryStatus=hasSavedSorareInventory()?'stale':'unverified';renderAll();
     renderSorareReport({status:'error',requestedSlug:'',message:'Errore durante la verifica dell’account Sorare.',detail:String(error?.message||error),profile:{found:false,slug:'',nickname:null},cards:{status:'unavailable',count:null,items:[],complete:false,authenticated:false,message:'Inventario non verificato.',detail:'Nessun dato incompleto è stato importato.'}});
   }finally{
     if(btn){btn.disabled=false;btn.textContent='Rileggi dati';}
@@ -1185,11 +1253,23 @@ $('cardSearch').addEventListener('input',()=>{cardsPage=1;renderCards();});
 $('positionFilter').addEventListener('change',()=>{cardsPage=1;renderCards();});
 $('rarityFilter').addEventListener('change',()=>{cardsPage=1;renderCards();});
 $('variantFilter').addEventListener('change',()=>{cardsPage=1;renderCards();});
+$('cardsSort').addEventListener('change',()=>{cardsPage=1;renderCards();});
 $('cardsPrevPage').addEventListener('click',()=>{cardsPage=Math.max(1,cardsPage-1);renderCards();});
 $('cardsNextPage').addEventListener('click',()=>{cardsPage++;renderCards();});
 $('reloadSorareData').addEventListener('click',loadSorarePublicData);
 $('importSorareCards').addEventListener('click',()=>importSorareCards(false));
 $('autoBuildLineup').addEventListener('click',buildOptimalLineup);
+$('lineupSlots').addEventListener('click',event=>{const open=event.target.closest('[data-open-lineup-picker]');if(open){openLineupPicker(open.dataset.openLineupPicker);return;}const clear=event.target.closest('[data-clear-slot]');if(clear){state.lineup[Number(clear.dataset.clearSlot)]='';persist();renderLineup();}});
+$('lineupPickerSearch').addEventListener('input',()=>{lineupPickerPage=1;renderLineupPickerResults();});
+$('lineupPickerRarity').addEventListener('change',()=>{lineupPickerPage=1;renderLineupPickerResults();});
+$('lineupPickerSort').addEventListener('change',()=>{lineupPickerPage=1;renderLineupPickerResults();});
+$('lineupPickerTargetOnly').addEventListener('change',()=>{lineupPickerPage=1;renderLineupPickerResults();});
+$('lineupPickerPrev').addEventListener('click',()=>{lineupPickerPage=Math.max(1,lineupPickerPage-1);renderLineupPickerResults();});
+$('lineupPickerNext').addEventListener('click',()=>{lineupPickerPage++;renderLineupPickerResults();});
+$('closeLineupPicker').addEventListener('click',closeLineupPicker);
+$('lineupPickerModal').addEventListener('click',event=>{if(event.target===$('lineupPickerModal'))closeLineupPicker();});
+$('lineupPickerResults').addEventListener('click',event=>{const button=event.target.closest('[data-picker-select]');if(!button||button.disabled||lineupPickerSlot<0)return;const id=button.dataset.pickerSelect,card=collectionCards().find(item=>item.id===id);if(!card){toast('La carta non è più presente nella collezione caricata.');return;}const duplicate=state.lineup.some((selected,index)=>index!==lineupPickerSlot&&selected&&collectionCards().some(item=>item.id===selected&&playerIdentity(item)===playerIdentity(card)));if(duplicate){toast('Questo giocatore è già inserito in un altro slot.');return;}state.lineup[lineupPickerSlot]=id;closeLineupPicker();persist();renderLineup();});
+document.addEventListener('keydown',event=>{if(event.key==='Escape')closeLineupPicker();});
 $('edgeRoleFilter').addEventListener('change',renderEdgeLab);
 $('edgeSortFilter').addEventListener('change',renderEdgeLab);
 $('lineupTarget').addEventListener('input',renderLineup);
