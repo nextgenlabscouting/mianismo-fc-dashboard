@@ -2,6 +2,11 @@
 name: Sorare public data refresh
 
 'on':
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/sorare-public-sync.mjs'
+      - '.github/workflows/sorare-public-refresh.yml'
   workflow_dispatch:
   schedule:
     - cron: '0 */6 * * *'
