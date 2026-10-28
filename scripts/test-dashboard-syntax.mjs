@@ -4,8 +4,8 @@ import { readFile } from 'node:fs/promises';
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 const authFiles = [
   '../lib/sorare-session.js',
-  '../api/auth/sorare/login.js',
-  '../api/auth/sorare/callback.js',
+  '../api/auth/sorare/salt.js',
+  '../api/auth/sorare/password.js',
   '../api/auth/sorare/session.js',
   '../api/auth/sorare/logout.js',
   '../api/public/cards.js',
@@ -61,7 +61,7 @@ const checks = [
   [/function renderAnalytics\(\)/, 'telemetria dinamica per ruolo'],
   [/id="roleDistribution"/, 'grafico distribuzione ruoli'],
   [/id="rolePerformance"/, 'grafico media L5 per ruolo'],
-  [/function updateSorareAuthUI\(session\)/, 'stato account OAuth'],
+  [/function updateSorareAuthUI\(session\)/, 'stato account Sorare diretto'],
   [/setInterval\(\(\)=>\{if\(!document\.hidden\)loadSorarePublicData\(\);\},120000\)/, 'sincronizzazione ogni 2 minuti'],
   [/const KEY='mianismoFcDashboardV1';/, 'conservazione dei dati locali dopo il rebranding']
 ];
@@ -96,11 +96,16 @@ updateEstimate();
 assert.match(elements.loyaltyEssenceEstimate.textContent, /^6.?000 Essence$/);
 assert.equal(elements.loyaltyGemsEstimate.textContent, '0+ Gems (fascia da verificare)');
 
-assert.match(authSources[0], /createCipheriv\("aes-256-gcm"/, 'I token OAuth devono essere cifrati nel cookie');
+assert.match(authSources[0], /createCipheriv\("aes-256-gcm"/, 'Il token Sorare deve essere cifrato nella sessione');
 assert.match(authSources[0], /HttpOnly; SameSite=Lax/, 'La sessione deve usare cookie HttpOnly SameSite=Lax');
-assert.match(authSources[2], /grant_type: "authorization_code"/, 'Callback OAuth deve scambiare il code');
-assert.match(authSources[3], /getValidSession/, 'L’endpoint sessione deve validare/aggiornare il token');
-assert.match(authSources[5], /Authorization: "Bearer " \+ accessToken/, 'L’API carte deve usare il token OAuth dell’account');
-assert.match(authSources[6], /Authorization: "Bearer " \+ accessToken/, 'L’API profilo deve usare il token OAuth dell’account');
+assert.match(authSources[0], /session.authType === "jwt"/, 'La sessione deve riconoscere il JWT diretto Sorare');
+assert.match(authSources[1], /api\/v1\/users\//, 'Il backend deve recuperare il salt ufficiale Sorare');
+assert.match(authSources[2], /otpSessionChallenge/, 'Il login deve gestire la verifica 2FA');
+assert.match(authSources[2], /writeSession\(res/, 'Il login deve creare una sessione cifrata');
+assert.match(authSources[3], /getValidSession/, 'L’endpoint sessione deve verificare il token');
+assert.match(authSources[5], /JWT-AUD/, 'L’API carte deve inviare JWT-AUD per il token Sorare');
+assert.match(authSources[6], /JWT-AUD/, 'L’API profilo deve inviare JWT-AUD per il token Sorare');
+assert.match(html, /bcryptjs@2\.4\.3/, 'Il modulo password deve hashare nel browser');
+assert.doesNotMatch(html, /window\.location\.href=['"]\/api\/auth\/sorare\/login/, 'Il pulsante non deve usare OAuth');
 
 console.log('Dashboard regression checks passed (' + (checks.length + authSources.length + 11) + ' assertions).');
