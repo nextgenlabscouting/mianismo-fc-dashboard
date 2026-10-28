@@ -17,6 +17,7 @@ const checks = [
   [/function currentTargetSet\(\)/, 'nessuna formazione senza un Set selezionato'],
   [/legacyEssenceExpired=true/, 'migrazione Essence HyperGlitch scaduta'],
   [/reportItems=items\.slice\(0,60\)/, 'limite rendering del pannello tecnico'],
+  [/function variantBonusLabel\(value\)/, 'bonus variante visualizzato in percentuale'],
   [/Dati conservati/, 'stato stale visibile']
 ];
 
