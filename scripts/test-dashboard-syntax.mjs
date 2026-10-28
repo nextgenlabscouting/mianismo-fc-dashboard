@@ -58,8 +58,7 @@ const elements = {
   loyaltyGemsEstimate: { textContent: '' },
   loyaltyRewardDetail: { textContent: '' }
 };
-const updateEstimate = new Function('
-, 'state', 'num', 'fmt', helperSource + '\nreturn updateLoyaltyRewardEstimate;')(
+const updateEstimate = new Function('$', 'state', 'num', 'fmt', helperSource + String.fromCharCode(10) + 'return updateLoyaltyRewardEstimate;')(
   id => elements[id] || { value: '' },
   { resources: { collection: 80, legacyGemsSpentBracket: '200-349' } },
   value => Number.isFinite(Number(value)) ? Number(value) : 0,
