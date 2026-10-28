@@ -369,8 +369,8 @@ let liveSorareItems=[];
 function renderSorareReport(data){
   const status=data?.status||'pending';
   const ok=status==='ok';
-  $('sorareStatus').textContent=ok?'Report pronto':status==='profile_not_found_or_not_public'?'Profilo non trovato':status==='error'?'Errore API':'In attesa';
-  $('sorareStatus').className='stat-value '+(ok?'green':status==='error'?'red':'orange');
+  $('sorareStatus').textContent=ok?'Report pronto':status==='stale'?'Dati conservati':status==='degraded'?'Dati insufficienti':status==='profile_not_found_or_not_public'?'Profilo non trovato':status==='error'?'Errore API':'In attesa';
+  $('sorareStatus').className='stat-value '+(ok?'green':status==='error'||status==='degraded'?'red':'orange');
   $('sorareStatusFoot').textContent=data?.statusLabel||'Da eseguire il primo controllo';
   $('sorareProfileFound').textContent=data?.profile?.found?'Sì':data?.profile?.found===false?'No':'—';
   $('sorareProfileName').textContent=data?.profile?.nickname?`${data.profile.nickname} · ${data.profile.slug}`:`Slug richiesto: ${data?.requestedSlug||'mianismo'}`;
@@ -410,22 +410,24 @@ function importSorareCards(silent=false){
     const idx=indexBySlug.get(card.slug),old=idx===undefined?{}:merged[idx],skin=card.skinEdition||null;
     const item={
       ...old,id:old.id||'sorare-'+card.slug,sorareSlug:card.slug,slug:card.slug,assetId:card.assetId||old.assetId||null,
-      name:card.name||old.name||card.slug,club:card.team||old.club||'',
+      name:(card.name&&card.slug&&String(card.name).trim().toLowerCase()!==String(card.slug).trim().toLowerCase()?card.name:null)||old.name||card.name||card.slug,
+      club:card.team||old.club||'',
       position:normalizedPosition(card.position)||old.position||'Altro',
-      positionCodes:Array.isArray(card.position)?card.position:(old.positionCodes||[]),
-      rarity:card.rarity||old.rarity||'Unknown',rarityTyped:card.rarityTyped||old.rarityTyped||null,
+      positionCodes:Array.isArray(card.position)&&card.position.length?card.position:(old.positionCodes||[]),
+      rarity:card.rarity&&String(card.rarity).toLowerCase()!=='unknown'?card.rarity:(old.rarity||card.rarity||'Unknown'),
+      rarityTyped:card.rarityTyped||old.rarityTyped||null,
       l5:card.l5??old.l5??'',l10:card.l10??old.l10??'',l15:card.l15??old.l15??'',age:card.age??old.age??'',
       imageUrl:card.imageUrl||old.imageUrl||null,playerImageUrl:card.playerImageUrl||old.playerImageUrl||null,
-      skinEdition:skin,variantName:skin?.variantName||skin?.variant||old.variantName||null,
+      skinEdition:skin||old.skinEdition||null,variantName:skin?.variantName||skin?.variant||old.variantName||null,
       skin:skin?.skin||old.skin||null,bonus:skin?.bonus??old.bonus??null,
       power:card.power??old.power??null,grade:card.grade??old.grade??null,
-      rawScores:Array.isArray(card.rawScores)?card.rawScores:(old.rawScores||[]),
-      playerRawScores:Array.isArray(card.playerRawScores)?card.playerRawScores:(old.playerRawScores||[]),
+      rawScores:Array.isArray(card.rawScores)&&card.rawScores.length?card.rawScores:(old.rawScores||[]),
+      playerRawScores:Array.isArray(card.playerRawScores)&&card.playerRawScores.length?card.playerRawScores:(old.playerRawScores||[]),
       playerSlug:card.playerSlug||old.playerSlug||null,
       activeTeam:card.activeTeam||old.activeTeam||null,
-      upcomingGames:Array.isArray(card.upcomingGames)?card.upcomingGames:(old.upcomingGames||[]),
+      upcomingGames:Array.isArray(card.upcomingGames)&&card.upcomingGames.length?card.upcomingGames:(old.upcomingGames||[]),
       season:card.season??old.season??null,serialNumber:card.serialNumber??old.serialNumber??null,
-      edition:card.edition??old.edition??null,setName:card.set?.name??old.setName??null,source:'sorare'
+      edition:card.edition||old.edition||null,setName:card.set?.name||old.setName||null,source:'sorare'
     };
     if(idx===undefined){indexBySlug.set(card.slug,merged.length);merged.push(item);added++;}else{merged[idx]=item;updated++;}
   }
@@ -443,7 +445,9 @@ async function loadSorarePublicData(){
     const allCards=[],seen=new Set(),tierCounts={},fallbackErrors=[];
     let cardsData={status:'unavailable',error:'Nessuna risposta carta',items:[]};
     let lastGoodChunk=null,after=null,complete=false,pageError=null;
-    for(let page=0;page<10;page++){
+    const seenCursors=new Set();
+    const MAX_CLIENT_PAGES=100;
+    for(let page=0;page<MAX_CLIENT_PAGES;page++){
       const params=new URLSearchParams({slug:'mianismo',t:String(Date.now())});
       if(after)params.set('after',after);
       const response=await fetch('/api/public/cards?'+params.toString(),{cache:'no-store'});
@@ -465,8 +469,12 @@ async function loadSorarePublicData(){
       }
       cardsData=chunk;
       const next=chunk.endCursor||null;
-      if(!chunk.hasMore||!next||next===after){complete=true;break;}
+      if(!chunk.hasMore||!next){complete=true;break;}
+      if(next===after||seenCursors.has(next)){pageError='Cursor di paginazione ripetuto: sincronizzazione fermata per evitare un loop.';break;}
+      if(!Array.isArray(chunk.items)||chunk.items.length===0){pageError='La paginazione ha segnalato altre carte ma ha restituito una pagina vuota.';break;}
+      seenCursors.add(next);
       after=next;
+      if(page===MAX_CLIENT_PAGES-1)pageError='Raggiunto il limite prudenziale di '+MAX_CLIENT_PAGES+' pagine; inventario parziale.';
     }
     const profileOk=profileResponse.ok&&profile.status==='ok'&&profile.profile;
     const cardsOk=!!lastGoodChunk;
@@ -537,7 +545,7 @@ $('clearLineup').addEventListener('click',()=>{state.lineup=['','','','',''];per
 $('saveLineup').addEventListener('click',()=>{persist();toast('Formazione salvata in questo browser.');});
 renderAll();
 loadSorarePublicData();
-setInterval(()=>{if(!document.hidden)loadSorarePublicData();},300000);
+setInterval(()=>{if(!document.hidden)loadSorarePublicData();},900000);
 })();
 </script>
 </body></html>
