@@ -8,6 +8,8 @@ on:
       - "scripts/test-cards-api.cjs"
       - "scripts/sorare-public-sync.mjs"
       - "scripts/test-sorare-sync.mjs"
+      - "scripts/test-dashboard-syntax.mjs"
+      - "index.html"
       - ".github/workflows/sorare-cards-tests.yml"
   pull_request:
     paths:
@@ -15,6 +17,8 @@ on:
       - "scripts/test-cards-api.cjs"
       - "scripts/sorare-public-sync.mjs"
       - "scripts/test-sorare-sync.mjs"
+      - "scripts/test-dashboard-syntax.mjs"
+      - "index.html"
       - ".github/workflows/sorare-cards-tests.yml"
   workflow_dispatch:
 
@@ -32,3 +36,5 @@ jobs:
         run: node scripts/test-cards-api.cjs
       - name: Run Sorare sync regression tests
         run: node scripts/test-sorare-sync.mjs
+      - name: Run dashboard syntax and UI safety checks
+        run: node scripts/test-dashboard-syntax.mjs
