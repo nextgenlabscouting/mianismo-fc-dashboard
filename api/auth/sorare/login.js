@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const { writeState } = require("./session-lib");
+const { writeState } = require("../../../lib/sorare-session");
 
 function callbackUri(req) {
   if (process.env.SORARE_REDIRECT_URI) return process.env.SORARE_REDIRECT_URI;
