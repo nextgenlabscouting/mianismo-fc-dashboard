@@ -2,12 +2,12 @@ const USER_ENDPOINT = "https://api.sorare.com/api/v1/users/";
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   res.setHeader("X-Content-Type-Options", "nosniff");
-  if (req.method !== "GET") {
-    res.setHeader("Allow", "GET");
+  res.setHeader("Referrer-Policy", "no-referrer");
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method not allowed" });
   }
-  const raw = Array.isArray(req.query.email) ? req.query.email[0] : req.query.email;
-  const email = String(raw || "").trim().toLowerCase();
+  const email = String(req.body?.email || "").trim().toLowerCase();
   if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: "Inserisci un indirizzo email valido." });
   }
