@@ -53,15 +53,15 @@ module.exports = async function handler(req, res) {
       ? { otpSessionChallenge: challenge, otpAttempt: otp }
       : { email, password };
     const result = await signIn(input);
+    if (result.tcuToken || (Array.isArray(result.errors) && result.errors.some(error => /must_accept_tcus|terms|conditions/i.test(String(error?.message || "")))) ) {
+      return res.status(409).json({ error: "Sorare richiede di accettare termini aggiornati. Accedi prima su sorare.com e completa la richiesta, poi riprova." });
+    }
     if (Array.isArray(result.errors) && result.errors.length) {
       const message = result.errors.map(e => e?.message).filter(Boolean).join(" ");
       return res.status(401).json({ error: /invalid|password|credential|email/i.test(message) ? "Email o password non corrette." : "Sorare ha rifiutato l'accesso: " + message.slice(0, 180) });
     }
     if (result.otpSessionChallenge && !result.currentUser) {
       return res.status(200).json({ requires2FA: true, otpSessionChallenge: result.otpSessionChallenge, message: "Inserisci il codice di verifica in due passaggi ricevuto da Sorare." });
-    }
-    if (result.tcuToken) {
-      return res.status(409).json({ error: "Sorare richiede di accettare termini aggiornati. Accedi prima su sorare.com e completa la richiesta, poi riprova." });
     }
     const token = result.jwtToken?.token;
     const expiryDate = result.jwtToken?.expiredAt ? Date.parse(result.jwtToken.expiredAt) : NaN;
