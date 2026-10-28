@@ -197,7 +197,7 @@ async function testDirectApiContract() {
   assert.match(passwordFile, /jwtToken\(aud: "nexus-sorare-intelligence"\)/);
   assert.match(passwordFile, /otpSessionChallenge/);
   assert.match(html, /bcryptjs@2\.4\.3/);
-  assert.match(html, /window\.dcodeIO\.bcrypt\.hashSync\(password,saltBody\.salt\)/);
+  assert.match(html, /window\.dcodeIO\.bcrypt\.hashSync\(password,sb\.salt\)/);
   assert.doesNotMatch(html, /window\.location\.href=['"]\/api\/auth\/sorare\/login/);
 }
 
