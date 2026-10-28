@@ -6,23 +6,11 @@ const MAX_PAGES = 1;
 // the endpoint can still return the inventory using the documented base fields.
 const QUERY_TIERS = [
 {
-    label: "rich-with-team-logos",
+    label: "rich",
     fields: [
       "__typename slug assetId name",
       "anyPlayer { displayName fullPictureUrl avatarPictureUrl squaredPictureUrl age slug activeClub { name slug pictureUrl } rawPlayerGameScores(last: 15) nextGame { date statusTyped homeTeam { name } awayTeam { name } } }",
       "anyTeam { name slug pictureUrl } anyPositions",
-      "pictureUrl(derivative: \"full\") ipfsPictureUrl",
-      "rarityTyped displayRarity seasonYear serialNumber cardEditionName formattedCardEditionName specialEdition",
-      "skinEdition { skin skinName variant variantName bonus } cardSet { name slug } power grade",
-      "... on Card { age rarity customCardEditionName rawSo5Scores(last: 10) }"
-    ]
-  },
-{
-    label: "rich",
-    fields: [
-      "__typename slug assetId name",
-      "anyPlayer { displayName fullPictureUrl avatarPictureUrl squaredPictureUrl age slug activeClub { name } rawPlayerGameScores(last: 15) nextGame { date statusTyped homeTeam { name } awayTeam { name } } }",
-      "anyTeam { name } anyPositions",
       "pictureUrl(derivative: \"full\") ipfsPictureUrl",
       "rarityTyped displayRarity seasonYear serialNumber cardEditionName formattedCardEditionName specialEdition",
       "skinEdition { skin skinName variant variantName bonus } cardSet { name slug } power grade",
