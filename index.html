@@ -42,13 +42,13 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
 #addCardTop{min-width:150px}
 .player-card{padding:0;display:flex;flex-direction:column;overflow:hidden;isolation:isolate;border-color:#294356;background:linear-gradient(160deg,#0d1a29,#08111d 78%);box-shadow:0 10px 30px #0003;min-width:0}
 .player-card:after{display:none}
-.card-artwork{height:188px;flex:0 0 188px;width:100%;position:relative;z-index:0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse at 50% 25%,#203d4a,#0b1420 76%);border-bottom:1px solid #284357;padding:8px 10px}
+.player-card{isolation:isolate;min-width:0}.card-artwork{height:188px;flex:0 0 188px;width:100%;position:relative;z-index:0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse at 50% 25%,#203d4a,#0b1420 76%);border-bottom:1px solid #284357;padding:8px 10px}
 .card-artwork img{display:block;position:relative;max-width:100%;max-height:166px;width:auto;height:auto;object-fit:contain;object-position:center center;z-index:0}
 .card-artwork.is-card-art img{max-width:100%;max-height:170px}
 .card-artwork.is-player-art img{max-width:100%;max-height:164px;max-width:190px}
 .artwork-type{position:absolute;bottom:8px;left:9px;font-size:8px;letter-spacing:.18em;color:#7e9aaf;background:#07111dcc;border:1px solid #2c4558;border-radius:4px;padding:3px 5px;z-index:1}
 .fallback-player{font-size:35px;font-weight:900;color:var(--cyan);display:grid;place-items:center;width:100%;height:100%}
-.card-main{padding:13px;display:flex;flex-direction:column;gap:0;min-width:0}
+.card-main{position:relative;z-index:1;padding:13px;display:flex;flex-direction:column;gap:0;min-width:0;background:linear-gradient(180deg,#101a29 0%,#0d1725 100%)}
 .card-identity{display:flex;gap:9px;align-items:center;min-width:0}
 .club-mark{width:34px;height:34px;flex:0 0 34px;display:flex;align-items:center;justify-content:center;border-radius:10px;border:1px solid #35566c;background:linear-gradient(135deg,#143444,#0a1926);color:#7df2ff;font-size:10px;font-weight:900;overflow:hidden}
 .club-mark img{width:100%;height:100%;object-fit:contain;padding:3px;display:block}
@@ -715,6 +715,14 @@ function updateSorareAuthUI(session){
  if($('accountPill'))$('accountPill').classList.toggle('account-connected',authenticated);
  const button=$('addCardTop');
  if(button){button.textContent=authenticated?'Disconnetti account':'Accedi con Sorare';button.classList.toggle('btn-primary',!authenticated);}
+ const badge=$('directLoginBadge');
+ if(badge){badge.textContent=authenticated?'ACCOUNT COLLEGATO':'NON COLLEGATO';badge.classList.toggle('green',authenticated);}
+ const logout=$('sorareLogout');
+ if(logout)logout.classList.toggle('hide',!authenticated);
+ const form=$('sorareLoginForm');
+ if(form)form.classList.toggle('hide',authenticated);
+ if(authenticated){setSorareLoginMessage('Account collegato. Sincronizzazione automatica attiva.','success');}
+ else if(form)setSorareLoginMessage('La password viene hashata nel browser prima di contattare Sorare. Potrebbe essere richiesto un codice 2FA.');
 }
 let sorareOtpChallenge=null;
 function setSorareLoginMessage(msg,type=''){const el=$('sorareLoginMessage');if(el){el.textContent=msg;el.className='sorare-login-message'+(type?' '+type:'');}}
@@ -834,7 +842,7 @@ function importSorareCards(silent=false){
       season:card.season??old.season??null,serialNumber:card.serialNumber??old.serialNumber??null,
       edition:card.edition||old.edition||null,setName:card.set?.name||old.setName||null,source:'sorare'
     };
-    if(idx===undefined){indexBySlug.set(card.slug,merged.length);merged.push(item);added++;}else{merged[idx]=item;updated++;}
+    if(idx===undefined){indexBySlug.set(card.slug,merged.length);merged.push(item);if(previousSorare.has(card.slug))updated++;else added++;}else{merged[idx]=item;updated++;}
   }
   state.cards=merged;state.sorareProfileSlug=liveSorareProfileSlug;persist();
   if(!silent)toast('Import completato: '+added+' nuove carte, '+updated+' aggiornate.');
