@@ -1,43 +1,50 @@
-# MIANISMO FC — Sorare Command Center
+# NEXUS — Sorare Intelligence
 
-Dashboard personale per monitorare le carte Sorare pubblicamente esposte, consultare dati disponibili e simulare una formazione Set senza fingere che le regole non confermate siano ufficiali.
+NEXUS è una dashboard indipendente per leggere e organizzare una collezione Sorare, analizzare gli score storici disponibili e preparare bozze di formazione. **NEXUS è il nome dell'app; lo slug Sorare è soltanto l'account da cui leggere le carte.** L'interfaccia non è un prodotto ufficiale Sorare.
 
-## Link in produzione
+## Produzione
 
-- Dashboard: https://mianismo-fc-dashboard.vercel.app/
-- Profilo pubblico: https://mianismo-fc-dashboard.vercel.app/api/public/profile?slug=mianismo
-- API carte (prima pagina): https://mianismo-fc-dashboard.vercel.app/api/public/cards?slug=mianismo
-- Repository e workflow: https://github.com/nextgenlabscouting/mianismo-fc-dashboard/actions
+- App: https://mianismo-fc-dashboard.vercel.app/
+- Repository: https://github.com/nextgenlabscouting/mianismo-fc-dashboard
+- OAuth callback: https://mianismo-fc-dashboard.vercel.app/api/auth/sorare/callback
+- API carte: https://mianismo-fc-dashboard.vercel.app/api/public/cards
+- Stato account: https://mianismo-fc-dashboard.vercel.app/api/auth/sorare/session
 
-L’API carte restituisce un cursore `endCursor` e il flag `hasMore`. Per leggere le pagine successive passa il cursore come parametro URL `after`. La dashboard segue la paginazione, deduplica i risultati e mostra soltanto una parte della collezione per mantenere fluida l’interfaccia; il conteggio e l’importazione comprendono tutti i record ricevuti.
+## Primo collegamento con Sorare (obbligatorio per il login)
 
-## Componenti
+NEXUS usa il flusso **OAuth Authorization Code** ufficiale: non chiede né memorizza la password Sorare. I token sono mantenuti in un cookie HttpOnly, cifrato con AES-256-GCM; il backend prova a rinnovarli usando il refresh token.
 
-- `index.html`: interfaccia del Command Center, archivio paginato, Weekend Radar, Set Strategy Lab, gestione risorse, backup/importazione locale e stima dei premi fedeltà HyperGlitch sulla base di valori dichiarati.
-- `api/public/cards.js` e `api/public/profile.js`: endpoint serverless in sola lettura usati dalla dashboard distribuita su Vercel.
-- `scripts/sorare-public-sync.mjs`: aggiornamento periodico di `data/sorare-public.json`. Usa prima l’API Vercel, segue i cursori e rifiuta risposte prive di dettagli sufficienti.
-- `worker/index.js`: endpoint alternativo separato, destinato a Cloudflare Workers se vengono configurati i segreti necessari.
-- `scripts/test-cards-api.cjs`, `scripts/test-sorare-sync.mjs`, `scripts/test-dashboard-syntax.mjs`: test di regressione per l’API, la paginazione/qualità dati e la sintassi/sicurezza minima della UI.
+1. Aprire [Sorare Developer Settings](https://sorare.com/settings/developer) e creare una OAuth application.
+2. Registrare esattamente questo Redirect URI: `https://mianismo-fc-dashboard.vercel.app/api/auth/sorare/callback`. L'URI registrato e quello configurato in Vercel devono corrispondere esattamente.
+3. Nelle **Vercel Project Settings → Environment Variables**, aggiungere le variabili seguenti per gli ambienti da usare:
 
-La sincronizzazione GitHub Actions è programmata ogni sei ore; una modifica ai file dello script o del workflow avvia anche una sincronizzazione. La dashboard aggiorna l’API live mentre la pagina è aperta, con un intervallo di quindici minuti.
+   - `SORARE_CLIENT_ID`: Client ID mostrato da Sorare.
+   - `SORARE_CLIENT_SECRET`: secret OAuth mostrato da Sorare. Va tenuto segreto.
+   - `SORARE_SESSION_SECRET`: segreto casuale di almeno 32 caratteri, da generare con un password manager o un generatore crittografico.
+   - `SORARE_REDIRECT_URI`: `https://mianismo-fc-dashboard.vercel.app/api/auth/sorare/callback`.
 
-## Qualità e integrità dei dati
+4. Salvare le variabili e fare un nuovo deploy di Vercel. Poi usare **Accedi con Sorare** nell'app.
 
-Il report espone conteggi distinti per immagini delle carte, ritratti dei giocatori, varianti, storico punteggi e partite in programma. Un ritratto non viene etichettato come artwork della carta. Se una nuova risposta non risolve almeno l’80% dei nomi e dei dettagli essenziali, la UI non importa il risultato degradato; lo script conserva l’ultimo inventario valido invece di sostituirlo con identificativi senza informazioni.
+Non incollare mai qui, nel repository o nei log il Client Secret, il session secret, i token OAuth o chiavi API. Se il dominio di produzione viene cambiato, aggiornare anche il Redirect URI nella dashboard Sorare e la variabile `SORARE_REDIRECT_URI`.
 
-Le medie L5/L10/L15 sono storiche, non previsioni garantite. La data delle partite, i punteggi e i campi della carta dipendono da ciò che Sorare espone in quel momento.
+## Inventario e sincronizzazione
 
-## Regole Set e formazione
+- All'avvio e poi ogni **2 minuti**, mentre la pagina è visibile, NEXUS verifica la sessione Sorare, legge l'account collegato (oppure usa il profilo pubblico predefinito `mianismo` quando non si è autenticati) e prova a recuperare tutte le pagine dell'inventario.
+- Le carte si importano e aggiornano in automatico: nome, immagine disponibile, squadra, rarità, stagione, variante, Power/Grade, storico score e prossime partite solo quando l'API espone quei campi. I doppioni vengono riconciliati con lo slug carta.
+- Quando si collega un altro account, l'inventario Sorare importato in precedenza viene separato da quello del nuovo account. Le eventuali schede aggiunte a mano sono conservate.
+- La paginazione è rallentata in modalità pubblica per rispettare i limiti noti dell'API Sorare. Un aggiornamento completo può richiedere buona parte dell'intervallo di due minuti per collezioni grandi; se Sorare limita le richieste, NEXUS conserva l'ultimo inventario valido invece di cancellarlo con dati incompleti.
+- La griglia di performance colora L5/L10 e ruolo; il mini-grafico mostra gli ultimi punteggi effettivamente disponibili. La telemetria di squadra usa solo i dati presenti nell'inventario. Se Sorare non fornisce un logo ufficiale della squadra, la carta mostra una sigla testuale, non un logo inventato.
+- `data/sorare-public.json` è una copia pubblica secondaria aggiornata dal workflow GitHub Actions ogni sei ore; la UI live interroga le API serverless su Vercel.
 
-Sorare ha annunciato che HyperGlitch si è concluso il **27 ottobre 2026 alle 17:00 CET**, che le carte HyperGlitch non sono più idonee alle formazioni e che l’Essence HyperGlitch è persa. La dashboard mostra una stima separata dei premi fedeltà (Essence per fasce di completamento, bonus Gems per collezione e fascia Gems usate); non aggiunge questi valori al saldo locale e li indica come non confermati fino alla verifica su Sorare. Il lancio del nuovo Set è stato annunciato per il 30 ottobre 2026; al momento dell’aggiornamento di questo README i dettagli del nuovo regolamento non erano ancora stati pubblicati.
+## Limiti ufficiali da conoscere
 
-Per evitare formazioni ingannevoli, l’ottimizzatore esclude HyperGlitch e resta bloccato finché il nome del Set corrente non viene impostato in **Risorse**. Una volta scelto il nome, prende in considerazione solo le carte il cui Set restituito dall’API coincide con quel nome. Questo filtro non sostituisce la convalida ufficiale di Sorare: prima di inviare una formazione bisogna comunque controllare il tabellone, il cap, i ruoli e i requisiti pubblicati per il nuovo Set.
+Il login OAuth rende disponibili le informazioni utente e le carte che Sorare autorizza attraverso i propri scope. La documentazione Sorare indica però che OAuth **non** concede accesso a email, future lineups e premi, riscossione premi o operazioni di trading come acquisti/vendite/offerte. Perciò NEXUS non finge di leggere saldo Gems, premi riservati o formazioni non esposte dall'API. Queste limitazioni non sono bug dell'interfaccia.
 
-Fonte ufficiale: [Sorare — From Hyperglitch to…](https://sorare.com/blog/football/%F0%9F%86%95-from-hyperglitch-to-%F0%9F%91%80).
+Documentazione ufficiale: [Sorare API / OAuth](https://github.com/sorare/api).
 
-## Esecuzione dei test
+## Test
 
-Con Node.js 22, dalla directory principale del repository:
+Con Node.js 20 o successivo:
 
 ```bash
 node scripts/test-cards-api.cjs
@@ -45,12 +52,4 @@ node scripts/test-sorare-sync.mjs
 node scripts/test-dashboard-syntax.mjs
 ```
 
-I test sono eseguiti da GitHub Actions in caso di modifiche ai file che influenzano l’API, la sincronizzazione, i test o la dashboard.
-
-## Sicurezza e limiti
-
-- Le API descritte qui sono in sola lettura. Non inviano formazioni, non riscattano premi e non modificano l’account Sorare.
-- La dashboard non chiede password Sorare, JWT o chiavi private.
-- Il saldo Gems, le risorse, le note e la formazione salvata localmente nel browser sono un registro personale, non una lettura certificata del saldo o dello stato account.
-- Non vengono inventati immagini, punteggi, partite, premi o regole mancanti.
-- I segreti di deploy devono essere conservati in GitHub Actions Secrets, mai nel repository, nei log pubblici o nelle chat.
+I valori locali di risorse, note e formazione sono dati modificabili salvati nel browser, non una conferma ufficiale del saldo Sorare. Le medie L5/L10/L15 sono valori storici, non previsioni garantite.
