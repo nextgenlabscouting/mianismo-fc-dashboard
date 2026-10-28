@@ -41,6 +41,7 @@ Con Node.js 20 o successivo:
 ```bash
 node scripts/test-cards-api.cjs
 node scripts/test-sorare-sync.mjs
+node scripts/test-sorare-login.cjs
 node scripts/test-dashboard-syntax.mjs
 ```
 
