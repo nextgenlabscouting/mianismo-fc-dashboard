@@ -13,7 +13,7 @@ L’API carte restituisce un cursore `endCursor` e il flag `hasMore`. Per legger
 
 ## Componenti
 
-- `index.html`: interfaccia del Command Center, archivio paginato, Weekend Radar, Set Strategy Lab, gestione risorse e importazione/esportazione locale.
+- `index.html`: interfaccia del Command Center, archivio paginato, Weekend Radar, Set Strategy Lab, gestione risorse, backup/importazione locale e stima dei premi fedeltà HyperGlitch sulla base di valori dichiarati.
 - `api/public/cards.js` e `api/public/profile.js`: endpoint serverless in sola lettura usati dalla dashboard distribuita su Vercel.
 - `scripts/sorare-public-sync.mjs`: aggiornamento periodico di `data/sorare-public.json`. Usa prima l’API Vercel, segue i cursori e rifiuta risposte prive di dettagli sufficienti.
 - `worker/index.js`: endpoint alternativo separato, destinato a Cloudflare Workers se vengono configurati i segreti necessari.
@@ -29,7 +29,7 @@ Le medie L5/L10/L15 sono storiche, non previsioni garantite. La data delle parti
 
 ## Regole Set e formazione
 
-Sorare ha annunciato che HyperGlitch si è concluso il **27 ottobre 2026 alle 17:00 CET**, che le carte HyperGlitch non sono più idonee alle formazioni e che l’Essence HyperGlitch è persa. Il lancio del nuovo Set è stato annunciato per il 30 ottobre 2026; al momento dell’aggiornamento di questo README i dettagli del nuovo regolamento non erano ancora stati pubblicati.
+Sorare ha annunciato che HyperGlitch si è concluso il **27 ottobre 2026 alle 17:00 CET**, che le carte HyperGlitch non sono più idonee alle formazioni e che l’Essence HyperGlitch è persa. La dashboard mostra una stima separata dei premi fedeltà (Essence per fasce di completamento, bonus Gems per collezione e fascia Gems usate); non aggiunge questi valori al saldo locale e li indica come non confermati fino alla verifica su Sorare. Il lancio del nuovo Set è stato annunciato per il 30 ottobre 2026; al momento dell’aggiornamento di questo README i dettagli del nuovo regolamento non erano ancora stati pubblicati.
 
 Per evitare formazioni ingannevoli, l’ottimizzatore esclude HyperGlitch e resta bloccato finché il nome del Set corrente non viene impostato in **Risorse**. Una volta scelto il nome, prende in considerazione solo le carte il cui Set restituito dall’API coincide con quel nome. Questo filtro non sostituisce la convalida ufficiale di Sorare: prima di inviare una formazione bisogna comunque controllare il tabellone, il cap, i ruoli e i requisiti pubblicati per il nuovo Set.
 
