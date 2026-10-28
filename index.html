@@ -149,7 +149,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
     </div><div class="sorare-login-actions"><button class="btn btn-primary" id="sorareLoginSubmit" type="submit">Accedi con Sorare</button><button class="btn hide" id="sorareOtpBack" type="button">Torna all'email</button><button class="btn btn-danger hide" id="sorareLogout" type="button">Disconnetti</button></div><p class="sorare-login-message" id="sorareLoginMessage" role="status" aria-live="polite">La password viene hashata nel browser prima di contattare l'endpoint di login Sorare. Potrebbe essere richiesto un codice 2FA.</p></form></div>
     <div class="grid stats">
       <div class="stat"><div class="stat-head"><span>Stato sincronizzazione</span><span class="stat-icon">↻</span></div><div class="stat-value" id="sorareStatus" style="font-size:20px">In attesa</div><div class="stat-foot" id="sorareStatusFoot">Da eseguire il primo controllo</div></div>
-      <div class="stat"><div class="stat-head"><span>Profilo risolto</span><span class="stat-icon">◎</span></div><div class="stat-value" id="sorareProfileFound">—</div><div class="stat-foot" id="sorareProfileName">Account pubblico predefinito: mianismo</div></div>
+      <div class="stat"><div class="stat-head"><span>Profilo risolto</span><span class="stat-icon">◎</span></div><div class="stat-value" id="sorareProfileFound">—</div><div class="stat-foot" id="sorareProfileName">Collega il tuo account per caricare la tua collezione</div></div>
       <div class="stat"><div class="stat-head"><span>Carte pubblicamente esposte</span><span class="stat-icon">▧</span></div><div class="stat-value" id="sorareCardCount">—</div><div class="stat-foot" id="sorareCardFoot">Non ancora verificato</div></div>
       <div class="stat"><div class="stat-head"><span>Ultimo aggiornamento</span><span class="stat-icon">◷</span></div><div class="stat-value" id="sorareUpdated" style="font-size:16px">Mai</div><div class="stat-foot">Data del report GitHub</div></div>
     </div>
@@ -168,7 +168,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
 <script>
 (function(){
 'use strict';
-const KEY='mianismoFcDashboardV1';
+const KEY='nexusSorareIntelligenceV1';
 const initial={cards:[],lineup:['','','','',''],resources:{gems:320,essence:0,set:'Nuovo Set (in attesa)',collection:80,goal:500,notes:'',legacyEssenceExpired:false,legacyGemsSpentBracket:'200-349'},lastSaved:null};
 let state=loadState();
 let cardsPage=1;const CARDS_PAGE_SIZE=60;
