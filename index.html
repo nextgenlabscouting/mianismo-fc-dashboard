@@ -763,7 +763,7 @@ async function submitSorareLogin(event){
   resetSorareOtp();$('sorareEmail').value='';$('sorarePassword').value='';$('sorareLoginForm').classList.add('hide');
   updateSorareAuthUI({authenticated:true,profile:data.profile,expiresAt:data.expiresAt});setSorareLoginMessage('Accesso riuscito. Caricamento della tua collezione…','success');toast('Account Sorare collegato.');await loadSorarePublicData();
  }catch(e){setSorareLoginMessage(String(e?.message||'Errore di accesso.').slice(0,240),'error');}
- finally{button.disabled=false;}
+ finally{$('sorarePassword').value='';button.disabled=false;}
 }
 function renderAnalytics(){
  const cards=state.cards||[];
