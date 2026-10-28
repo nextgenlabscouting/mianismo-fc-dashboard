@@ -63,7 +63,8 @@ const checks = [
   [/id="rolePerformance"/, 'grafico media L5 per ruolo'],
   [/function updateSorareAuthUI\(session\)/, 'stato account Sorare diretto'],
   [/setInterval\(\(\)=>\{if\(!document\.hidden\)loadSorarePublicData\(\);\},120000\)/, 'sincronizzazione ogni 2 minuti'],
-  [/const KEY='mianismoFcDashboardV1';/, 'conservazione dei dati locali dopo il rebranding']
+  [/const KEY='nexusSorareIntelligenceV1';/, 'chiave locale con il nuovo brand'],
+  [/localStorage.getItem\('mianismoFcDashboardV1'\)/, 'migrazione dei dati salvati dalla vecchia versione']
 ];
 
 for (const [pattern, label] of checks) {
