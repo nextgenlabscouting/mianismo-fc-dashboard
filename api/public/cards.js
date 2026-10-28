@@ -1,9 +1,22 @@
 const ENDPOINT = "https://api.sorare.com/graphql";
+const { getValidSession } = require("../auth/sorare/session-lib");
 const MAX_PAGES = 1;
 
 // Optional fields are isolated into query tiers. If the Sorare schema changes,
 // the endpoint can still return the inventory using the documented base fields.
 const QUERY_TIERS = [
+{
+    label: "rich-with-team-logos",
+    fields: [
+      "__typename slug assetId name",
+      "anyPlayer { displayName fullPictureUrl avatarPictureUrl squaredPictureUrl age slug activeClub { name slug pictureUrl } rawPlayerGameScores(last: 15) nextGame { date statusTyped homeTeam { name } awayTeam { name } } }",
+      "anyTeam { name slug pictureUrl } anyPositions",
+      "pictureUrl(derivative: \"full\") ipfsPictureUrl",
+      "rarityTyped displayRarity seasonYear serialNumber cardEditionName formattedCardEditionName specialEdition",
+      "skinEdition { skin skinName variant variantName bonus } cardSet { name slug } power grade",
+      "... on Card { age rarity customCardEditionName rawSo5Scores(last: 10) }"
+    ]
+  },
 {
     label: "rich",
     fields: [
@@ -102,13 +115,14 @@ const QUERY_TIERS = [
   }
 ];
 
-async function querySorare(query, variables = {}) {
+async function querySorare(query, variables = {}, accessToken = null) {
   const response = await fetch(ENDPOINT, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "User-Agent": "MIANISMO-FC-Dashboard/2.1 (public read-only)",
+      "User-Agent": "NEXUS-Sorare-Intelligence/3.0",
+      ...(accessToken ? { Authorization: "Bearer " + accessToken } : {}),
       ...(process.env.SORARE_API_KEY ? { APIKEY: process.env.SORARE_API_KEY } : {})
     },
     body: JSON.stringify({ query, variables }),
@@ -172,7 +186,11 @@ function normalizeCard(card) {
     playerSlug: player.slug || null,
     name: player.displayName || card.name || card.slug,
     team: card.anyTeam?.name || null,
+    teamSlug: card.anyTeam?.slug || null,
+    teamImageUrl: card.anyTeam?.pictureUrl || null,
     activeTeam: player.activeClub?.name || null,
+    activeTeamSlug: player.activeClub?.slug || null,
+    activeTeamImageUrl: player.activeClub?.pictureUrl || null,
     position: Array.isArray(card.anyPositions) ? card.anyPositions : [],
     imageUrl: card.pictureUrl || card.ipfsPictureUrl || null,
     playerImageUrl: player.fullPictureUrl || player.avatarPictureUrl || player.squaredPictureUrl || null,
@@ -224,8 +242,9 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  const session = await getValidSession(req, res);
   const rawSlug = Array.isArray(req.query.slug) ? req.query.slug[0] : req.query.slug;
-  const slug = String(rawSlug || "mianismo").trim();
+  const slug = String(rawSlug || session?.profile?.slug || "mianismo").trim();
   const rawAfter = Array.isArray(req.query.after) ? req.query.after[0] : req.query.after;
   const requestedCursor = rawAfter ? String(rawAfter) : null;
 
@@ -251,7 +270,7 @@ module.exports = async function handler(req, res) {
 
       for (let tier = activeTier; tier < QUERY_TIERS.length; tier++) {
         try {
-          const data = await querySorare(buildPageQuery(tier), { slug, cursor });
+          const data = await querySorare(buildPageQuery(tier), { slug, cursor }, session?.accessToken || null);
           const candidate = data?.user?.cards;
           if (!candidate) throw new Error("Sorare did not return the cards connection");
           connection = candidate;
@@ -286,7 +305,8 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({
       status: "ok",
-      source: "Sorare public GraphQL API",
+      source: session ? "Sorare OAuth GraphQL API" : "Sorare public GraphQL API",
+      authenticated: Boolean(session),
       profileSlug: slug,
       count: items.length,
       items,
