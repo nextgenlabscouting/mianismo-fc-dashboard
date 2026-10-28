@@ -2,6 +2,20 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+const authFiles = [
+  '../lib/sorare-session.js',
+  '../api/auth/sorare/login.js',
+  '../api/auth/sorare/callback.js',
+  '../api/auth/sorare/session.js',
+  '../api/auth/sorare/logout.js',
+  '../api/public/cards.js',
+  '../api/public/profile.js'
+];
+const authSources = await Promise.all(authFiles.map(path => readFile(new URL(path, import.meta.url), 'utf8')));
+for (const [index, source] of authSources.entries()) {
+  assert.doesNotThrow(() => new Function(source), 'Il modulo deve essere sintatticamente valido: ' + authFiles[index]);
+}
+
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.equal(scripts.length, 1, 'La dashboard deve avere un solo script inline principale');
 assert.doesNotThrow(() => new Function(scripts[0][1]), 'Lo script inline della dashboard deve essere sintatticamente valido');
@@ -41,7 +55,15 @@ const checks = [
   [/\$\("resourcesForm"\)\.addEventListener\("submit",saveResourcesFromForm\)/, 'submit del modulo risorse collegato'],
   [/\$\("exportData"\)\.addEventListener\("click",exportBackup\)/, 'pulsante esportazione collegato'],
   [/\$\("importFile"\)\.addEventListener\("change",importBackupFromFile\)/, 'input importazione collegato']
-];
+,
+  [/<title>NEXUS — Sorare Intelligence<\/title>/, 'brand indipendente dall’account'],
+  [/function scoreClass\(value\)/, 'colori punteggi basati sui valori reali'],
+  [/function renderAnalytics\(\)/, 'telemetria dinamica per ruolo'],
+  [/id="roleDistribution"/, 'grafico distribuzione ruoli'],
+  [/id="rolePerformance"/, 'grafico media L5 per ruolo'],
+  [/function updateSorareAuthUI\(session\)/, 'stato account OAuth'],
+  [/setInterval\(\(\)=>\{if\(!document\.hidden\)loadSorarePublicData\(\);\},120000\)/, 'sincronizzazione ogni 2 minuti'],
+  [/const KEY='mianismoFcDashboardV1';/, 'conservazione dei dati locali dopo il rebranding']
 
 for (const [pattern, label] of checks) {
   assert.match(html, pattern, 'Manca il controllo UI: ' + label);
@@ -73,4 +95,11 @@ updateEstimate();
 assert.match(elements.loyaltyEssenceEstimate.textContent, /^6.?000 Essence$/);
 assert.equal(elements.loyaltyGemsEstimate.textContent, '0+ Gems (fascia da verificare)');
 
-console.log('Dashboard regression checks passed (' + (checks.length + 5) + ' assertions).');
+assert.match(authSources[0], /createCipheriv\("aes-256-gcm"/, 'I token OAuth devono essere cifrati nel cookie');
+assert.match(authSources[0], /HttpOnly; SameSite=Lax/, 'La sessione deve usare cookie HttpOnly SameSite=Lax');
+assert.match(authSources[2], /grant_type: "authorization_code"/, 'Callback OAuth deve scambiare il code');
+assert.match(authSources[3], /getValidSession/, 'L’endpoint sessione deve validare/aggiornare il token');
+assert.match(authSources[5], /Authorization: "Bearer " \+ accessToken/, 'L’API carte deve usare il token OAuth dell’account');
+assert.match(authSources[6], /Authorization: "Bearer " \+ accessToken/, 'L’API profilo deve usare il token OAuth dell’account');
+
+console.log('Dashboard regression checks passed (' + (checks.length + authSources.length + 11) + ' assertions).');
