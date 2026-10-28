@@ -64,6 +64,7 @@ const checks = [
   [/function updateSorareAuthUI\(session\)/, 'stato account OAuth'],
   [/setInterval\(\(\)=>\{if\(!document\.hidden\)loadSorarePublicData\(\);\},120000\)/, 'sincronizzazione ogni 2 minuti'],
   [/const KEY='mianismoFcDashboardV1';/, 'conservazione dei dati locali dopo il rebranding']
+];
 
 for (const [pattern, label] of checks) {
   assert.match(html, pattern, 'Manca il controllo UI: ' + label);
