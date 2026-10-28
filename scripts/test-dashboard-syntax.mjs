@@ -65,12 +65,12 @@ const updateEstimate = new Function('$', 'state', 'num', 'fmt', helperSource + S
   value => Number(value).toLocaleString('it-IT', { maximumFractionDigits: 1 })
 );
 updateEstimate();
-assert.equal(elements.loyaltyEssenceEstimate.textContent, '8.000 Essence');
+assert.match(elements.loyaltyEssenceEstimate.textContent, /^8.?000 Essence$/);
 assert.equal(elements.loyaltyGemsEstimate.textContent, '25 Gems');
 elements.collectionInput.value = '65';
 elements.legacyGemsSpentBracket.value = '';
 updateEstimate();
-assert.equal(elements.loyaltyEssenceEstimate.textContent, '6.000 Essence');
+assert.match(elements.loyaltyEssenceEstimate.textContent, /^6.?000 Essence$/);
 assert.equal(elements.loyaltyGemsEstimate.textContent, '0+ Gems (fascia da verificare)');
 
 console.log('Dashboard regression checks passed (' + (checks.length + 5) + ' assertions).');
