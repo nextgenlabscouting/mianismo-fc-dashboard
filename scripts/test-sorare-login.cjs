@@ -135,6 +135,15 @@ async function testTwoFactorChallengeWinsOverLegacyError() {
   assert.equal(legacyShape.body.otpSessionChallenge, challenge);
 }
 
+async function testMissingTwoFactorChallengeShowsRecoveryMessage() {
+  const result = await invoke(passwordHandler, req("POST", { email: TEST_EMAIL, password: HASHED_PASSWORD }), async () =>
+    response(200, { data: { signIn: null }, errors: [{ message: "2fa missing" }] })
+  );
+  assert.equal(result.statusCode, 409);
+  assert.match(result.body.error, /sfida OTP utilizzabile/i);
+  assert.equal(result.headers["Set-Cookie"]?.some?.(value => value.startsWith("nexus_sorare_session=;")), true);
+}
+
 async function testTwoFactorAndEncryptedSession() {
   const challenge = "3a390a0661cd6f4944205f68c13fd04f";
   let calls = 0;
@@ -234,6 +243,7 @@ async function testDirectApiContract() {
   await testSaltEndpoint();
   await testPasswordValidationAndBadCredentials();
   await testTwoFactorChallengeWinsOverLegacyError();
+  await testMissingTwoFactorChallengeShowsRecoveryMessage();
   await testTwoFactorAndEncryptedSession();
   await testDirectApiContract();
   console.log("Direct Sorare login tests passed (4 suites: salt, validation, 2FA/session, authenticated card sync).");
