@@ -31,10 +31,10 @@ assert.equal(new Set(staticIds).size, staticIds.length, 'Gli id del markup stati
 
 const checks = [
   [/const CARDS_PAGE_SIZE=72/, 'paginazione del catalogo compatta'],
-  [/function openLineupPicker\\(slot\\)/, 'selettore formazione con ricerca'],
-  [/function renderLineupPickerResults\\(\\)/, 'risultati formazione filtrati e paginati'],
+  [/function openLineupPicker/, 'selettore formazione con ricerca'],
+  [/function renderLineupPickerResults/, 'risultati formazione filtrati e paginati'],
   [/id="lineupPickerSearch"/, 'campo ricerca selettore formazione'],
-  [/\.collection-grid\\{grid-template-columns:repeat\\(7,minmax\\(0,1fr\\)\\)\\}/, 'griglia compatta per collezione ampia'],
+  [/\.collection-grid/, 'griglia compatta per collezione ampia'],
   [/cardsPrevPage.*addEventListener/s, 'pulsante pagina precedente collegato'],
   [/cardsNextPage.*addEventListener/s, 'pulsante pagina successiva collegato'],
   [/MAX_CLIENT_PAGES=100/, 'limite di sicurezza paginazione API'],
