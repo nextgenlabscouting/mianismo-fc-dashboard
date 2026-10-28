@@ -34,8 +34,10 @@ module.exports = async function handler(req, res) {
   }
 
   const session = await getValidSession(req, res);
-  const rawSlug = Array.isArray(req.query.slug) ? req.query.slug[0] : req.query.slug;
-  const slug = (session?.profile?.slug || rawSlug || "mianismo").trim();
+  if (!session) {
+    return res.status(401).json({ status: "not_authenticated", authenticated: false, error: "Collega il tuo account Sorare prima di leggere il profilo." });
+  }
+  const slug = String(session.profile.slug).trim();
   if (!/^[a-zA-Z0-9_-]{1,80}$/.test(slug)) {
     return res.status(400).json({ error: "Invalid profile slug." });
   }

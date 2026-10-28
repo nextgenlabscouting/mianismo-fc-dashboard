@@ -232,8 +232,10 @@ module.exports = async function handler(req, res) {
   }
 
   const session = await getValidSession(req, res);
-  const rawSlug = Array.isArray(req.query.slug) ? req.query.slug[0] : req.query.slug;
-  const slug = String(session?.profile?.slug || rawSlug || "mianismo").trim();
+  if (!session) {
+    return res.status(401).json({ status: "not_authenticated", authenticated: false, error: "Collega il tuo account Sorare prima di leggere l’inventario." });
+  }
+  const slug = String(session.profile.slug).trim();
   const rawAfter = Array.isArray(req.query.after) ? req.query.after[0] : req.query.after;
   const requestedCursor = rawAfter ? String(rawAfter) : null;
 

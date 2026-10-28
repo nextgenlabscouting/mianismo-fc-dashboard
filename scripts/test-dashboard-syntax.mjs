@@ -30,7 +30,11 @@ const staticIds = [...staticMarkup.matchAll(/\bid=["']([^"']+)["']/g)].map(match
 assert.equal(new Set(staticIds).size, staticIds.length, 'Gli id del markup statico devono essere univoci');
 
 const checks = [
-  [/const CARDS_PAGE_SIZE=60/, 'paginazione del catalogo'],
+  [/const CARDS_PAGE_SIZE=72/, 'paginazione del catalogo compatta'],
+  [/function openLineupPicker\\(slot\\)/, 'selettore formazione con ricerca'],
+  [/function renderLineupPickerResults\\(\\)/, 'risultati formazione filtrati e paginati'],
+  [/id="lineupPickerSearch"/, 'campo ricerca selettore formazione'],
+  [/\.collection-grid\\{grid-template-columns:repeat\\(7,minmax\\(0,1fr\\)\\)\\}/, 'griglia compatta per collezione ampia'],
   [/cardsPrevPage.*addEventListener/s, 'pulsante pagina precedente collegato'],
   [/cardsNextPage.*addEventListener/s, 'pulsante pagina successiva collegato'],
   [/MAX_CLIENT_PAGES=100/, 'limite di sicurezza paginazione API'],
@@ -116,8 +120,12 @@ assert.match(authSources[2], /writeSession\(res/, 'Il login deve creare una sess
 assert.match(authSources[3], /getValidSession/, 'L’endpoint sessione deve verificare il token');
 assert.match(authSources[5], /JWT-AUD/, 'L’API carte deve inviare JWT-AUD per il token Sorare');
 assert.match(authSources[6], /JWT-AUD/, 'L’API profilo deve inviare JWT-AUD per il token Sorare');
-assert.match(authSources[5], /session\?\.profile\?\.slug \|\| rawSlug/, 'L’API carte usa lo slug dell’account autenticato');
-assert.match(authSources[6], /session\?\.profile\?\.slug \|\| rawSlug/, 'L’API profilo usa lo slug dell’account autenticato');
+assert.match(authSources[5], /if \(!session\)/, 'L’API carte rifiuta la lettura senza sessione autenticata');
+assert.match(authSources[5], /String\(session\.profile\.slug\)\.trim\(\)/, 'L’API carte usa solo lo slug della sessione autenticata');
+assert.doesNotMatch(authSources[5], /rawSlug\s*\|\|\s*"mianismo"/, 'L’API carte non usa account predefiniti');
+assert.match(authSources[6], /if \(!session\)/, 'L’API profilo rifiuta la lettura senza sessione autenticata');
+assert.match(authSources[6], /String\(session\.profile\.slug\)\.trim\(\)/, 'L’API profilo usa solo lo slug della sessione autenticata');
+assert.doesNotMatch(authSources[6], /rawSlug\s*\|\|\s*"mianismo"/, 'L’API profilo non usa account predefiniti');
 assert.match(html, /bcryptjs@2\.4\.3/, 'Il modulo password deve hashare nel browser');
 assert.doesNotMatch(html, /window\.location\.href=['"]\/api\/auth\/sorare\/login/, 'Il pulsante non deve usare OAuth');
 assert.match(html, /const previousSorare=state\.cards\.filter/, 'Le carte Sorare precedenti vengono riconciliate prima della sincronizzazione');

@@ -26,8 +26,26 @@ function sorareData(card, endCursor = null) {
 async function callHandler(fetchMock, req = { method: "GET", query: { slug: "mianismo" } }) {
   const originalFetch = global.fetch;
   const originalKey = process.env.SORARE_API_KEY;
-  global.fetch = fetchMock;
+  const originalSecret = process.env.SORARE_SESSION_SECRET;
   process.env.SORARE_API_KEY = "unit-test-key";
+  process.env.SORARE_SESSION_SECRET = originalSecret || "nexus-api-test-session-secret-at-least-32-chars";
+  const request = { ...req, headers: { ...(req.headers || {}) } };
+  const skipSession = request.skipSession === true;
+  delete request.skipSession;
+  if (!request.headers.cookie && !skipSession) {
+    const cookieRes = {
+      headers: {},
+      setHeader(name, value) { this.headers[name] = value; },
+      getHeader(name) { return this.headers[name]; }
+    };
+    writeSession(cookieRes, {
+      authType: "jwt", accessToken: "test-account-token", jwtAud: "nexus-sorare-intelligence",
+      expiresAt: Date.now() + 60 * 60 * 1000,
+      profile: { slug: request.query?.slug || "mianismo", nickname: "API Test" }
+    });
+    request.headers.cookie = cookieRes.headers["Set-Cookie"].find(value => value.startsWith("nexus_sorare_session=")).split(";")[0];
+  }
+  global.fetch = fetchMock;
   try {
     const res = {
       headers: {},
@@ -36,12 +54,14 @@ async function callHandler(fetchMock, req = { method: "GET", query: { slug: "mia
       status(code) { this.statusCode = code; return this; },
       json(body) { this.body = body; return body; }
     };
-    await handler(req, res);
+    await handler(request, res);
     return res;
   } finally {
     global.fetch = originalFetch;
     if (originalKey === undefined) delete process.env.SORARE_API_KEY;
     else process.env.SORARE_API_KEY = originalKey;
+    if (originalSecret === undefined) delete process.env.SORARE_SESSION_SECRET;
+    else process.env.SORARE_SESSION_SECRET = originalSecret;
   }
 }
 
@@ -149,7 +169,21 @@ async function testAuthenticatedSlugCannotBeOverridden() {
   }
 }
 
+
+async function testUnauthenticatedRequestsCannotReadPublicFallback() {
+  let fetched = false;
+  const res = await callHandler(async () => {
+    fetched = true;
+    throw new Error("Sorare must not be contacted without a session");
+  }, { method: "GET", query: { slug: "mianismo" }, skipSession: true });
+  assert.equal(res.statusCode, 401);
+  assert.equal(res.body.status, "not_authenticated");
+  assert.equal(res.body.authenticated, false);
+  assert.equal(fetched, false, "No account inventory query may run without a Sorare session");
+}
+
 (async () => {
+  await testUnauthenticatedRequestsCannotReadPublicFallback();
   await testVariantQueryFallback();
   await testStandardFallbackWhenOptionalFieldsFail();
   await testCursorAndMethodValidation();
