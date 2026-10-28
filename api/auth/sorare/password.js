@@ -133,7 +133,7 @@ module.exports = async function handler(req, res) {
   } catch (error) {
     clearSession(res);
     const message = String(error?.message || "");
-    if (/2fa[\\s_-]*missing|two[\\s_-]*factor[\\s_-]*missing|otp[\\s_-]*session[\\s_-]*challenge[\\s_-]*missing/i.test(message)) {
+    if (/2fa[\s_-]*missing|two[\s_-]*factor[\s_-]*missing|otp[\s_-]*session[\s_-]*challenge[\s_-]*missing/i.test(message)) {
       return res.status(409).json({ error: "Sorare richiede la verifica in due passaggi ma non ha restituito una sfida OTP utilizzabile. Riavvia l'accesso; se continua, accedi su sorare.com e completa eventuali richieste di sicurezza, poi riprova." });
     }
     return res.status(502).json({ error: "Errore di connessione a Sorare. Riprova tra poco." });
