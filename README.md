@@ -6,26 +6,20 @@ NEXUS è una dashboard indipendente per leggere e organizzare una collezione Sor
 
 - App: https://mianismo-fc-dashboard.vercel.app/
 - Repository: https://github.com/nextgenlabscouting/mianismo-fc-dashboard
-- OAuth callback: https://mianismo-fc-dashboard.vercel.app/api/auth/sorare/callback
 - API carte: https://mianismo-fc-dashboard.vercel.app/api/public/cards
 - Stato account: https://mianismo-fc-dashboard.vercel.app/api/auth/sorare/session
 
-## Primo collegamento con Sorare (obbligatorio per il login)
+## Collegare l'account Sorare senza OAuth
 
-NEXUS usa il flusso **OAuth Authorization Code** ufficiale: non chiede né memorizza la password Sorare. I token sono mantenuti in un cookie HttpOnly, cifrato con AES-256-GCM; il backend prova a rinnovarli usando il refresh token.
+NEXUS usa il flusso di autenticazione API documentato da Sorare tramite email, password hashata con bcrypt nel browser e mutazione GraphQL `signIn`. Non serve creare un'app OAuth né registrare un redirect URI.
 
-1. Aprire [Sorare Developer Settings](https://sorare.com/settings/developer) e creare una OAuth application.
-2. Registrare esattamente questo Redirect URI: `https://mianismo-fc-dashboard.vercel.app/api/auth/sorare/callback`. L'URI registrato e quello configurato in Vercel devono corrispondere esattamente.
-3. Nelle **Vercel Project Settings → Environment Variables**, aggiungere le variabili seguenti per gli ambienti da usare:
+1. In **Vercel Project Settings → Environment Variables**, configura `SORARE_SESSION_SECRET` con un segreto casuale di almeno 32 caratteri. È usato per cifrare il cookie di sessione.
+2. Salva la variabile e ridistribuisci il progetto.
+3. Apri NEXUS, vai su **Sorare Sync** e inserisci email e password Sorare. Se Sorare richiede 2FA, inserisci il codice monouso ricevuto.
 
-   - `SORARE_CLIENT_ID`: Client ID mostrato da Sorare.
-   - `SORARE_CLIENT_SECRET`: secret OAuth mostrato da Sorare. Va tenuto segreto.
-   - `SORARE_SESSION_SECRET`: segreto casuale di almeno 32 caratteri, da generare con un password manager o un generatore crittografico.
-   - `SORARE_REDIRECT_URI`: `https://mianismo-fc-dashboard.vercel.app/api/auth/sorare/callback`.
+La password viene hashata nel browser usando il salt restituito da Sorare. L'endpoint di login riceve l'hash, non la password originale. Email e hash non vengono scritti nei log o salvati come preferenze; il JWT Sorare viene conservato in un cookie HttpOnly cifrato AES-256-GCM e scade secondo la data restituita da Sorare (normalmente fino a 30 giorni). NEXUS non può revocare il JWT Sorare: il logout cancella la sessione locale.
 
-4. Salvare le variabili e fare un nuovo deploy di Vercel. Poi usare **Accedi con Sorare** nell'app.
-
-Non incollare mai qui, nel repository o nei log il Client Secret, il session secret, i token OAuth o chiavi API. Se il dominio di produzione viene cambiato, aggiornare anche il Redirect URI nella dashboard Sorare e la variabile `SORARE_REDIRECT_URI`.
+**Sicurezza:** usa solo il dominio HTTPS ufficiale di NEXUS, non inserire credenziali Sorare in copie o siti non verificati e non condividere il cookie di sessione. Il login diretto è documentato da Sorare, ma i suoi requisiti possono cambiare; se il provider modifica l'API, l'accesso potrebbe richiedere un aggiornamento.
 
 ## Inventario e sincronizzazione
 
@@ -38,9 +32,7 @@ Non incollare mai qui, nel repository o nei log il Client Secret, il session sec
 
 ## Limiti ufficiali da conoscere
 
-Il login OAuth rende disponibili le informazioni utente e le carte che Sorare autorizza attraverso i propri scope. La documentazione Sorare indica però che OAuth **non** concede accesso a email, future lineups e premi, riscossione premi o operazioni di trading come acquisti/vendite/offerte. Perciò NEXUS non finge di leggere saldo Gems, premi riservati o formazioni non esposte dall'API. Queste limitazioni non sono bug dell'interfaccia.
-
-Documentazione ufficiale: [Sorare API / OAuth](https://github.com/sorare/api).
+L'autenticazione diretta rende disponibili i dati che Sorare espone al JWT dell'account. Non garantisce l'accesso a dati non esposti dallo schema API, né rende automaticamente disponibili saldo Gems, premi riservati o formazioni future. Documentazione ufficiale: [Sorare API](https://github.com/sorare/api).
 
 ## Test
 
