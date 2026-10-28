@@ -751,7 +751,7 @@ async function submitSorareLogin(event){
    if(!window.dcodeIO?.bcrypt)throw Error('Libreria di sicurezza non caricata. Ricarica la pagina e riprova.');
    if(!email||!password)throw Error('Inserisci email e password Sorare.');
    setSorareLoginMessage('Preparazione sicura delle credenziali…');
-   const sr=await fetch('/api/auth/sorare/salt?email='+encodeURIComponent(email),{cache:'no-store'}),sb=await sr.json().catch(()=>({}));
+   const sr=await fetch('/api/auth/sorare/salt',{method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',body:JSON.stringify({email})}),sb=await sr.json().catch(()=>({}));
    if(!sr.ok||!sb.salt)throw Error(sb.error||'Sorare non ha restituito il salt di accesso.');
    const hashedPassword=window.dcodeIO.bcrypt.hashSync(password,sb.salt);$('sorarePassword').value='';
    payload={email,password:hashedPassword};
