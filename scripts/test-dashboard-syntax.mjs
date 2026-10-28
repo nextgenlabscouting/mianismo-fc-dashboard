@@ -6,6 +6,15 @@ const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
 assert.equal(scripts.length, 1, 'La dashboard deve avere un solo script inline principale');
 assert.doesNotThrow(() => new Function(scripts[0][1]), 'Lo script inline della dashboard deve essere sintatticamente valido');
 
+const declaredIds = new Set([...html.matchAll(/\bid=["']([^"']+)["']/g)].map(match => match[1]));
+const referencedIds = new Set([...scripts[0][1].matchAll(/\$\(["']([^"']+)["']\)/g)].map(match => match[1]));
+const missingIds = [...referencedIds].filter(id => !declaredIds.has(id));
+assert.deepEqual(missingIds, [], 'Ogni riferimento DOM statico deve avere un id dichiarato');
+
+const staticMarkup = html.split('<script>')[0];
+const staticIds = [...staticMarkup.matchAll(/\bid=["']([^"']+)["']/g)].map(match => match[1]);
+assert.equal(new Set(staticIds).size, staticIds.length, 'Gli id del markup statico devono essere univoci');
+
 const checks = [
   [/const CARDS_PAGE_SIZE=60/, 'paginazione del catalogo'],
   [/cardsPrevPage.*addEventListener/s, 'pulsante pagina precedente collegato'],
