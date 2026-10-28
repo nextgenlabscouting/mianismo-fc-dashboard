@@ -1,11 +1,14 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-import { dirname } from 'node:path';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const ENDPOINT = 'https://api.sorare.com/graphql';
 const SLUG = (process.env.SORARE_USER_SLUG || 'mianismo').trim();
 const OUTPUT = 'data/sorare-public.json';
-const PAGE_SIZE_NOTE = 'Sorare uses cursor pagination; this sync stops at the configured safety limit.';
-const MAX_PAGES = 11;
+const CARDS_API_URL = (process.env.SORARE_CARDS_API_URL || 'https://mianismo-fc-dashboard.vercel.app/api/public/cards').trim();
+const PAGE_SIZE_NOTE = 'La sincronizzazione usa cursori e segnala esplicitamente se raggiunge il limite di sicurezza.';
+const MAX_PAGES_RAW = Number.parseInt(process.env.SORARE_MAX_PAGES || '200', 10);
+const MAX_PAGES = Number.isFinite(MAX_PAGES_RAW) ? Math.max(1, Math.min(500, MAX_PAGES_RAW)) : 200;
 
 const QUERY_TIERS = [
 { label: 'rich', fields: [
@@ -88,7 +91,8 @@ async function gql(query, variables = {}) {
     headers: {
       'content-type': 'application/json',
       'accept': 'application/json',
-      'user-agent': 'MIANISMO-FC-Dashboard/2.1 (public read-only sync)'
+      'user-agent': 'MIANISMO-FC-Dashboard/2.1 (public read-only sync)',
+      ...(process.env.SORARE_API_KEY ? { APIKEY: process.env.SORARE_API_KEY } : {})
     },
     body: JSON.stringify({ query, variables }),
     signal: AbortSignal.timeout(20000)
@@ -248,19 +252,119 @@ async function fetchCardPages(field) {
   return { items, truncated, endCursor: cursor, queryTier: QUERY_TIERS[activeTier].label, fallbackErrors };
 }
 
-function cardQuality(items) {
+async function fetchCardsViaProxy({ slug = SLUG, baseUrl = CARDS_API_URL, maxPages = MAX_PAGES } = {}) {
+  const items = [];
+  const seen = new Set();
+  const cursors = new Set();
+  const fallbackErrors = [];
+  let cursor = null;
+  let endCursor = null;
+  let queryTier = null;
+  let fetchedAt = null;
+  let pagesFetched = 0;
+  let truncated = false;
+
+  for (let page = 0; page < maxPages; page++) {
+    const url = new URL(baseUrl);
+    url.searchParams.set('slug', slug);
+    if (cursor) url.searchParams.set('after', cursor);
+    else url.searchParams.delete('after');
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        accept: 'application/json',
+        'user-agent': 'MIANISMO-FC-Dashboard/2.1 (public inventory sync)'
+      },
+      signal: AbortSignal.timeout(25000)
+    });
+    const responseText = await response.text();
+    let body = {};
+    try { body = responseText ? JSON.parse(responseText) : {}; } catch {}
+    if (!response.ok || body.status !== 'ok' || !Array.isArray(body.items)) {
+      const detail = body.error || body.message || responseText.slice(0, 220);
+      throw new Error('Vercel cards API HTTP ' + response.status + (detail ? ': ' + detail : ''));
+    }
+    if (!body.items.length && body.hasMore) {
+      throw new Error('La paginazione API ha segnalato altre pagine ma ha restituito una pagina vuota.');
+    }
+
+    for (const card of body.items) {
+      const key = card?.assetId || card?.slug;
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      items.push(card);
+    }
+    pagesFetched += 1;
+    queryTier = body.queryTier || queryTier;
+    fetchedAt = body.fetchedAt || fetchedAt;
+    if (Array.isArray(body.diagnostic?.fallbackErrors)) {
+      fallbackErrors.push(...body.diagnostic.fallbackErrors.map(item => ({
+        tier: item.tier || 'api-fallback',
+        error: cleanError(item.error || 'Fallback segnalato dal backend')
+      })));
+    }
+
+    const next = body.endCursor || null;
+    if (!body.hasMore || !next) {
+      endCursor = next;
+      truncated = false;
+      break;
+    }
+    if (next === cursor || cursors.has(next)) {
+      throw new Error('Cursor Sorare ripetuto: sincronizzazione interrotta per evitare duplicati o loop.');
+    }
+    cursors.add(next);
+    cursor = next;
+    endCursor = next;
+    if (page === maxPages - 1) truncated = true;
+  }
+
   return {
-    withCardImage: items.filter(card => card.imageUrl).length,
-    withPlayerImage: items.filter(card => card.playerImageUrl).length,
-    withVariant: items.filter(card => card.skinEdition || card.specialEdition || card.edition).length,
-    withRecentScores: items.filter(card => card.rawScores.length || card.playerRawScores.length).length,
-    withUpcomingGames: items.filter(card => card.upcomingGames.length).length
+    items, truncated, endCursor, queryTier, fallbackErrors, pagesFetched,
+    fetchedAt, sourceMode: 'vercel-api'
   };
 }
 
+function cardQuality(items) {
+  const safe = Array.isArray(items) ? items : [];
+  const nameResolved = card => Boolean(card?.name && card?.slug && String(card.name).trim().toLowerCase() !== String(card.slug).trim().toLowerCase());
+  const hasUsefulData = card => Boolean(
+    card?.imageUrl || card?.playerImageUrl || card?.team || card?.activeTeam ||
+    (Array.isArray(card?.position) && card.position.length) ||
+    (card?.rarityTyped && String(card.rarityTyped).toLowerCase() !== 'unknown') ||
+    (Array.isArray(card?.rawScores) && card.rawScores.length) ||
+    (Array.isArray(card?.playerRawScores) && card.playerRawScores.length)
+  );
+  return {
+    withResolvedNames: safe.filter(nameResolved).length,
+    withUsefulData: safe.filter(hasUsefulData).length,
+    withCardImage: safe.filter(card => card?.imageUrl).length,
+    withPlayerImage: safe.filter(card => card?.playerImageUrl).length,
+    withVariant: safe.filter(card => card?.skinEdition || card?.specialEdition || card?.edition).length,
+    withRecentScores: safe.filter(card => (Array.isArray(card?.rawScores) && card.rawScores.length) || (Array.isArray(card?.playerRawScores) && card.playerRawScores.length)).length,
+    withUpcomingGames: safe.filter(card => Array.isArray(card?.upcomingGames) && card.upcomingGames.length).length
+  };
+}
+
+function isUsableInventory(items) {
+  if (!Array.isArray(items) || items.length === 0) return false;
+  const quality = cardQuality(items);
+  return quality.withResolvedNames / items.length >= 0.8 &&
+    quality.withUsefulData / items.length >= 0.8;
+}
+
+async function readPreviousReport() {
+  try {
+    return JSON.parse(await readFile(OUTPUT, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
 async function main() {
-  const report = {
-    schemaVersion: 3,
+  const previousReport = await readPreviousReport();
+  let report = {
+    schemaVersion: 4,
     source: 'Sorare GraphQL API — public read-only sync',
     requestedSlug: SLUG,
     updatedAt: new Date().toISOString(),
@@ -289,14 +393,33 @@ async function main() {
       report.statusLabel = 'Profilo risolto';
       let result = null;
       let lastCardError = null;
+      let proxyError = null;
 
-      for (const field of ['cards', 'paginatedCards']) {
-        try {
-          result = await fetchCardPages(field);
-          break;
-        } catch (error) {
-          lastCardError = error;
+      try {
+        result = await fetchCardsViaProxy();
+      } catch (error) {
+        proxyError = error;
+        lastCardError = error;
+      }
+
+      // Direct GraphQL is a fallback only. Its lower-access schema is rejected
+      // later if it returns identifiers without resolved player/card details.
+      if (!result) {
+        for (const field of ['cards', 'paginatedCards']) {
+          try {
+            result = await fetchCardPages(field);
+            result.sourceMode = 'direct-graphql';
+            if (proxyError) result.fallbackErrors.unshift({ tier: 'vercel-api', error: cleanError(proxyError) });
+            break;
+          } catch (error) {
+            lastCardError = error;
+          }
         }
+      }
+
+      if (result && !isUsableInventory(result.items)) {
+        lastCardError = new Error('Risposta inventario rifiutata: nomi o dettagli essenziali non risolti (' + result.items.length + ' record). Nessun dato degradato verrà presentato come inventario valido.');
+        result = null;
       }
 
       if (result) {
@@ -307,16 +430,20 @@ async function main() {
           truncated: result.truncated,
           endCursor: result.endCursor || null,
           queryTier: result.queryTier,
+          sourceMode: result.sourceMode || 'direct-graphql',
+          pagesFetched: result.pagesFetched || null,
+          fetchedAt: result.fetchedAt || null,
+          stale: false,
           dataQuality: cardQuality(result.items),
-          message: result.items.length ? 'Carte pubbliche con dettagli disponibili ricevute.' : 'La query è riuscita ma non ha restituito carte.',
+          message: result.items.length ? 'Carte pubbliche con dettagli verificati ricevute.' : 'La query è riuscita ma non ha restituito carte.',
           detail: result.truncated ? PAGE_SIZE_NOTE : null,
           diagnostics: {
             attemptedFallbacks: result.fallbackErrors.length,
-            fallbackErrors: result.fallbackErrors.slice(-5)
+            fallbackErrors: result.fallbackErrors.slice(-8)
           }
         };
         report.statusLabel = result.truncated ? 'Inventario parzialmente sincronizzato' : 'Inventario sincronizzato';
-        report.message = 'Profilo trovato; ' + result.items.length + ' identificativi carta elaborati.';
+        report.message = 'Profilo trovato; ' + result.items.length + ' carte con dettagli risolti elaborate tramite ' + (result.sourceMode || 'GraphQL') + '.';
         report.detail = result.truncated
           ? 'L’elenco supera il limite prudenziale per questa esecuzione; riavvia la sincronizzazione per proseguire.'
           : 'La disponibilità di immagini, varianti, punteggi e partite dipende dai campi esposti dall’API.';
@@ -339,6 +466,42 @@ async function main() {
     report.cards.message = 'Il controllo API è fallito prima di verificare le carte.';
   }
 
+  const currentHasGoodData = report.cards?.status === 'available' && isUsableInventory(report.cards.items);
+  const previousHasGoodData = previousReport?.cards?.status === 'available' && isUsableInventory(previousReport.cards.items);
+  const candidateIsSuspiciouslySmall = currentHasGoodData && report.cards.truncated && previousHasGoodData &&
+    report.cards.items.length < previousReport.cards.items.length * 0.8;
+
+  if ((!currentHasGoodData || candidateIsSuspiciouslySmall) && previousHasGoodData) {
+    const failedAttemptAt = new Date().toISOString();
+    const reason = candidateIsSuspiciouslySmall
+      ? 'Aggiornamento parziale molto più piccolo del precedente inventario valido.'
+      : (report.detail || report.cards?.detail || report.message || 'La nuova risposta non ha superato i controlli di qualità.');
+    report = {
+      ...previousReport,
+      status: 'stale',
+      statusLabel: 'Ultimo inventario valido conservato',
+      refreshAttemptedAt: failedAttemptAt,
+      message: 'Aggiornamento non accettato; mantenuto l’ultimo inventario che aveva superato i controlli.',
+      detail: reason,
+      cards: {
+        ...previousReport.cards,
+        stale: true,
+        refreshAttemptedAt: failedAttemptAt,
+        refreshError: reason,
+        message: 'Dati precedenti conservati: l’ultimo aggiornamento non ha superato i controlli di integrità.'
+      }
+    };
+  } else if (!currentHasGoodData) {
+    report.status = report.status === 'ok' ? 'degraded' : report.status;
+    report.statusLabel = 'Inventario non verificato';
+    report.cards = {
+      ...report.cards,
+      status: 'unavailable', count: null, items: [], dataQuality: null, stale: false,
+      message: 'Nessun inventario salvato: la risposta ricevuta non ha superato i controlli di qualità.'
+    };
+  }
+
+  report.updatedAt = report.status === 'stale' ? (previousReport?.updatedAt || report.updatedAt) : new Date().toISOString();
   await mkdir(dirname(OUTPUT), { recursive: true });
   await writeFile(OUTPUT, JSON.stringify(report, null, 2) + '\n', 'utf8');
   console.log(JSON.stringify({
@@ -346,13 +509,18 @@ async function main() {
     profileFound: report.profile.found,
     cardStatus: report.cards.status,
     cardCount: report.cards.count,
+    truncated: report.cards.truncated,
+    sourceMode: report.cards.sourceMode,
+    pagesFetched: report.cards.pagesFetched,
     queryTier: report.cards.queryTier,
     dataQuality: report.cards.dataQuality,
     message: report.message
   }, null, 2));
 }
 
-main().catch(async error => {
+export { fetchCardsViaProxy, cardQuality, isUsableInventory };
+
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) main().catch(async error => {
   const minimal = {
     schemaVersion: 3,
     source: 'Sorare GraphQL API',
