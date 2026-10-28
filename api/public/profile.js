@@ -1,5 +1,5 @@
 const SORARE_ENDPOINT = "https://api.sorare.com/graphql";
-const { getValidSession } = require("../auth/sorare/session-lib");
+const { getValidSession } = require("../../lib/sorare-session");
 
 async function sorareGraphQL(query, variables = {}, accessToken = null) {
   const response = await fetch(SORARE_ENDPOINT, {
