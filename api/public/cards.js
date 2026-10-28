@@ -1,5 +1,6 @@
 const ENDPOINT = "https://api.sorare.com/graphql";
 const { getValidSession } = require("../../lib/sorare-session");
+const JWT_AUD = "nexus-sorare-intelligence";
 const MAX_PAGES = 1;
 
 // Optional fields are isolated into query tiers. If the Sorare schema changes,
@@ -110,7 +111,7 @@ async function querySorare(query, variables = {}, accessToken = null) {
       "Content-Type": "application/json",
       Accept: "application/json",
       "User-Agent": "NEXUS-Sorare-Intelligence/3.0",
-      ...(accessToken ? { Authorization: "Bearer " + accessToken } : {}),
+      ...(accessToken ? { Authorization: "Bearer " + accessToken, "JWT-AUD": JWT_AUD } : {}),
       ...(process.env.SORARE_API_KEY ? { APIKEY: process.env.SORARE_API_KEY } : {})
     },
     body: JSON.stringify({ query, variables }),
@@ -293,7 +294,7 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({
       status: "ok",
-      source: session ? "Sorare OAuth GraphQL API" : "Sorare public GraphQL API",
+      source: session?.authType === "jwt" ? "Sorare authenticated GraphQL API" : session ? "Sorare OAuth GraphQL API" : "Sorare public GraphQL API",
       authenticated: Boolean(session),
       profileSlug: slug,
       count: items.length,
