@@ -89,6 +89,8 @@ function cardInitials(name){return String(name||'?').split(/\s+/).slice(0,2).map
 function cardVisualUrl(c){return c.imageUrl||c.playerImageUrl||c.avatarUrl||''}
 function cardHTML(c){const visual=cardVisualUrl(c);return `<article class="player-card"><div class="card-top"><div class="player-avatar">${visual?`<img src="${esc(visual)}" alt="${esc(c.imageUrl?'Carta '+c.name:'Ritratto '+c.name)}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:esc(cardInitials(c.name))}</div><div style="min-width:0"><div class="player-name">${esc(c.name)}</div><div class="player-club">${esc(c.club||'Club non inserito')}</div></div><span class="rarity">${esc(c.rarity||'Non indicata')}</span></div><div class="card-metrics"><div class="metric"><span>Media L5</span><strong>${c.l5!==''&&c.l5!=null?esc(fmt(c.l5)):'—'}</strong></div><div class="metric"><span>Media L10</span><strong>${c.l10!==''&&c.l10!=null?esc(fmt(c.l10)):'—'}</strong></div><div class="metric"><span>Ruolo</span><strong style="font-size:11px">${esc(c.position||'—')}</strong></div></div><div class="card-tags">${visual&&!c.imageUrl?'<span class="tag">Ritratto giocatore</span>':''}${c.league?`<span class="tag">${esc(c.league)}</span>`:''}${c.age?`<span class="tag">${esc(c.age)} anni</span>`:''}${c.l15!==''&&c.l15!=null?`<span class="tag">L15 ${esc(fmt(c.l15))}</span>`:''}${c.skinEdition?.skinName?`<span class="tag">${esc(c.skinEdition.skinName)}</span>`:''}${c.skinEdition?.variantName?`<span class="tag">${esc(c.skinEdition.variantName)}</span>`:''}${c.bonus!=null?`<span class="tag">Bonus API: ${esc(c.bonus)}</span>`:''}${c.serialNumber!=null?`<span class="tag">N° ${esc(c.serialNumber)}</span>`:''}${c.upcomingGames?.[0]?.date?`<span class="tag">Prossima: ${esc(new Date(c.upcomingGames[0].date).toLocaleDateString('it-IT',{day:'2-digit',month:'short'}))}</span>`:''}</div>${c.note?`<div class="muted" style="font-size:11px;margin-top:9px">${esc(c.note)}</div>`:''}<div class="card-actions"><button class="btn btn-small" data-edit="${esc(c.id)}">Modifica</button><button class="btn btn-small" data-delete="${esc(c.id)}">Elimina</button></div></article>`}
 function isEndedHyperGlitch(card){const source=[card?.setName,card?.set?.name,card?.edition,card?.specialEdition,card?.sorareSlug,card?.slug].filter(Boolean).join(' ').toLowerCase();return /hyper\s?glitch|glitch_(standard|shiny|holo|legendary)/i.test(source)}
+function currentTargetSet(){const name=String(state.resources?.set||'').trim();return !name||/nuovo set|in attesa|hyper\s?glitch/i.test(name)?'':name.toLocaleLowerCase();}
+function isTargetSetCard(card){const target=currentTargetSet(),actual=String(card?.setName||card?.set?.name||'').trim().toLocaleLowerCase();return Boolean(target&&actual&&actual===target&&!isEndedHyperGlitch(card));}
 function cardVariantLabel(card){
   const skin=card.skinEdition||{};
   const known=skin.variantName||skin.skinName||card.variantName||card.specialEdition||card.edition;
@@ -273,11 +275,14 @@ function buildOptimalLineup(){
   const rawBonus=Number($('lineupBonus')?.value??0),bonusPct=Math.max(0,Math.min(5,Number.isFinite(rawBonus)?rawBonus:0));
   const target=Number($('lineupTarget')?.value||0);
   const endedLegacy=state.cards.filter(isEndedHyperGlitch).length;
-  const eligibleCandidates=state.cards.filter(card=>!isEndedHyperGlitch(card));
+  const targetSet=currentTargetSet();
+  if(!targetSet){
+    toast('Ottimizzatore bloccato in sicurezza: in Risorse inserisci il nome ufficiale del nuovo Set dopo il lancio del 30/10/2026. HyperGlitch è terminato e non viene riutilizzato.');
+    return;
+  }
+  const eligibleCandidates=state.cards.filter(isTargetSetCard);
   if(!eligibleCandidates.length){
-    toast(endedLegacy
-      ? 'Ottimizzatore fermato: tutte le '+endedLegacy+' carte importate sono HyperGlitch e non sono più idonee dal 27/10/2026. Sincronizza le carte del nuovo Set dopo il lancio.'
-      : 'Nessuna carta non-HyperGlitch disponibile per costruire una bozza. Sincronizza la collezione e verifica l’idoneità delle carte al nuovo Set.');
+    toast('Nessuna carta verificata per il Set "'+state.resources.set+'". Sono escluse le '+endedLegacy+' carte HyperGlitch e tutte le carte di Set diversi. Sincronizza il nuovo inventario prima di ottimizzare.');
     return;
   }
   const bestByPlayer=new Map();
@@ -339,7 +344,7 @@ function renderLineup(){
     const id=state.lineup[i]||'',card=state.cards.find(x=>x.id===id),stats=card?cardScoreStats(card):null;
     const pos=card?(Array.isArray(card.positionCodes)&&card.positionCodes.length?card.positionCodes.join(', '):(Array.isArray(card.position)?card.position.join(', '):card.position||'Ruolo n.d.')):'';
     const l10=stats&&stats.capL10!=null?fmt(stats.capL10):'n.d.',l5=stats&&stats.expected!=null?fmt(stats.expected):'n.d.';
-    const slotOptions=state.cards.filter(x=>!isEndedHyperGlitch(x)||x.id===id);
+    const slotOptions=state.cards.filter(x=>isTargetSetCard(x)||x.id===id);
     const options=slotOptions.map(x=>'<option value="'+esc(x.id)+'" '+(x.id===id?'selected ':'')+(isEndedHyperGlitch(x)?'disabled ':'')+'>'+esc(x.name)+(x.club?' · '+esc(x.club):'')+(isEndedHyperGlitch(x)?' · HyperGlitch non idonea':'')+'</option>').join('');
     return '<div class="slot '+(card?'filled':'')+'"><div class="slot-label">'+label+'</div><select class="select lineup-select" data-slot="'+i+'"><option value="">Seleziona una carta…</option>'+options+'</select><div class="slot-info">'+(card?esc(pos)+' · L5 '+esc(l5)+' · L10 '+esc(l10):'Nessun giocatore selezionato')+'</div></div>';
   }).join('');
@@ -363,6 +368,7 @@ function renderLineup(){
     const kinds=positionKinds(card);
     const valid=i===4?kinds.some(role=>role!=='GK'):kinds.includes(['GK','DF','MD','FW'][i]);
     if(isEndedHyperGlitch(card))return 'Carta non idonea: '+card.name+' appartiene a HyperGlitch, terminato il 27/10/2026.';
+    if(!isTargetSetCard(card))return 'Set non idoneo o non verificato: '+card.name+' non appartiene al Set corrente selezionato nelle Risorse.';
     return valid?null:labelsRoleError(roleNames[i],card.name);
   }).filter(Boolean);
   const seenPlayers=new Set(),duplicatePlayers=new Set();
