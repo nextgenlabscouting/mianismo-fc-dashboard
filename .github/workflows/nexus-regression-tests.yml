@@ -1,0 +1,31 @@
+name: NEXUS regression tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    name: API, sync and dashboard regression tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Test direct Sorare login and 2FA
+        run: node scripts/test-sorare-login.cjs
+      - name: Test card API normalization
+        run: node scripts/test-cards-api.cjs
+      - name: Test public sync and pagination
+        run: node scripts/test-sorare-sync.mjs
+      - name: Test dashboard syntax and key UI wiring
+        run: node scripts/test-dashboard-syntax.mjs
