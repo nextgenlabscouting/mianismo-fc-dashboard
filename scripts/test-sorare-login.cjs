@@ -246,7 +246,7 @@ async function testDirectApiContract() {
   await testMissingTwoFactorChallengeShowsRecoveryMessage();
   await testTwoFactorAndEncryptedSession();
   await testDirectApiContract();
-  console.log("Direct Sorare login tests passed (4 suites: salt, validation, 2FA/session, authenticated card sync).");
+  console.log("Direct Sorare login tests passed (6 scenarios: salt, validation, OTP challenge, missing challenge, encrypted session, authenticated card sync).");
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;
