@@ -114,5 +114,7 @@ assert.match(authSources[5], /JWT-AUD/, 'L’API carte deve inviare JWT-AUD per 
 assert.match(authSources[6], /JWT-AUD/, 'L’API profilo deve inviare JWT-AUD per il token Sorare');
 assert.match(html, /bcryptjs@2\.4\.3/, 'Il modulo password deve hashare nel browser');
 assert.doesNotMatch(html, /window\.location\.href=['"]\/api\/auth\/sorare\/login/, 'Il pulsante non deve usare OAuth');
+assert.doesNotMatch(html, /previousSorare/, 'L’importazione non deve riferirsi a una variabile non definita');
+assert.match(html, /if\(idx===undefined\)\{indexBySlug\.set\(card\.slug,merged\.length\);merged\.push\(item\);added\+\+;\}/, 'Le carte nuove incrementano il contatore senza dipendenze esterne');
 
 console.log('Dashboard regression checks passed (' + (checks.length + authSources.length + 11) + ' assertions).');
