@@ -1,5 +1,5 @@
 const ENDPOINT = "https://api.sorare.com/graphql";
-const { getValidSession } = require("../auth/sorare/session-lib");
+const { getValidSession } = require("../../lib/sorare-session");
 const MAX_PAGES = 1;
 
 // Optional fields are isolated into query tiers. If the Sorare schema changes,
