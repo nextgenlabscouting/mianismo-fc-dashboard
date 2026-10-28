@@ -27,5 +27,7 @@ jobs:
         run: node scripts/test-cards-api.cjs
       - name: Test public sync and pagination
         run: node scripts/test-sorare-sync.mjs
+      - name: Test Sorare card import behavior
+        run: node scripts/test-sorare-import.cjs
       - name: Test dashboard syntax and key UI wiring
         run: node scripts/test-dashboard-syntax.mjs
