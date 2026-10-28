@@ -1,5 +1,6 @@
 const SORARE_ENDPOINT = "https://api.sorare.com/graphql";
 const { getValidSession } = require("../../lib/sorare-session");
+const JWT_AUD = "nexus-sorare-intelligence";
 
 async function sorareGraphQL(query, variables = {}, accessToken = null) {
   const response = await fetch(SORARE_ENDPOINT, {
@@ -8,7 +9,7 @@ async function sorareGraphQL(query, variables = {}, accessToken = null) {
       "Content-Type": "application/json",
       "Accept": "application/json",
       "User-Agent": "NEXUS-Sorare-Intelligence/3.0",
-      ...(accessToken ? { Authorization: "Bearer " + accessToken } : {}),
+      ...(accessToken ? { Authorization: "Bearer " + accessToken, "JWT-AUD": JWT_AUD } : {}),
       ...(process.env.SORARE_API_KEY ? { APIKEY: process.env.SORARE_API_KEY } : {})
     },
     body: JSON.stringify({ query, variables }),
@@ -48,7 +49,7 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({
       status: user ? "ok" : "not_found",
-      source: session ? "Sorare OAuth GraphQL API" : "Sorare public GraphQL API",
+      source: session?.authType === "jwt" ? "Sorare authenticated GraphQL API" : session ? "Sorare OAuth GraphQL API" : "Sorare public GraphQL API",
       authenticated: Boolean(session),
       profile: user ? { slug: user.slug || slug, nickname: user.nickname || null } : null,
       apiKeyConfigured: Boolean(process.env.SORARE_API_KEY),
