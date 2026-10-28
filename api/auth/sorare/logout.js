@@ -1,4 +1,4 @@
-const { readSession, clearSession } = require("./session-lib");
+const { readSession, clearSession } = require("../../../lib/sorare-session");
 
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
