@@ -43,12 +43,20 @@ async function signIn(input) {
   }
 
   if (payload) {
+    // Do not let an empty nested errors array hide GraphQL errors returned
+    // at the top level. Normalize common response shapes before interpreting
+    // authentication failures so "2fa_missing" is not lost.
+    const payloadErrors = Array.isArray(payload.errors) ? payload.errors : [];
+    const normalizedErrors = payloadErrors.length
+      ? payloadErrors
+      : (graphErrors.length ? graphErrors : (apiError ? [{ message: apiError }] : []));
     return {
       ...payload,
+      currentUser: payload.currentUser || payload.current_user || body?.currentUser || body?.current_user || null,
+      jwtToken: payload.jwtToken || payload.jwt_token || body?.jwtToken || body?.jwt_token || null,
+      tcuToken: payload.tcuToken || payload.tcu_token || body?.tcuToken || body?.tcu_token || null,
       otpSessionChallenge: challenge ? String(challenge) : null,
-      errors: Array.isArray(payload.errors)
-        ? payload.errors
-        : (graphErrors.length ? graphErrors : (apiError ? [{ message: apiError }] : []))
+      errors: normalizedErrors
     };
   }
 
