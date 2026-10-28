@@ -569,15 +569,15 @@ function bindCoreControls(){
 }
 
 function updateLoyaltyRewardEstimate(){
-  const collection=Math.max(0,Math.min(100,num(state.resources.collection)));
+  const collection=Math.max(0,Math.min(100,num($('collectionInput')?.value??state.resources.collection)));
   const essence=Math.floor(collection/10)*1000;
-  const bracket=String(state.resources.legacyGemsSpentBracket||'');
+  const bracket=String($('legacyGemsSpentBracket')?.value??state.resources.legacyGemsSpentBracket??'');
   const rewardByBracket={'750+':60,'500-749':40,'350-499':25,'200-349':15,'100-199':10,'50-99':5};
   const collectionGems=collection>=70?10:0;
   const usageGems=Object.prototype.hasOwnProperty.call(rewardByBracket,bracket)?rewardByBracket[bracket]:null;
   $('loyaltyEssenceEstimate').textContent=fmt(essence)+' Essence';
   $('loyaltyGemsEstimate').textContent=usageGems==null?fmt(collectionGems)+'+ Gems (fascia da verificare)':fmt(collectionGems+usageGems)+' Gems';
-  $('loyaltyRewardDetail').textContent='Calcolo indicativo: '+Math.floor(collection/10)+' fasce da 10% × 1.000 Essence; '+(collectionGems?'+10 Gems per completamento ≥70%':'nessun bonus Gems per completamento sotto il 70%')+'; '+(usageGems==null?'bonus da Gems spese non incluso finché la fascia non è verificata.':'+'+usageGems+' Gems per fascia di spesa '+bracket+'.')+' Non sono saldo confermato né promessa di accredito.';
+  $('loyaltyRewardDetail').textContent='Calcolo indicativo: '+Math.floor(collection/10)+' fasce da 10% × 1.000 Essence; '+(collectionGems?'+10 Gems per completamento ≥70%':'nessun bonus Gems per completamento sotto il 70%')+'; '+(usageGems==null?'bonus da Gems spese non incluso finché la fascia non è verificata.':'+'+usageGems+' Gems per fascia di spesa '+bracket+'.')+' Non sono saldo confermato né promessa di accredito e non includono eventuali pack rewards HyperGlitch non riscattati prima della chiusura.';
 }
 function renderResourcesForm(){const r=state.resources;$('gemsInput').value=r.gems;$('essenceInput').value=r.essence;$('setInput').value=r.set;$('collectionInput').value=r.collection;$('goalInput').value=r.goal;$('notesInput').value=r.notes||'';$('legacyGemsSpentBracket').value=r.legacyGemsSpentBracket??'';updateLoyaltyRewardEstimate();const ratio=r.goal>0?Math.min(100,num(r.gems)/num(r.goal)*100):0;$('goalBar').style.width=ratio+'%';$('goalCaption').textContent=`${fmt(r.gems)} / ${fmt(r.goal)} Gems`;$('goalPercent').textContent=Math.round(ratio)+'%'}
 let liveSorareItems=[];
@@ -756,6 +756,8 @@ async function loadSorarePublicData(){
 }
 
 function renderAll(){renderOverview();renderCards();renderResourcesForm();renderLineup();}
+$('collectionInput').addEventListener('input',updateLoyaltyRewardEstimate);
+$('legacyGemsSpentBracket').addEventListener('change',updateLoyaltyRewardEstimate);
 $('cardSearch').addEventListener('input',()=>{cardsPage=1;renderCards();});
 $('positionFilter').addEventListener('change',()=>{cardsPage=1;renderCards();});
 $('rarityFilter').addEventListener('change',()=>{cardsPage=1;renderCards();});
