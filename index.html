@@ -339,7 +339,8 @@ function renderLineup(){
     const id=state.lineup[i]||'',card=state.cards.find(x=>x.id===id),stats=card?cardScoreStats(card):null;
     const pos=card?(Array.isArray(card.positionCodes)&&card.positionCodes.length?card.positionCodes.join(', '):(Array.isArray(card.position)?card.position.join(', '):card.position||'Ruolo n.d.')):'';
     const l10=stats&&stats.capL10!=null?fmt(stats.capL10):'n.d.',l5=stats&&stats.expected!=null?fmt(stats.expected):'n.d.';
-    const options=state.cards.map(x=>'<option value="'+esc(x.id)+'" '+(x.id===id?'selected ':'')+(isEndedHyperGlitch(x)?'disabled ':'')+'>'+esc(x.name)+(x.club?' · '+esc(x.club):'')+(isEndedHyperGlitch(x)?' · HyperGlitch non idonea':'')+'</option>').join('');
+    const slotOptions=state.cards.filter(x=>!isEndedHyperGlitch(x)||x.id===id);
+    const options=slotOptions.map(x=>'<option value="'+esc(x.id)+'" '+(x.id===id?'selected ':'')+(isEndedHyperGlitch(x)?'disabled ':'')+'>'+esc(x.name)+(x.club?' · '+esc(x.club):'')+(isEndedHyperGlitch(x)?' · HyperGlitch non idonea':'')+'</option>').join('');
     return '<div class="slot '+(card?'filled':'')+'"><div class="slot-label">'+label+'</div><select class="select lineup-select" data-slot="'+i+'"><option value="">Seleziona una carta…</option>'+options+'</select><div class="slot-info">'+(card?esc(pos)+' · L5 '+esc(l5)+' · L10 '+esc(l10):'Nessun giocatore selezionato')+'</div></div>';
   }).join('');
   slots.querySelectorAll('select').forEach(sel=>sel.onchange=()=>{state.lineup[Number(sel.dataset.slot)]=sel.value;persist();renderLineup();});
