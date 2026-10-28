@@ -1,4 +1,4 @@
-const { writeSession, clearState, readState, graphQL } = require("./session-lib");
+const { writeSession, clearState, readState, graphQL } = require("../../../lib/sorare-session");
 
 const TOKEN_ENDPOINT = "https://api.sorare.com/oauth/token";
 
