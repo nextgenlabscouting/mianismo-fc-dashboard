@@ -139,6 +139,29 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
 @media(max-width:1100px){.edge-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.edge-layout,.edge-bottom-layout{grid-template-columns:1fr}}
 @media(max-width:700px){.edge-table .table{min-width:760px}.edge-controls{align-items:stretch}.edge-controls .select{min-width:0}.edge-coverage-row{grid-template-columns:82px minmax(0,1fr) 42px}.edge-method-row{display:grid;gap:3px}.edge-method-row b{min-width:0}}
 
+
+/* NEXUS primary brand lockup: a persistent identity across desktop and mobile. */
+.brand{padding-bottom:20px;margin-bottom:-2px}
+.brand-logo{width:100%;max-width:224px;height:auto;display:block}
+.topbar-heading{align-items:flex-start}
+.topbar-mark{width:48px;height:48px;flex-basis:48px}
+.hero:not(.edge-hero) .hero-mark{width:176px;height:176px;flex:0 0 176px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:10px;border:1px solid rgba(92,225,230,.22);border-radius:30px;background:radial-gradient(circle at 50% 35%,rgba(22,200,239,.15),rgba(163,255,95,.04) 48%,rgba(9,14,24,.18));box-shadow:inset 0 0 36px rgba(22,200,239,.055),0 0 36px rgba(22,200,239,.08);transform:none;font-size:12px;color:#a8bacd;letter-spacing:.19em}
+.hero:not(.edge-hero) .hero-mark img{display:block;width:134px;height:134px;object-fit:contain}
+.hero:not(.edge-hero) .hero-mark span{display:block;font-size:9px;font-weight:800;letter-spacing:.17em;color:#a8bacd;text-align:center;white-space:nowrap}
+@media(max-width:700px){
+ .brand-logo{max-width:215px}
+ .topbar-heading{gap:8px}
+ .topbar-mark{width:34px;height:34px;flex-basis:34px;margin-top:0}
+ .hero:not(.edge-hero) .hero-mark{width:94px;height:94px;flex-basis:94px;border-radius:20px;padding:4px}
+ .hero:not(.edge-hero) .hero-mark img{width:76px;height:76px}
+ .hero:not(.edge-hero) .hero-mark span{font-size:6px;letter-spacing:.08em}
+}
+@media(max-width:520px){
+ .hero:not(.edge-hero) .hero-mark{width:72px;height:72px;flex-basis:72px;border-radius:15px}
+ .hero:not(.edge-hero) .hero-mark img{width:58px;height:58px}
+ .hero:not(.edge-hero) .hero-mark span{display:none}
+}
+
 </style>
 </head>
 <body>
