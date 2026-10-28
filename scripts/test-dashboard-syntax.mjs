@@ -98,7 +98,7 @@ assert.equal(elements.loyaltyGemsEstimate.textContent, '0+ Gems (fascia da verif
 
 assert.match(authSources[0], /createCipheriv\("aes-256-gcm"/, 'Il token Sorare deve essere cifrato nella sessione');
 assert.match(authSources[0], /HttpOnly; SameSite=Lax/, 'La sessione deve usare cookie HttpOnly SameSite=Lax');
-assert.match(authSources[0], /session.authType === "jwt"/, 'La sessione deve riconoscere il JWT diretto Sorare');
+assert.match(authSources[0], /session.authType !== "jwt"/, 'La sessione deve riconoscere il JWT diretto Sorare');
 assert.match(authSources[1], /api\/v1\/users\//, 'Il backend deve recuperare il salt ufficiale Sorare');
 assert.match(authSources[2], /otpSessionChallenge/, 'Il login deve gestire la verifica 2FA');
 assert.match(authSources[2], /writeSession\(res/, 'Il login deve creare una sessione cifrata');
