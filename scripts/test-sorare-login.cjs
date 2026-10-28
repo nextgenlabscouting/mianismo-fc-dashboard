@@ -109,6 +109,32 @@ async function testPasswordValidationAndBadCredentials() {
   assert.equal(wrongPassword.headers["Set-Cookie"], undefined);
 }
 
+async function testTwoFactorChallengeWinsOverLegacyError() {
+  const challenge = "3a390a0661cd6f4944205f68c13fd04f";
+  const first = await invoke(passwordHandler, req("POST", { email: TEST_EMAIL, password: HASHED_PASSWORD }), async (_url, options) => {
+    const payload = JSON.parse(options.body);
+    assert.equal(payload.variables.input.email, TEST_EMAIL);
+    return response(200, { data: { signIn: {
+      currentUser: null,
+      jwtToken: null,
+      otpSessionChallenge: challenge,
+      tcuToken: null,
+      errors: [{ message: "2fa missing" }]
+    } } });
+  });
+  assert.equal(first.statusCode, 200);
+  assert.equal(first.body.requires2FA, true);
+  assert.equal(first.body.otpSessionChallenge, challenge);
+  assert.equal(first.headers["Set-Cookie"], undefined);
+
+  const legacyShape = await invoke(passwordHandler, req("POST", { email: TEST_EMAIL, password: HASHED_PASSWORD }), async () =>
+    response(200, { otp_session_challenge: challenge, error: "2fa_missing" })
+  );
+  assert.equal(legacyShape.statusCode, 200);
+  assert.equal(legacyShape.body.requires2FA, true);
+  assert.equal(legacyShape.body.otpSessionChallenge, challenge);
+}
+
 async function testTwoFactorAndEncryptedSession() {
   const challenge = "3a390a0661cd6f4944205f68c13fd04f";
   let calls = 0;
@@ -196,6 +222,9 @@ async function testDirectApiContract() {
   assert.match(passwordFile, /signIn\(input\)/);
   assert.match(passwordFile, /jwtToken\(aud: "nexus-sorare-intelligence"\)/);
   assert.match(passwordFile, /otpSessionChallenge/);
+  const challengeCheck = passwordFile.indexOf("if (otpChallenge && !result.currentUser)");
+  const errorsCheck = passwordFile.indexOf("if (Array.isArray(result.errors) && result.errors.length)");
+  assert.ok(challengeCheck >= 0 && errorsCheck > challengeCheck, "2FA challenge handling must run before error handling");
   assert.match(html, /bcryptjs@2\.4\.3/);
   assert.match(html, /window\.dcodeIO\.bcrypt\.hashSync\(password,sb\.salt\)/);
   assert.doesNotMatch(html, /window\.location\.href=['"]\/api\/auth\/sorare\/login/);
@@ -204,6 +233,7 @@ async function testDirectApiContract() {
 (async () => {
   await testSaltEndpoint();
   await testPasswordValidationAndBadCredentials();
+  await testTwoFactorChallengeWinsOverLegacyError();
   await testTwoFactorAndEncryptedSession();
   await testDirectApiContract();
   console.log("Direct Sorare login tests passed (4 suites: salt, validation, 2FA/session, authenticated card sync).");

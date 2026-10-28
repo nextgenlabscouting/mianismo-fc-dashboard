@@ -95,6 +95,47 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
 #importSorareCards{display:none!important}
 @media(max-width:900px){.telemetry-grid{grid-template-columns:1fr}}
 @media(max-width:480px){.card-artwork{height:175px;flex-basis:175px}.card-artwork img{max-height:154px}.card-main{padding:11px}.card-metrics{gap:4px}.metric{padding:8px 5px}.metric strong{font-size:13px}.telemetry-row{grid-template-columns:88px minmax(0,1fr) 32px}.performance-row small{display:none}}
+
+/* NEXUS EDGE LAB — explainable, data-backed decision layer */
+.edge-kpis{grid-template-columns:repeat(4,minmax(0,1fr));margin:0 0 16px;gap:11px}
+.edge-layout{grid-template-columns:minmax(0,1.35fr) minmax(270px,.65fr);align-items:start}
+.edge-bottom-layout{grid-template-columns:minmax(0,1fr) minmax(280px,.8fr);margin-top:16px;align-items:start}
+.edge-hero{border-color:#276076;background:linear-gradient(110deg,#0c2635,#0a1723 58%,#0b1a22)}
+.edge-hero .hero-label{color:var(--cyan)}
+.edge-hero .hero-mark{font-size:18px;letter-spacing:.08em;color:var(--cyan);border-color:#42e8ff55}
+.edge-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px}
+.edge-controls .select{flex:1;min-width:130px;font-size:11px}
+.edge-metric-value{font-size:27px;font-weight:850;letter-spacing:-.045em;margin:12px 0 3px;font-variant-numeric:tabular-nums}
+.edge-metric-foot{font-size:10px;color:var(--muted)}
+.edge-signal-list{display:grid;gap:9px}
+.edge-signal{border:1px solid #24394d;border-left:3px solid #68849c;background:#0a1420;border-radius:9px;padding:12px}
+.edge-signal.positive{border-left-color:var(--green)}
+.edge-signal.negative{border-left-color:var(--red)}
+.edge-signal.warning{border-left-color:var(--orange)}
+.edge-signal.neutral{border-left-color:var(--cyan)}
+.edge-signal-label{font-size:9px;letter-spacing:.17em;color:#7f9ab2;font-weight:850;text-transform:uppercase}
+.edge-signal-title{font-size:12px;font-weight:800;margin:5px 0 3px;overflow-wrap:anywhere}
+.edge-signal-detail{font-size:10px;color:#91a7bb;line-height:1.6}
+.edge-score{font-variant-numeric:tabular-nums;font-weight:850}
+.edge-delta-up{color:var(--green)}.edge-delta-down{color:var(--red)}
+.edge-table .table{min-width:780px}
+.edge-table .table td{vertical-align:middle}
+.edge-table .edge-player{font-weight:800;max-width:220px;overflow-wrap:anywhere}
+.edge-table .edge-player small{display:block;color:#7790a7;font-size:9px;font-weight:500;margin-top:3px}
+.edge-confidence{display:inline-block;padding:4px 6px;border:1px solid #2a4356;border-radius:5px;font-size:9px;white-space:nowrap}
+.edge-confidence.high{color:var(--green);border-color:#31553b}.edge-confidence.medium{color:var(--cyan)}.edge-confidence.low{color:var(--orange)}
+.edge-coverage-list{display:grid;gap:12px}
+.edge-coverage-row{display:grid;grid-template-columns:100px minmax(0,1fr) 48px;gap:9px;align-items:center;font-size:10px}
+.edge-coverage-track{height:7px;background:#1b2b3b;border-radius:99px;overflow:hidden}
+.edge-coverage-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#42e8ff,#b7ff42)}
+.edge-method{display:grid;gap:9px}
+.edge-method-row{display:flex;gap:10px;align-items:flex-start;font-size:11px;color:#9bb0c3}
+.edge-method-row b{color:#dbe8f5;min-width:100px}
+.edge-method-note{font-size:10px;color:#7f95aa;line-height:1.65;border-top:1px solid #203247;padding-top:12px;margin-top:5px}
+.edge-table-empty{padding:22px;text-align:center;color:#8399af;font-size:11px}
+@media(max-width:1100px){.edge-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.edge-layout,.edge-bottom-layout{grid-template-columns:1fr}}
+@media(max-width:700px){.edge-table .table{min-width:760px}.edge-controls{align-items:stretch}.edge-controls .select{min-width:0}.edge-coverage-row{grid-template-columns:82px minmax(0,1fr) 42px}.edge-method-row{display:grid;gap:3px}.edge-method-row b{min-width:0}}
+
 </style>
 </head>
 <body>
@@ -104,6 +145,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
   <div><div class="nav-label">Intelligence workspace</div><nav class="nav" id="sideNav">
     <button class="active" data-page="overview"><span class="ico">◫</span>Panoramica</button>
     <button data-page="cards"><span class="ico">▧</span>Le mie carte <span id="navCardCount" class="badge" style="margin-left:auto">0</span></button>
+    <button data-page="analytics"><span class="ico">⌁</span>NEXUS Edge Lab</button>
     <button data-page="lineup"><span class="ico">⚽</span>Formazione</button>
     <button data-page="resources"><span class="ico">◈</span>Risorse e premi</button>
     <button data-page="sorare"><span class="ico">↻</span>Sorare Sync</button>
@@ -130,6 +172,45 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
     </div>
     <div class="panel" style="margin-top:18px"><div class="panel-head"><div><h3 class="panel-title">Weekend Radar</h3><p class="panel-sub">Le carte della tua collezione con una partita prevista nei prossimi 7 giorni, ordinate per forma storica.</p></div><span class="tag" id="weekendRadarBadge">In attesa di dati</span></div><div id="weekendRadar" class="cards-grid"><div class="empty"><span class="empty-icon">↻</span><strong>Sincronizza le carte Sorare</strong><p>Le prossime partite appariranno dopo aver importato la collezione.</p></div></div></div>
   </section>
+  <section class="page" id="page-analytics">
+    <div class="hero edge-hero">
+      <div class="hero-copy"><div class="hero-label">NEXUS · EXPLAINABLE EDGE ENGINE</div><h2>Signal, not noise.<br><span class="cyan">Decide with evidence.</span></h2>
+      <p>Un laboratorio personale che trasforma lo storico della tua collezione in segnali leggibili: forma, volatilità, copertura dei dati e candidati da controllare. Nessuna statistica mancante viene inventata.</p>
+      <button class="btn btn-primary" data-goto="lineup">Valuta la formazione ↗</button> <button class="btn" data-goto="cards">Apri l'archivio carte</button></div>
+      <div class="hero-mark">EDGE<span style="font-size:8px;align-self:end;margin-left:-31px;margin-bottom:24px">/ LAB</span></div>
+    </div>
+    <div class="grid edge-kpis">
+      <div class="stat"><div class="stat-head"><span>Edge medio</span><span class="stat-icon">⌁</span></div><div class="edge-metric-value cyan" id="edgeAverage">—</div><div class="edge-metric-foot">Indice derivato · punti storici</div></div>
+      <div class="stat"><div class="stat-head"><span>In accelerazione</span><span class="stat-icon">↗</span></div><div class="edge-metric-value green" id="edgeRisers">—</div><div class="edge-metric-foot">L5 − L10 ≥ +5 punti</div></div>
+      <div class="stat"><div class="stat-head"><span>Volatilità alta</span><span class="stat-icon">⌁</span></div><div class="edge-metric-value orange" id="edgeVolatility">—</div><div class="edge-metric-foot">Deviazione standard ≥ 15 · almeno 3 score</div></div>
+      <div class="stat"><div class="stat-head"><span>Copertura punteggi</span><span class="stat-icon">◎</span></div><div class="edge-metric-value" id="edgeCoverage">—</div><div class="edge-metric-foot" id="edgeCoverageFoot">In attesa della collezione</div></div>
+    </div>
+    <div class="grid edge-layout">
+      <div class="panel">
+        <div class="panel-head"><div><h3 class="panel-title">Edge Board</h3><p class="panel-sub">Classifica basata esclusivamente su L5/L10/L15 e volatilità disponibile.</p></div><span class="tag" id="edgeBoardCount">0 giocatori</span></div>
+        <div class="edge-controls"><select class="select" id="edgeRoleFilter" aria-label="Filtra il laboratorio per ruolo"><option value="Tutti">Tutti i ruoli</option><option value="Portiere">Portiere</option><option value="Difensore">Difensore</option><option value="Centrocampista">Centrocampista</option><option value="Attaccante">Attaccante</option><option value="Altro">Altro</option></select><select class="select" id="edgeSortFilter" aria-label="Ordina Edge Board"><option value="edge">Ordina per Edge Index</option><option value="trend">Ordina per momentum</option><option value="risk">Ordina per volatilità</option></select></div>
+        <div class="table-wrap edge-table"><table class="table"><thead><tr><th>#</th><th>Giocatore</th><th>Ruolo</th><th>Edge Index</th><th>L5 / L10</th><th>Trend</th><th>Volatilità</th><th>Confidenza</th><th></th></tr></thead><tbody id="edgeBoardBody"><tr><td colspan="9" class="edge-table-empty">Sincronizza le carte per calcolare gli indici.</td></tr></tbody></table></div>
+        <p class="edge-method-note" id="edgeBoardFoot">I valori n.d. restano n.d.: il sistema non li converte in zero.</p>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3 class="panel-title">Decision Queue</h3><p class="panel-sub">Le verifiche operative più utili emerse dai dati presenti.</p></div><span class="tag">LIVE LOGIC</span></div>
+        <div class="edge-signal-list" id="edgeSignalQueue"><div class="edge-signal neutral"><div class="edge-signal-title">In attesa dei dati</div><div class="edge-signal-detail">Collega Sorare e importa la collezione per generare i segnali.</div></div></div>
+      </div>
+    </div>
+    <div class="grid edge-bottom-layout">
+      <div class="panel"><div class="panel-head"><div><h3 class="panel-title">Qualità dei dati per ruolo</h3><p class="panel-sub">Percentuale di carte con almeno una media punteggio valida.</p></div></div><div class="edge-coverage-list" id="edgeRoleCoverage"><div class="edge-table-empty">In attesa della collezione.</div></div></div>
+      <div class="panel"><div class="panel-head"><div><h3 class="panel-title">Come funziona l'Edge Index</h3><p class="panel-sub">Modello trasparente, modificabile e senza numeri fittizi.</p></div></div>
+        <div class="edge-method">
+          <div class="edge-method-row"><b>Base storica</b><span>Media ponderata dei valori disponibili: L5 50%, L10 30%, L15 20%. Se manca una media, il peso viene ridistribuito.</span></div>
+          <div class="edge-method-row"><b>Aggiustamento rischio</b><span>Quando sono disponibili almeno 3 score grezzi, sottrae 0,25 × deviazione standard per evitare che un rendimento instabile venga presentato come affidabile.</span></div>
+          <div class="edge-method-row"><b>Momentum</b><span>L5 − L10: ≥ +5 indica accelerazione storica; ≤ −5 segnala un calo da verificare. Non è una previsione del prossimo turno.</span></div>
+          <div class="edge-method-row"><b>Confidenza</b><span>Alta: almeno 2 medie e 5 score grezzi. Media: almeno 2 medie. Bassa: una sola media o uno storico insufficiente.</span></div>
+          <div class="edge-method-note" id="edgeMethodology">L'Edge Index è un indicatore proprietario di screening NEXUS, non un punteggio ufficiale Sorare, una probabilità di titolarità o una garanzia di premio. Utilizza solo i dati effettivamente presenti nella collezione locale.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="page" id="page-cards">
     <div class="panel"><div class="panel-head"><div><h3 class="panel-title">Archivio carte</h3><p class="panel-sub">Un registro personale della tua collezione Sorare.</p></div><button class="btn btn-small" id="addCardPage">＋ Aggiunta manuale (facoltativa)</button></div><div class="toolbar"><div class="toolbar-left"><input class="input" id="cardSearch" placeholder="Cerca giocatore, club o campionato…" aria-label="Cerca carte"><select class="select" id="positionFilter" aria-label="Filtra per ruolo"><option value="">Tutti i ruoli</option><option>Portiere</option><option>Difensore</option><option>Centrocampista</option><option>Attaccante</option><option>Altro</option></select><select class="select" id="rarityFilter" aria-label="Filtra per rarità"><option value="">Tutte le rarità</option></select><select class="select" id="variantFilter" aria-label="Filtra per variante"><option value="">Tutte le varianti</option></select></div><div class="toolbar-right"><button class="btn btn-small" id="exportData">Esporta backup</button><button class="btn btn-small" id="importData">Importa backup</button><input type="file" id="importFile" accept="application/json" class="hide"></div></div><div id="cardsGrid" class="cards-grid"></div><div id="cardsPagination" class="toolbar" style="display:none;justify-content:space-between;align-items:center;margin-top:14px"><span class="muted" id="cardsPageLabel">Pagina 1</span><div class="toolbar-right"><button class="btn btn-small" id="cardsPrevPage" type="button">Precedente</button><button class="btn btn-small" id="cardsNextPage" type="button">Successiva</button></div></div><div id="cardsEmpty" class="empty"><span class="empty-icon">▧</span><strong>Nessuna carta in archivio</strong><p>Inserisci la prima carta. I dati saranno salvati nel browser su questo dispositivo.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button></div></div>
   </section>
@@ -161,7 +242,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
   <div class="footer">NEXUS · SORARE COMMAND CENTER · SINCRONIZZAZIONE PUBBLICA · RISORSE SALVATE NEL BROWSER</div>
 </main>
 </div>
-<nav class="mobile-nav" id="mobileNav"><button class="active" data-page="overview"><span>◫</span>Home</button><button data-page="cards"><span>▧</span>Carte</button><button data-page="lineup"><span>⚽</span>Formazione</button><button data-page="resources"><span>◈</span>Risorse</button><button data-page="sorare"><span>↻</span>Sync</button></nav>
+<nav class="mobile-nav" id="mobileNav"><button class="active" data-page="overview"><span>◫</span>Home</button><button data-page="cards"><span>▧</span>Carte</button><button data-page="analytics"><span>⌁</span>Edge</button><button data-page="lineup"><span>⚽</span>Formazione</button><button data-page="resources"><span>◈</span>Risorse</button><button data-page="sorare"><span>↻</span>Sync</button></nav>
 <div class="modal-wrap" id="cardModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><div class="modal-head"><h3 id="modalTitle">Aggiungi una carta</h3><button class="close-btn" id="closeModal" aria-label="Chiudi">✕</button></div><form id="cardForm"><input type="hidden" id="editId"><div class="form-grid"><div class="field"><label for="playerName">Nome giocatore *</label><input class="input" id="playerName" required maxlength="80" placeholder="Es. Nome Cognome"></div><div class="field"><label for="playerClub">Club</label><input class="input" id="playerClub" maxlength="80" placeholder="Nome della squadra"></div><div class="field"><label for="playerLeague">Campionato</label><select class="select" id="playerLeague"><option value="">Seleziona…</option><option>Premier League</option><option>Bundesliga</option><option>La Liga</option><option>Ligue 1</option><option>Serie A</option><option>Altro</option></select></div><div class="field"><label for="playerPosition">Ruolo</label><select class="select" id="playerPosition"><option>Portiere</option><option selected>Difensore</option><option>Centrocampista</option><option>Attaccante</option><option>Altro</option></select></div><div class="field"><label for="playerRarity">Rarità</label><select class="select" id="playerRarity"><option>Limited</option><option>Common</option><option>Rare</option><option>Super Rare</option><option>Unique</option><option>Altro</option></select></div><div class="field"><label for="playerL5">Media L5 (se nota)</label><input class="input" id="playerL5" type="number" min="0" max="100" step="0.1" placeholder="Es. 48.6"></div><div class="field"><label for="playerL15">Media L10 (se nota)</label><input class="input" id="playerL15" type="number" min="0" max="100" step="0.1" placeholder="Es. 45.2"></div><div class="field"><label for="playerAge">Età (facoltativa)</label><input class="input" id="playerAge" type="number" min="1" max="100" placeholder="Età"></div><div class="field full"><label for="playerNote">Note</label><input class="input" id="playerNote" maxlength="250" placeholder="Es. titolare, rigorista, avversario difficile…"></div></div><div class="form-actions"><button type="button" class="btn" id="cancelModal">Annulla</button><button type="submit" class="btn btn-primary">Salva carta</button></div></form></div></div>
 <input type="file" id="unusedFile" class="hide" aria-hidden="true"><div class="toast" id="toast" role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
@@ -180,7 +261,7 @@ function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
 function num(v){return Number.isFinite(Number(v))?Number(v):0}
 function fmt(v){return num(v).toLocaleString('it-IT',{maximumFractionDigits:1})}
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
-function goto(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));const titles={overview:['La tua stagione, sotto controllo.','Il tuo account Sorare, le carte e l’analisi delle performance in un’unica piattaforma.'],cards:['La tua collezione.','Organizza le carte e conserva le statistiche che vuoi confrontare.'],lineup:['Costruisci la tua formazione.','Componi una bozza e confronta le medie inserite.'],resources:['Gestisci ogni risorsa.','Saldo, obiettivi e note operative in un unico pannello.'],sorare:['Sorare Sync.','Accesso diretto email/password, inventario automatico e statistiche aggiornate ogni 2 minuti.']};$('pageTitle').textContent=titles[page][0];$('pageSubtitle').textContent=titles[page][1];window.scrollTo({top:0,behavior:'smooth'});if(page==='lineup')renderLineup()}
+function goto(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));const titles={overview:['La tua stagione, sotto controllo.','Il tuo account Sorare, le carte e l’analisi delle performance in un’unica piattaforma.'],cards:['La tua collezione.','Organizza le carte e conserva le statistiche che vuoi confrontare.'],analytics:['NEXUS Edge Lab.','Segnali, volatilità e copertura dei dati calcolati dalla tua collezione.'],lineup:['Costruisci la tua formazione.','Componi una bozza e confronta le medie inserite.'],resources:['Gestisci ogni risorsa.','Saldo, obiettivi e note operative in un unico pannello.'],sorare:['Sorare Sync.','Accesso diretto email/password, inventario automatico e statistiche aggiornate ogni 2 minuti.']};$('pageTitle').textContent=titles[page][0];$('pageSubtitle').textContent=titles[page][1];window.scrollTo({top:0,behavior:'smooth'});if(page==='lineup')renderLineup();if(page==='analytics')renderEdgeLab()}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.page)));document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.goto)));
 function cardVisualUrl(c){return c.imageUrl||c.playerImageUrl||c.avatarUrl||''}
 function cardInitials(name){return String(name||'?').split(/\\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase()}
@@ -775,6 +856,92 @@ function renderAnalytics(){
  const scoreMaximum=100;
  $('rolePerformance').innerHTML=groups.map(g=>'<div class="telemetry-row"><span class="telemetry-label '+roleClass(g.role)+'">'+g.role+'</span><div class="telemetry-track"><i class="'+scoreClass(g.avg)+'" style="width:'+Math.max(0,Math.min(scoreMaximum,g.avg||0))+'%"></i></div><strong class="'+scoreClass(g.avg)+'">'+(g.avg==null?'—':fmt(g.avg))+'</strong></div>').join('')+'<p class="telemetry-foot">Copertura L5: '+cards.filter(c=>c.l5!==''&&c.l5!=null&&Number.isFinite(Number(c.l5))).length+' / '+cards.length+' carte.</p>';
 }
+
+function edgeMetrics(card){
+  const safeNumber=value=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value))?Number(value):null;
+  const mean=values=>values.length?values.reduce((sum,value)=>sum+value,0)/values.length:null;
+  const stats=cardScoreStats(card);
+  const rawSource=Array.isArray(card.playerRawScores)&&card.playerRawScores.length?card.playerRawScores:(Array.isArray(card.rawScores)?card.rawScores:[]);
+  const raw=rawSource.filter(value=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value))).map(Number);
+  const l5=safeNumber(card.l5)??stats.expected??mean(raw.slice(0,5));
+  const l10=safeNumber(card.l10)??stats.capL10??mean(raw.slice(0,10));
+  const l15=safeNumber(card.l15)??mean(raw.slice(0,15));
+  const components=[[l5,.5],[l10,.3],[l15,.2]].filter(([value])=>value!==null);
+  const weightTotal=components.reduce((sum,component)=>sum+component[1],0);
+  const base=weightTotal?components.reduce((sum,[value,weight])=>sum+value*weight,0)/weightTotal:null;
+  const volatility=raw.length>=3?stats.sd:null;
+  const edge=base===null?null:base-(volatility===null?0:.25*volatility);
+  const trend=l5!==null&&l10!==null?l5-l10:null;
+  const confidence=(components.length>=2&&raw.length>=5)?'Alta':components.length>=2?'Media':components.length===1?'Bassa':'N.D.';
+  const kinds=positionKinds(card);
+  const roleMap={GK:'Portiere',DF:'Difensore',MD:'Centrocampista',FW:'Attaccante'};
+  const role=roleMap[kinds[0]]||'Altro';
+  return {card,l5,l10,l15,base,edge,trend,volatility,rawCount:raw.length,confidence,role};
+}
+function edgeSignalLabel(item){
+  if(item.trend!==null&&item.trend>=5)return {label:'Momentum +',kind:'positive'};
+  if(item.trend!==null&&item.trend<=-5)return {label:'In calo',kind:'negative'};
+  if(item.volatility!==null&&item.volatility>=15)return {label:'Volatile',kind:'warning'};
+  if(item.confidence==='Bassa'||item.confidence==='N.D.')return {label:'Campione limitato',kind:'warning'};
+  return {label:'Neutro',kind:'neutral'};
+}
+function renderEdgeLab(){
+  const cards=Array.isArray(state.cards)?state.cards:[];
+  const metrics=cards.map(edgeMetrics);
+  const withScores=metrics.filter(item=>item.edge!==null);
+  const knownL5=metrics.filter(item=>item.l5!==null);
+  const average=withScores.length?withScores.reduce((sum,item)=>sum+item.edge,0)/withScores.length:null;
+  const risers=metrics.filter(item=>item.trend!==null&&item.trend>=5);
+  const volatile=metrics.filter(item=>item.volatility!==null&&item.volatility>=15&&item.rawCount>=3);
+  $('edgeAverage').textContent=average===null?'—':fmt(average);
+  $('edgeRisers').textContent=fmt(risers.length);
+  $('edgeVolatility').textContent=fmt(volatile.length);
+  $('edgeCoverage').textContent=cards.length?Math.round(knownL5.length/cards.length*100)+'%':'—';
+  $('edgeCoverageFoot').textContent=cards.length?knownL5.length+' / '+cards.length+' carte con L5 o storico utile':'In attesa della collezione';
+
+  const roleFilter=$('edgeRoleFilter')?.value||'Tutti';
+  const sortFilter=$('edgeSortFilter')?.value||'edge';
+  const filtered=metrics.filter(item=>roleFilter==='Tutti'||item.role===roleFilter);
+  filtered.sort((a,b)=>{
+    if(sortFilter==='trend')return (b.trend??-Infinity)-(a.trend??-Infinity);
+    if(sortFilter==='risk')return (b.volatility??-Infinity)-(a.volatility??-Infinity);
+    return (b.edge??-Infinity)-(a.edge??-Infinity);
+  });
+  $('edgeBoardCount').textContent=filtered.length+' giocatori';
+  $('edgeBoardBody').innerHTML=filtered.length?filtered.slice(0,40).map((item,index)=>{
+    const card=item.card,signal=edgeSignalLabel(item);
+    const trendText=item.trend===null?'n.d.':(item.trend>0?'+':'')+fmt(item.trend);
+    const trendClass=item.trend===null?'muted':item.trend>=5?'edge-delta-up':item.trend<=-5?'edge-delta-down':'muted';
+    const team=card.activeTeam||card.club||'Club n.d.';
+    const name=card.name||card.slug||'Giocatore senza nome';
+    return '<tr><td>'+(index+1)+'</td><td><div class="edge-player">'+esc(name)+'<small>'+esc(team)+'</small></div></td><td>'+esc(item.role)+'</td><td><strong class="edge-score '+(item.edge===null?'muted':scoreClass(item.edge))+'">'+(item.edge===null?'n.d.':fmt(item.edge))+'</strong></td><td>'+(item.l5===null?'n.d.':fmt(item.l5))+' / '+(item.l10===null?'n.d.':fmt(item.l10))+'</td><td class="'+trendClass+'">'+trendText+'</td><td>'+(item.volatility===null?'n.d.':fmt(item.volatility))+'</td><td><span class="edge-confidence '+(item.confidence==='Alta'?'high':item.confidence==='Media'?'medium':'low')+'">'+esc(item.confidence)+'</span></td><td><button type="button" class="btn btn-small" data-edge-card="'+esc(name)+'">Apri</button></td></tr>';
+  }).join(''):'<tr><td colspan="9" class="edge-table-empty">Nessuna carta per questo filtro. Sincronizza l’account o modifica il ruolo selezionato.</td></tr>';
+  $('edgeBoardFoot').textContent=withScores.length+' / '+cards.length+' carte con Edge Index calcolabile. L’indice è storico e comparativo; non è una previsione del punteggio del prossimo turno.';
+  document.querySelectorAll('[data-edge-card]').forEach(button=>button.addEventListener('click',()=>{
+    goto('cards');$('cardSearch').value=button.dataset.edgeCard||'';cardsPage=1;renderCards();
+  }));
+
+  const queue=[];
+  const solid=metrics.filter(item=>item.edge!==null&&item.rawCount>=5&&item.volatility!==null).sort((a,b)=>b.edge-a.edge).find(item=>item.volatility<10);
+  if(solid)queue.push({kind:'positive',label:'STABILITÀ',title:'Profilo più stabile: '+(solid.card.name||solid.card.slug),detail:'Edge '+fmt(solid.edge)+' · volatilità '+fmt(solid.volatility)+' su '+solid.rawCount+' score disponibili. È un profilo da confrontare con cap e idoneità del Set, non una selezione automatica.'});
+  const rise=risers.slice().sort((a,b)=>b.trend-a.trend)[0];
+  if(rise)queue.push({kind:'positive',label:'MOMENTUM',title:'Forma in accelerazione: '+(rise.card.name||rise.card.slug),detail:'L5 '+fmt(rise.l5)+' contro L10 '+fmt(rise.l10)+' (+'+fmt(rise.trend)+'). Verifica ruolo, fixture e disponibilità prima di decidere.'});
+  const fall=metrics.filter(item=>item.trend!==null&&item.trend<=-5).sort((a,b)=>a.trend-b.trend)[0];
+  if(fall)queue.push({kind:'negative',label:'CONTROLLO',title:'Calo da verificare: '+(fall.card.name||fall.card.slug),detail:'L5 '+fmt(fall.l5)+' contro L10 '+fmt(fall.l10)+' ('+fmt(fall.trend)+'). Il dato segnala un cambiamento storico, non ne identifica da solo la causa.'});
+  const risk=volatile.slice().sort((a,b)=>b.volatility-a.volatility)[0];
+  if(risk)queue.push({kind:'warning',label:'RISCHIO',title:'Variabilità elevata: '+(risk.card.name||risk.card.slug),detail:'Deviazione standard '+fmt(risk.volatility)+' su '+risk.rawCount+' score. Considera il rischio nella costruzione della squadra.'});
+  const gaps=metrics.filter(item=>item.l5===null).length;
+  if(gaps)queue.push({kind:'warning',label:'QUALITÀ DATI',title:gaps+' carte senza L5 calcolabile',detail:'Non vengono penalizzate con zero e non possono ricevere una raccomandazione quantitativa affidabile. Aggiorna i dati o completa manualmente le medie.'});
+  if(!queue.length)queue.push({kind:'neutral',label:'BASELINE',title:cards.length?'Nessun pattern forte rilevato':'Nessuna carta sincronizzata',detail:cards.length?'Con i dati attuali non emergono soglie forti di momentum o volatilità. Controlla i giocatori direttamente nell’Edge Board.':'Collega Sorare Sync o importa una collezione per generare analisi basate sui dati.'});
+  $('edgeSignalQueue').innerHTML=queue.slice(0,5).map(signal=>'<div class="edge-signal '+signal.kind+'"><div class="edge-signal-label">'+esc(signal.label)+'</div><div class="edge-signal-title">'+esc(signal.title)+'</div><div class="edge-signal-detail">'+esc(signal.detail)+'</div></div>').join('');
+
+  const roles=['Portiere','Difensore','Centrocampista','Attaccante','Altro'];
+  $('edgeRoleCoverage').innerHTML=roles.map(role=>{
+    const group=metrics.filter(item=>item.role===role),count=group.filter(item=>item.l5!==null).length,ratio=group.length?Math.round(count/group.length*100):0;
+    return '<div class="edge-coverage-row"><span>'+esc(role)+'</span><div class="edge-coverage-track"><i style="width:'+ratio+'%"></i></div><strong>'+count+'/'+group.length+'</strong></div>';
+  }).join('');
+}
+
 function renderSorareReport(data){
   const status=data?.status||'pending';
   const ok=status==='ok';
@@ -963,7 +1130,7 @@ async function loadSorarePublicData(){
   }
 }
 
-function renderAll(){renderOverview();renderCards();renderResourcesForm();renderLineup();}
+function renderAll(){renderOverview();renderCards();renderResourcesForm();renderLineup();renderEdgeLab();}
 $('collectionInput').addEventListener('input',updateLoyaltyRewardEstimate);
 $('legacyGemsSpentBracket').addEventListener('change',updateLoyaltyRewardEstimate);
 $('cardSearch').addEventListener('input',()=>{cardsPage=1;renderCards();});
@@ -975,6 +1142,8 @@ $('cardsNextPage').addEventListener('click',()=>{cardsPage++;renderCards();});
 $('reloadSorareData').addEventListener('click',loadSorarePublicData);
 $('importSorareCards').addEventListener('click',()=>importSorareCards(false));
 $('autoBuildLineup').addEventListener('click',buildOptimalLineup);
+$('edgeRoleFilter').addEventListener('change',renderEdgeLab);
+$('edgeSortFilter').addEventListener('change',renderEdgeLab);
 $('lineupTarget').addEventListener('input',renderLineup);
 $('lineupCap').addEventListener('input',renderLineup);
 $('lineupBonus').addEventListener('input',renderLineup);

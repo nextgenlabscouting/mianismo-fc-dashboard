@@ -19,10 +19,54 @@ async function signIn(input) {
     signal: AbortSignal.timeout(15000)
   });
   const body = await response.json().catch(() => ({}));
-  if (!response.ok || body.errors?.length || !body.data?.signIn) {
-    throw new Error("Sorare non ha accettato la richiesta di accesso.");
+  const payload = body?.data?.signIn || body?.signIn || null;
+  const challenge = payload?.otpSessionChallenge
+    || payload?.otp_session_challenge
+    || body?.otpSessionChallenge
+    || body?.otp_session_challenge
+    || null;
+  const apiError = String(body?.error || body?.message || "");
+  const graphErrors = Array.isArray(body?.errors) ? body.errors : [];
+
+  // Sorare's documented GraphQL response is camelCase. Some legacy/edge
+  // responses have used snake_case and/or returned "2fa_missing" beside a
+  // usable OTP challenge. The challenge must win over that error marker.
+  if (challenge && !(payload?.currentUser || body?.currentUser)) {
+    return {
+      ...(payload || {}),
+      currentUser: null,
+      jwtToken: null,
+      otpSessionChallenge: String(challenge),
+      tcuToken: payload?.tcuToken || body?.tcuToken || null,
+      errors: []
+    };
   }
-  return body.data.signIn;
+
+  if (payload) {
+    return {
+      ...payload,
+      otpSessionChallenge: challenge ? String(challenge) : null,
+      errors: Array.isArray(payload.errors)
+        ? payload.errors
+        : (graphErrors.length ? graphErrors : (apiError ? [{ message: apiError }] : []))
+    };
+  }
+
+  if (challenge) {
+    return {
+      currentUser: null,
+      jwtToken: null,
+      otpSessionChallenge: String(challenge),
+      tcuToken: body?.tcuToken || null,
+      errors: []
+    };
+  }
+
+  const topLevelMessage = graphErrors.map(error => error?.message || "").filter(Boolean).join("; ");
+  if (!response.ok || graphErrors.length || !body?.data) {
+    throw new Error(topLevelMessage || apiError || "Sorare non ha accettato la richiesta di accesso.");
+  }
+  throw new Error("Sorare non ha restituito una risposta di accesso valida.");
 }
 
 module.exports = async function handler(req, res) {
@@ -56,12 +100,21 @@ module.exports = async function handler(req, res) {
     if (result.tcuToken || (Array.isArray(result.errors) && result.errors.some(error => /must_accept_tcus|terms|conditions/i.test(String(error?.message || "")))) ) {
       return res.status(409).json({ error: "Sorare richiede di accettare termini aggiornati. Accedi prima su sorare.com e completa la richiesta, poi riprova." });
     }
+    const otpChallenge = String(result.otpSessionChallenge || result.otp_session_challenge || "").trim();
+    // Check the challenge before result.errors: some Sorare responses include
+    // the legacy "2fa missing" marker even when an OTP challenge is usable.
+    if (otpChallenge && !result.currentUser) {
+      if (!/^[a-z0-9_-]{8,256}$/i.test(otpChallenge)) {
+        return res.status(502).json({ error: "Sorare ha richiesto la verifica 2FA ma ha restituito una sfida non valida. Riavvia l'accesso e riprova." });
+      }
+      return res.status(200).json({ requires2FA: true, otpSessionChallenge: otpChallenge, message: "Inserisci il codice monouso richiesto da Sorare." });
+    }
     if (Array.isArray(result.errors) && result.errors.length) {
       const message = result.errors.map(e => e?.message).filter(Boolean).join(" ");
+      if (/2fa[\s_-]*missing|two[\s_-]*factor[\s_-]*missing|otp[\s_-]*session[\s_-]*challenge[\s_-]*missing/i.test(message)) {
+        return res.status(409).json({ error: "Sorare segnala una verifica 2FA ma non ha restituito la sfida OTP. Non è possibile completare il secondo passaggio senza quella sfida: riavvia l'accesso e riprova. Se continua, accedi direttamente su sorare.com e completa eventuali avvisi di sicurezza." });
+      }
       return res.status(401).json({ error: /invalid|password|credential|email/i.test(message) ? "Email o password non corrette." : "Sorare ha rifiutato l'accesso: " + message.slice(0, 180) });
-    }
-    if (result.otpSessionChallenge && !result.currentUser) {
-      return res.status(200).json({ requires2FA: true, otpSessionChallenge: result.otpSessionChallenge, message: "Inserisci il codice di verifica in due passaggi ricevuto da Sorare." });
     }
     const token = result.jwtToken?.token;
     const expiryDate = result.jwtToken?.expiredAt ? Date.parse(result.jwtToken.expiredAt) : NaN;
