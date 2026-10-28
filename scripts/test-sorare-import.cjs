@@ -8,11 +8,11 @@ const end = html.indexOf("\nasync function loadSorarePublicData(){", start);
 assert.ok(start >= 0 && end > start, "La funzione importSorareCards deve esistere");
 const functionSource = html.slice(start, end);
 
-function makeHarness({ cards = [], items = [], previousSlug = "", liveSlug = "test-user" } = {}) {
-  const state = { cards: structuredClone(cards), sorareProfileSlug: previousSlug, lineup: [] };
+function makeHarness({ cards = [], items = [], liveSlug = "test-user", previousSlug = null, complete = true, authenticated = true } = {}) {
+  const state = { cards: structuredClone(cards), sorareProfileSlug: previousSlug === null ? liveSlug : previousSlug, lineup: [] };
   const calls = { persisted: 0, toasts: [], renders: 0 };
   const importer = new Function(
-    "state", "liveSorareItems", "liveSorareProfileSlug", "persist", "toast", "renderLineup",
+    "state", "liveSorareItems", "liveSorareProfileSlug", "persist", "toast", "renderLineup", "liveSorareComplete", "isSorareAuthenticated",
     functionSource + "\nreturn importSorareCards;"
   )(
     state,
@@ -20,7 +20,9 @@ function makeHarness({ cards = [], items = [], previousSlug = "", liveSlug = "te
     liveSlug,
     () => { calls.persisted++; },
     message => calls.toasts.push(message),
-    () => { calls.renders++; }
+    () => { calls.renders++; },
+    complete,
+    authenticated
   );
   return { state, calls, importer };
 }
@@ -86,4 +88,38 @@ const newCard = {
   assert.equal(state.cards.some(card => card.sorareSlug === newCard.slug), true);
 }
 
-console.log("Sorare import regression tests passed (new card, update existing, account isolation).");
+
+{
+  const manual = { id: "manual-keep", name: "Manual Keep", source: "manual" };
+  const stale = { id: "sorare-stale", slug: "old-player-card", sorareSlug: "old-player-card", name: "Card no longer owned", source: "sorare" };
+  const { state, importer } = makeHarness({ cards: [manual, stale], items: [newCard], previousSlug: "test-user", liveSlug: "test-user" });
+  importer(true);
+  assert.equal(state.cards.length, 2);
+  assert.equal(state.cards.some(card => card.id === "manual-keep"), true);
+  assert.equal(state.cards.some(card => card.id === "sorare-stale"), false);
+  assert.equal(state.sorareInventoryStatus, "complete");
+}
+{
+  const stale = { id: "sorare-stale", slug: "old-player-card", sorareSlug: "old-player-card", name: "Old card", source: "sorare" };
+  const { state, calls, importer } = makeHarness({ cards: [stale], items: [newCard], complete: false });
+  importer(true);
+  assert.equal(state.cards.length, 1);
+  assert.equal(calls.persisted, 0);
+  assert.match(calls.toasts[0], /inventario completo/i);
+}
+{
+  const stale = { id: "sorare-stale", slug: "old-player-card", sorareSlug: "old-player-card", name: "Old card", source: "sorare" };
+  const { state, calls, importer } = makeHarness({ cards: [stale], items: [newCard], authenticated: false });
+  importer(true);
+  assert.equal(state.cards.length, 1);
+  assert.equal(calls.persisted, 0);
+}
+{
+  const stale = { id: "sorare-stale", slug: "old-player-card", sorareSlug: "old-player-card", name: "Old card", source: "sorare" };
+  const { state, importer } = makeHarness({ cards: [stale], items: [], complete: true });
+  importer(true);
+  assert.equal(state.cards.length, 0);
+  assert.equal(state.sorareInventoryStatus, "complete");
+}
+
+console.log("Sorare import regression tests passed (new/update, stale replacement, partial/auth guards, empty inventory, account isolation).");

@@ -157,10 +157,10 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
   <section class="page active" id="page-overview">
     <div class="hero"><div class="hero-copy"><div class="hero-label">NEXUS · TACTICAL COMMAND</div><h2>Know the data.<br><span class="green">Own the edge.</span></h2><p>Organizza la tua collezione, prepara le formazioni e tieni sotto controllo le risorse. La dashboard parte dai tuoi dati e crescerà con le fonti Sorare che possiamo collegare.</p><button class="btn btn-primary" data-goto="lineup">Prepara la formazione <span>↗</span></button> <button class="btn" data-goto="cards">Gestisci le carte</button></div><div class="hero-mark">NX<span style="font-size:9px;align-self:end;margin-left:-12px;margin-bottom:26px">/ AI</span></div></div>
     <div class="grid stats">
-      <div class="stat"><div class="stat-head"><span>Carte registrate</span><span class="stat-icon">▧</span></div><div class="stat-value" id="statCards">0</div><div class="stat-foot" id="statCardsFoot">Nessuna carta inserita</div></div>
-      <div class="stat"><div class="stat-head"><span>Gems disponibili</span><span class="stat-icon">◈</span></div><div class="stat-value green" id="statGems">320</div><div class="stat-foot">Valore iniziale da verificare</div></div>
-      <div class="stat"><div class="stat-head"><span>Essence</span><span class="stat-icon">✧</span></div><div class="stat-value cyan" id="statEssence">10.000</div><div class="stat-foot" id="statEssenceFoot">Hyperglitch · da confermare</div></div>
-      <div class="stat"><div class="stat-head"><span>Collezione</span><span class="stat-icon">◉</span></div><div class="stat-value" id="statCollection">80%</div><div class="stat-foot">Percentuale dichiarata · modificabile</div></div>
+      <div class="stat"><div class="stat-head"><span>Carte registrate</span><span class="stat-icon">▧</span></div><div class="stat-value" id="statCards">—</div><div class="stat-foot" id="statCardsFoot">Nessuna carta inserita</div></div>
+      <div class="stat"><div class="stat-head"><span>Gems disponibili</span><span class="stat-icon">◈</span></div><div class="stat-value green" id="statGems">—</div><div class="stat-foot">Valore iniziale da verificare</div></div>
+      <div class="stat"><div class="stat-head"><span>Essence</span><span class="stat-icon">✧</span></div><div class="stat-value cyan" id="statEssence">—</div><div class="stat-foot" id="statEssenceFoot">Saldo non disponibile: non letto dall’API</div></div>
+      <div class="stat"><div class="stat-head"><span>Collezione</span><span class="stat-icon">◉</span></div><div class="stat-value" id="statCollection">—</div><div class="stat-foot">Percentuale dichiarata · modificabile</div></div>
     </div>
     <div class="grid telemetry-grid" style="margin:0 0 18px">
       <div class="panel"><div class="panel-head"><div><h3 class="panel-title">Squad telemetry</h3><p class="panel-sub">Distribuzione delle carte per ruolo · calcolata dalla collezione sincronizzata</p></div><span class="tag" id="analyticsCardTotal">0 CARTE</span></div><div id="roleDistribution" class="telemetry-list"><div class="empty">In attesa delle carte Sorare.</div></div></div>
@@ -218,7 +218,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
     <div class="grid lineup-layout"><div class="panel"><div class="panel-head"><div><h3 class="panel-title">Set Strategy Lab</h3><p class="panel-sub">Ottimizza una squadra per target punti e cap L10 usando lo storico disponibile.</p></div><span class="tag">5 giocatori · modello provvisorio</span></div><div class="notice" style="margin-bottom:15px"><span class="notice-icon">ⓘ</span><div>Il modello usa il riferimento del Set precedente (cap L10 120, MVP escluso); il regolamento del nuovo Set è ancora da verificare. <strong>Le carte HyperGlitch sono escluse dall’ottimizzatore</strong>: Sorare ha dichiarato che non sono più idonee alle formazioni dopo la chiusura del Set del 27/10/2026 alle 17:00 CET. Anche l’idoneità delle carte di altri Set va verificata prima di inviare una formazione.</div></div><div class="toolbar" style="margin-top:0"><div class="field" style="max-width:190px"><label for="lineupTarget">Target punti (livello)</label><input class="input" id="lineupTarget" type="number" min="0" max="1000" step="1" placeholder="Es. 300"></div><div class="field" style="max-width:190px"><label for="lineupCap">Cap L10 (MVP escluso)</label><input class="input" id="lineupCap" type="number" min="0" max="500" step="1" value="120"></div><div class="field" style="max-width:190px"><label for="lineupBonus">Bonus club simulato (%)</label><input class="input" id="lineupBonus" type="number" min="0" max="5" step="0.5" value="0"><small>Scenario, formula del nuovo Set da verificare</small></div><div class="toolbar-right"><button class="btn btn-primary" id="autoBuildLineup" type="button">Ottimizza squadra Set</button></div></div><div class="slots" id="lineupSlots"></div><div class="status-line"></div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><div class="muted" style="font-size:11px">Media L5 inserita (carte selezionate)</div><div class="resource-big" id="lineupAverage">—</div></div><div><button class="btn btn-small" id="clearLineup">Svuota formazione</button><button class="btn btn-primary btn-small" id="saveLineup">Salva formazione</button></div></div></div><div class="panel"><div class="panel-head"><div><h3 class="panel-title">Valutazione della bozza</h3><p class="panel-sub">Solo dati presenti nella tua dashboard.</p></div></div><div id="lineupSummary" class="empty"><span class="empty-icon">⚽</span><strong>Seleziona le carte</strong><p>Quando compili gli slot, qui vedrai i dettagli della formazione scelta.</p></div></div></div>
   </section>
   <section class="page" id="page-resources">
-    <div class="panel"><div class="panel-head"><div><h3 class="panel-title">Risorse e obiettivi</h3><p class="panel-sub">Tieni traccia di Gems, Essence e completamento della collezione.</p></div><span class="tag">Modificabile</span></div><div class="resource-grid"><div class="resource-tile"><div class="label">Gems disponibili</div><div class="value green" id="resourceGemsDisplay">320</div><div class="foot">Saldo dichiarato, da verificare</div></div><div class="resource-tile"><div class="label">Essence</div><div class="value cyan" id="resourceEssenceDisplay">0</div><div class="foot" id="resourceSetDisplay">Set: Nuovo Set (in attesa)</div></div><div class="resource-tile"><div class="label">Collezione</div><div class="value" id="resourceCollectionDisplay">80%</div><div class="progress-track"><div class="progress-bar" id="collectionBar" style="width:80%"></div></div><div class="foot">Obiettivo modificabile</div></div></div><form id="resourcesForm"><div class="resource-form"><div class="field"><label for="gemsInput">Gems attuali</label><input class="input" id="gemsInput" type="number" min="0" step="1" value="320" required></div><div class="field"><label for="essenceInput">Essence attuali</label><input class="input" id="essenceInput" type="number" min="0" step="1" value="0" required></div><div class="field"><label for="setInput">Nome del Set</label><input class="input" id="setInput" value="Nuovo Set (in attesa)" maxlength="60" required></div><div class="field"><label for="collectionInput">Completamento collezione (%)</label><input class="input" id="collectionInput" type="number" min="0" max="100" step="1" value="80" required><small>Inserisci un valore tra 0 e 100.</small></div><div class="field"><label for="goalInput">Obiettivo Gems</label><input class="input" id="goalInput" type="number" min="0" step="1" value="500" required></div><div class="field"><label for="legacyGemsSpentBracket">Gems usate in HyperGlitch (escluse ricompense)</label><select class="select" id="legacyGemsSpentBracket"><option value="">Non verificato</option><option value="750+">750 o più</option><option value="500-749">500–749</option><option value="350-499">350–499</option><option value="200-349" selected>200–349</option><option value="100-199">100–199</option><option value="50-99">50–99</option></select><small>Fascia dichiarata: modifica solo se il conteggio ufficiale è diverso.</small></div><div class="field"><label for="notesInput">Note / prossime scadenze</label><input class="input" id="notesInput" placeholder="Es. verificare premi del Set…" maxlength="250"></div></div><div style="display:flex;gap:9px;justify-content:flex-end;margin-top:18px"><button type="button" class="btn" id="resetResources">Ripristina valori iniziali</button><button class="btn btn-primary" type="submit">Salva risorse</button></div></form><div class="status-line"></div><div class="notice" style="margin-top:14px"><span class="notice-icon">!</span><div><strong>Essence HyperGlitch scaduta.</strong> Sorare ha annunciato che l’Essence HyperGlitch sarebbe stata persa alla chiusura del Set del 27/10/2026 alle 17:00 CET. Il saldo locale è stato azzerato automaticamente se era ancora associato a HyperGlitch. Inserisci il saldo del nuovo Set solo dopo averlo verificato nel tuo account. <a href="https://sorare.com/blog/football/%F0%9F%86%95-from-hyperglitch-to-%F0%9F%91%80" target="_blank" rel="noopener noreferrer">Annuncio ufficiale Sorare</a>.</div></div><div class="notice" id="loyaltyRewardEstimate" style="margin-top:14px"><span class="notice-icon">◎</span><div><strong>Ricompense fedeltà HyperGlitch — stima, non saldo accreditato.</strong><br><span id="loyaltyEssenceEstimate">8.000 Essence</span> e <span id="loyaltyGemsEstimate">25 Gems</span> sulla base della percentuale di collezione e della fascia Gems selezionata. <p id="loyaltyRewardDetail" style="margin:7px 0 0">Verifica gli accrediti direttamente su Sorare prima di aggiornare i saldi reali.</p></div></div><div class="panel-head"><div><h3 class="panel-title">Progresso verso l'obiettivo</h3><p class="panel-sub">Avanzamento aritmetico basato sul saldo che hai inserito.</p></div></div><div class="progress-track" style="height:10px"><div class="progress-bar" id="goalBar"></div></div><div style="display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted)"><span id="goalCaption">320 / 500 Gems</span><span id="goalPercent">64%</span></div><div class="status-line"></div><div class="notice"><span class="notice-icon">ⓘ</span><div>Questo registro non certifica il saldo Sorare e non prevede i premi futuri. Aggiorna i valori dopo averli verificati nel tuo account.</div></div></div>
+    <div class="panel"><div class="panel-head"><div><h3 class="panel-title">Risorse e obiettivi</h3><p class="panel-sub">Tieni traccia di Gems, Essence e completamento della collezione.</p></div><span class="tag">Modificabile</span></div><div class="resource-grid"><div class="resource-tile"><div class="label">Gems disponibili</div><div class="value green" id="resourceGemsDisplay">320</div><div class="foot">Saldo dichiarato, da verificare</div></div><div class="resource-tile"><div class="label">Essence</div><div class="value cyan" id="resourceEssenceDisplay">0</div><div class="foot" id="resourceSetDisplay">Set: Nuovo Set (in attesa)</div></div><div class="resource-tile"><div class="label">Collezione</div><div class="value" id="resourceCollectionDisplay">80%</div><div class="progress-track"><div class="progress-bar" id="collectionBar" style="width:80%"></div></div><div class="foot">Obiettivo modificabile</div></div></div><form id="resourcesForm"><div class="resource-form"><div class="field"><label for="gemsInput">Gems attuali</label><input class="input" id="gemsInput" type="number" min="0" step="1" value="" placeholder="Saldo da verificare"></div><div class="field"><label for="essenceInput">Essence attuali</label><input class="input" id="essenceInput" type="number" min="0" step="1" value="" placeholder="Saldo da verificare"></div><div class="field"><label for="setInput">Nome del Set</label><input class="input" id="setInput" value="" maxlength="60" placeholder="Set corrente (da verificare)"></div><div class="field"><label for="collectionInput">Completamento collezione (%)</label><input class="input" id="collectionInput" type="number" min="0" max="100" step="1" value="" placeholder="Percentuale da verificare"><small>Inserisci un valore tra 0 e 100.</small></div><div class="field"><label for="goalInput">Obiettivo Gems</label><input class="input" id="goalInput" type="number" min="0" step="1" value="500" required></div><div class="field"><label for="legacyGemsSpentBracket">Gems usate in HyperGlitch (escluse ricompense)</label><select class="select" id="legacyGemsSpentBracket"><option value="">Non verificato</option><option value="750+">750 o più</option><option value="500-749">500–749</option><option value="350-499">350–499</option><option value="200-349">200–349</option><option value="100-199">100–199</option><option value="50-99">50–99</option></select><small>Fascia dichiarata: modifica solo se il conteggio ufficiale è diverso.</small></div><div class="field"><label for="notesInput">Note / prossime scadenze</label><input class="input" id="notesInput" placeholder="Es. verificare premi del Set…" maxlength="250"></div></div><div style="display:flex;gap:9px;justify-content:flex-end;margin-top:18px"><button type="button" class="btn" id="resetResources">Ripristina valori iniziali</button><button class="btn btn-primary" type="submit">Salva risorse</button></div></form><div class="status-line"></div><div class="notice" style="margin-top:14px"><span class="notice-icon">!</span><div><strong>Saldo Essence da verificare.</strong> HyperGlitch è terminato, ma questo non significa che il saldo Essence del nuovo Set sia zero. NEXUS non legge il saldo Essence da questa integrazione: verifica il dato nel tuo account Sorare e, se serve, inseriscilo manualmente. <a href="https://sorare.com/blog/football/%F0%9F%86%95-from-hyperglitch-to-%F0%9F%91%80" target="_blank" rel="noopener noreferrer">Annuncio ufficiale Sorare</a>.</div></div><div class="notice" id="loyaltyRewardEstimate" style="margin-top:14px"><span class="notice-icon">◎</span><div><strong>Stima ricompense fedeltà — non è il saldo attuale né un accredito verificato.</strong><br><span id="loyaltyEssenceEstimate">—</span> e <span id="loyaltyGemsEstimate">—</span> sulla base della percentuale di collezione e della fascia Gems selezionata. <p id="loyaltyRewardDetail" style="margin:7px 0 0">Verifica gli accrediti direttamente su Sorare prima di aggiornare i saldi reali.</p></div></div><div class="panel-head"><div><h3 class="panel-title">Progresso verso l'obiettivo</h3><p class="panel-sub">Avanzamento aritmetico basato sul saldo che hai inserito.</p></div></div><div class="progress-track" style="height:10px"><div class="progress-bar" id="goalBar"></div></div><div style="display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted)"><span id="goalCaption">320 / 500 Gems</span><span id="goalPercent">64%</span></div><div class="status-line"></div><div class="notice"><span class="notice-icon">ⓘ</span><div>Questo registro non certifica il saldo Sorare e non prevede i premi futuri. Aggiorna i valori dopo averli verificati nel tuo account.</div></div></div>
   </section>
   <section class="page" id="page-sorare">
     <div class="hero"><div class="hero-copy"><div class="hero-label">Direct account connection</div><h2>NEXUS <span class="green">Sorare Sync.</span></h2><p>Accesso diretto email e password Sorare, senza OAuth. La password viene hashata nel browser e non viene salvata da NEXUS.</p><button class="btn" id="reloadSorareData">Rileggi dati</button> <button class="btn btn-primary" id="importSorareCards" disabled>Importazione automatica attiva</button></div><div class="hero-mark">↻<span style="font-size:9px;align-self:end;margin-left:-12px;margin-bottom:26px">/ API</span></div></div>
@@ -250,16 +250,18 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
 (function(){
 'use strict';
 const KEY='nexusSorareIntelligenceV1';
-const initial={cards:[],lineup:['','','','',''],resources:{gems:320,essence:0,set:'Nuovo Set (in attesa)',collection:80,goal:500,notes:'',legacyEssenceExpired:false,legacyGemsSpentBracket:'200-349'},lastSaved:null};
+const initial={cards:[],lineup:['','','','',''],resources:{gems:null,essence:null,set:'',collection:null,goal:500,notes:'',legacyEssenceExpired:false,legacyGemsSpentBracket:''},resourcesConfirmedByUser:false,sorareInventoryStatus:'unverified',lastSaved:null};
 let state=loadState();
 let cardsPage=1;const CARDS_PAGE_SIZE=60;
-let activeSorareSlug='mianismo',liveSorareProfileSlug='mianismo',isSorareAuthenticated=false,sorareSyncRunning=false;
-function loadState(){try{const raw=localStorage.getItem(KEY)||localStorage.getItem('mianismoFcDashboardV1')||'null';const v=JSON.parse(raw);if(v&&typeof v==='object'){if(!localStorage.getItem(KEY))try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}const merged={...structuredClone(initial),...v,resources:{...initial.resources,...(v.resources||{})},cards:Array.isArray(v.cards)?v.cards:[],lineup:Array.isArray(v.lineup)?v.lineup:['','','','',''],sorareProfileSlug:v.sorareProfileSlug||(Array.isArray(v.cards)&&v.cards.some(card=>card?.source==='sorare')?'mianismo':'')};if(/hyperglitch/i.test(String(merged.resources.set||''))&&Date.now()>=Date.parse('2026-10-27T16:00:00Z')){merged.resources.essence=0;merged.resources.set='Nuovo Set (in attesa)';merged.resources.legacyEssenceExpired=true;}return merged;}}catch(e){}return structuredClone(initial)}
+let activeSorareSlug='',liveSorareProfileSlug='',isSorareAuthenticated=false,sorareSyncRunning=false;
+function loadState(){try{const raw=localStorage.getItem(KEY)||localStorage.getItem('mianismoFcDashboardV1')||'null';const v=JSON.parse(raw);if(v&&typeof v==='object'){if(!localStorage.getItem(KEY))try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}const merged={...structuredClone(initial),...v,resources:{...initial.resources,...(v.resources||{})},cards:Array.isArray(v.cards)?v.cards:[],lineup:Array.isArray(v.lineup)?v.lineup:['','','','',''],sorareProfileSlug:v.sorareProfileSlug||(Array.isArray(v.cards)&&v.cards.some(card=>card?.source==='sorare')?'mianismo':'')};merged.resourcesConfirmedByUser=v.resourcesConfirmedByUser===true;if(!merged.resourcesConfirmedByUser)merged.resources={...merged.resources,gems:null,essence:null,set:'',collection:null,legacyGemsSpentBracket:''};if(/hyperglitch/i.test(String(merged.resources.set||''))&&Date.now()>=Date.parse('2026-10-27T16:00:00Z')){merged.resources.essence=null;merged.resources.set='';merged.resources.legacyEssenceExpired=true;}if(merged.sorareInventoryStatus!=='complete')merged.sorareInventoryStatus='unverified';return merged;}}catch(e){}return structuredClone(initial)}
 function persist(){state.lastSaved=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify(state));$('syncLabel').textContent='Salvato in questo browser';}catch(e){$('syncLabel').textContent='Salvataggio non disponibile';toast('Impossibile salvare in questo browser. Esporta un backup.');}renderAll()}
 function $(id){return document.getElementById(id)}
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function num(v){return Number.isFinite(Number(v))?Number(v):0}
 function fmt(v){return num(v).toLocaleString('it-IT',{maximumFractionDigits:1})}
+function fmtKnown(v){return v===null||v===undefined||v===''?'—':fmt(v)}
+function collectionCards(){const cards=Array.isArray(state.cards)?state.cards:[];return state.sorareInventoryStatus==='complete'?cards:cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug)}
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
 function goto(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));const titles={overview:['La tua stagione, sotto controllo.','Il tuo account Sorare, le carte e l’analisi delle performance in un’unica piattaforma.'],cards:['La tua collezione.','Organizza le carte e conserva le statistiche che vuoi confrontare.'],analytics:['NEXUS Edge Lab.','Segnali, volatilità e copertura dei dati calcolati dalla tua collezione.'],lineup:['Costruisci la tua formazione.','Componi una bozza e confronta le medie inserite.'],resources:['Gestisci ogni risorsa.','Saldo, obiettivi e note operative in un unico pannello.'],sorare:['Sorare Sync.','Accesso diretto email/password, inventario automatico e statistiche aggiornate ogni 2 minuti.']};$('pageTitle').textContent=titles[page][0];$('pageSubtitle').textContent=titles[page][1];window.scrollTo({top:0,behavior:'smooth'});if(page==='lineup')renderLineup();if(page==='analytics')renderEdgeLab()}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.page)));document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.goto)));
@@ -302,17 +304,18 @@ function cardVariantLabel(card){
   return '';
 }
 function renderCards(){
+  const cards=collectionCards();
   const q=$('cardSearch').value.trim().toLowerCase(),pos=$('positionFilter').value;
   const raritySelect=$('rarityFilter'),variantSelect=$('variantFilter');
   const oldRarity=raritySelect.value,oldVariant=variantSelect.value;
-  const rarities=[...new Set(state.cards.map(card=>String(card.rarityTyped||card.rarity||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-  const variants=[...new Set(state.cards.map(cardVariantLabel).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  const rarities=[...new Set(cards.map(card=>String(card.rarityTyped||card.rarity||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  const variants=[...new Set(cards.map(cardVariantLabel).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
   raritySelect.innerHTML='<option value="">Tutte le rarità</option>'+rarities.map(value=>'<option value="'+esc(value)+'">'+esc(value)+'</option>').join('');
   variantSelect.innerHTML='<option value="">Tutte le varianti</option>'+variants.map(value=>'<option value="'+esc(value)+'">'+esc(value)+'</option>').join('');
   raritySelect.value=rarities.includes(oldRarity)?oldRarity:'';
   variantSelect.value=variants.includes(oldVariant)?oldVariant:'';
   const rarity=raritySelect.value,variant=variantSelect.value;
-  const list=state.cards.filter(card=>{
+  const list=cards.filter(card=>{
     const matchesQuery=!q||[card.name,card.club,card.league,card.rarity,card.rarityTyped,card.position,card.edition,cardVariantLabel(card),card.setName].some(value=>String(value||'').toLowerCase().includes(q));
     const matchesPosition=!pos||card.position===pos||(Array.isArray(card.positionCodes)&&card.positionCodes.some(value=>String(value).toLowerCase()===pos.toLowerCase()));
     const matchesRarity=!rarity||String(card.rarityTyped||card.rarity||'').toLowerCase()===rarity.toLowerCase();
@@ -331,22 +334,23 @@ function renderCards(){
     $('cardsNextPage').disabled=cardsPage>=totalPages;
   }
   $('cardsEmpty').classList.toggle('hide',list.length>0);
-  if(state.cards.length&&list.length===0){
+  if(cards.length&&list.length===0){
     $('cardsEmpty').classList.remove('hide');
     $('cardsEmpty').innerHTML='<span class="empty-icon">⌕</span><strong>Nessuna carta corrispondente</strong><p>Prova a cambiare ricerca o filtri.</p>';
-  }else if(state.cards.length===0){
-    $('cardsEmpty').innerHTML='<span class="empty-icon">▧</span><strong>Nessuna carta in archivio</strong><p>Le carte Sorare si importano da Sorare Sync automaticamente quando i dati sono disponibili.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button>';
+  }else if(cards.length===0){
+    const unverified=state.sorareInventoryStatus!=='complete'&&state.cards.some(card=>card?.source==='sorare'||card?.sorareSlug);
+    $('cardsEmpty').innerHTML=unverified?'<span class="empty-icon">↻</span><strong>Inventario Sorare da verificare</strong><p>Le vecchie carte sincronizzate sono nascoste finché NEXUS non legge l’inventario completo dell’account collegato.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button>':'<span class="empty-icon">▧</span><strong>Nessuna carta in archivio</strong><p>Collega Sorare e attendi una sincronizzazione completa dell’inventario.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button>';
     if($('addEmptyCard'))$('addEmptyCard').onclick=()=>loadSorarePublicData();
   }
   document.querySelectorAll('[data-edit]').forEach(button=>button.onclick=()=>openModal(state.cards.find(card=>card.id===button.dataset.edit)));
   document.querySelectorAll('[data-delete]').forEach(button=>button.onclick=()=>deleteCard(button.dataset.delete));
-  $('navCardCount').textContent=state.cards.length;
+  $('navCardCount').textContent=cards.length;
 }
 function renderWeekendRadar(){
   const container=$('weekendRadar');
   if(!container)return;
   const now=Date.now(),limit=now+7*24*60*60*1000,bestByPlayer=new Map();
-  for(const card of state.cards){
+  for(const card of collectionCards()){
     const games=Array.isArray(card.upcomingGames)?card.upcomingGames:[];
     const game=games.map(g=>({game:g,time:g?.date?new Date(g.date).getTime():NaN})).filter(x=>Number.isFinite(x.time)&&x.time>=now-60*60*1000&&x.time<=limit).sort((a,b)=>a.time-b.time)[0];
     if(!game)continue;
@@ -374,19 +378,20 @@ function renderWeekendRadar(){
   }).join('');
 }
 function renderOverview(){
-  const r=state.resources;
-  $('statCards').textContent=state.cards.length;
-  $('statCardsFoot').textContent=state.cards.length?state.cards.filter(c=>c.l5!==''&&c.l5!=null).length+' con media L5 inserita':'Nessuna carta inserita';
-  $('statGems').textContent=fmt(r.gems);
-  $('statEssence').textContent=fmt(r.essence);
-  $('statEssenceFoot').textContent=(r.set||'Set non indicato')+' · da confermare';
-  $('statCollection').textContent=fmt(r.collection)+'%';
-  $('resourceGemsDisplay').textContent=fmt(r.gems);
-  $('resourceEssenceDisplay').textContent=fmt(r.essence);
-  $('resourceSetDisplay').textContent='Set: '+(r.set||'Non indicato');
-  $('resourceCollectionDisplay').textContent=fmt(r.collection)+'%';
-  $('collectionBar').style.width=Math.max(0,Math.min(100,num(r.collection)))+'%';
-  const cards=state.cards.slice(0,3);
+  const r=state.resources,manualResources=state.resourcesConfirmedByUser===true,inventoryVerified=state.sorareInventoryStatus==='complete';
+  const sorareCards=state.cards.filter(card=>card?.source==='sorare'||card?.sorareSlug),manualCount=state.cards.length-sorareCards.length;
+  $('statCards').textContent=inventoryVerified?fmt(sorareCards.length):'—';
+  $('statCardsFoot').textContent=inventoryVerified?`${sorareCards.length} carte Sorare verificate · ${manualCount} manuali locali`:`Inventario Sorare non verificato · ${manualCount} carte manuali locali`;
+  $('statGems').textContent=manualResources?fmtKnown(r.gems):'—';
+  $('statEssence').textContent=manualResources?fmtKnown(r.essence):'—';
+  $('statEssenceFoot').textContent=manualResources&&r.essence!=null?'Valore manuale · non sincronizzato via API':'Saldo non disponibile: NEXUS non lo legge dall’API Sorare';
+  $('statCollection').textContent=manualResources&&r.collection!=null?fmt(r.collection)+'%':'—';
+  $('resourceGemsDisplay').textContent=manualResources?fmtKnown(r.gems):'—';
+  $('resourceEssenceDisplay').textContent=manualResources?fmtKnown(r.essence):'—';
+  $('resourceSetDisplay').textContent='Set: '+(manualResources&&r.set?r.set:'Non verificato');
+  $('resourceCollectionDisplay').textContent=manualResources&&r.collection!=null?fmt(r.collection)+'%':'—';
+  $('collectionBar').style.width=manualResources&&r.collection!=null?Math.max(0,Math.min(100,num(r.collection)))+'%':'0%';
+  const cards=collectionCards().slice(0,3);
   if(cards.length){
     $('overviewCards').className='cards-grid';
     $('overviewCards').innerHTML=cards.map(cardHTML).join('');
@@ -477,13 +482,13 @@ function buildOptimalLineup(){
   const rawCap=Number($('lineupCap')?.value??120),cap=Number.isFinite(rawCap)&&rawCap>=0?rawCap:120;
   const rawBonus=Number($('lineupBonus')?.value??0),bonusPct=Math.max(0,Math.min(5,Number.isFinite(rawBonus)?rawBonus:0));
   const target=Number($('lineupTarget')?.value||0);
-  const endedLegacy=state.cards.filter(isEndedHyperGlitch).length;
+  const endedLegacy=collectionCards().filter(isEndedHyperGlitch).length;
   const targetSet=currentTargetSet();
   if(!targetSet){
     toast('Ottimizzatore bloccato in sicurezza: in Risorse inserisci il nome ufficiale del nuovo Set dopo il lancio del 30/10/2026. HyperGlitch è terminato e non viene riutilizzato.');
     return;
   }
-  const eligibleCandidates=state.cards.filter(isTargetSetCard);
+  const eligibleCandidates=collectionCards().filter(isTargetSetCard);
   if(!eligibleCandidates.length){
     toast('Nessuna carta verificata per il Set "'+state.resources.set+'". Sono escluse le '+endedLegacy+' carte HyperGlitch e tutte le carte di Set diversi. Sincronizza il nuovo inventario prima di ottimizzare.');
     return;
@@ -542,17 +547,18 @@ function buildOptimalLineup(){
   toast('Bozza euristica proposta · cap simulato '+fmt(best.capUsed)+'/'+fmt(cap)+' L10 · target '+(target>0?fmt(target):'non impostato')+'. Non certifica idoneità o regole ufficiali del Set.');
 }
 function renderLineup(){
+  const availableCards=collectionCards();
   const slots=$('lineupSlots'),labels=['Portiere','Difensore','Centrocampista','Attaccante','Flex / posizione aggiuntiva'];
   slots.innerHTML=labels.map((label,i)=>{
-    const id=state.lineup[i]||'',card=state.cards.find(x=>x.id===id),stats=card?cardScoreStats(card):null;
+    const id=state.lineup[i]||'',card=availableCards.find(x=>x.id===id),stats=card?cardScoreStats(card):null;
     const pos=card?(Array.isArray(card.positionCodes)&&card.positionCodes.length?card.positionCodes.join(', '):(Array.isArray(card.position)?card.position.join(', '):card.position||'Ruolo n.d.')):'';
     const l10=stats&&stats.capL10!=null?fmt(stats.capL10):'n.d.',l5=stats&&stats.expected!=null?fmt(stats.expected):'n.d.';
-    const slotOptions=state.cards.filter(x=>isTargetSetCard(x)||x.id===id);
+    const slotOptions=availableCards.filter(x=>isTargetSetCard(x)||x.id===id);
     const options=slotOptions.map(x=>'<option value="'+esc(x.id)+'" '+(x.id===id?'selected ':'')+(isEndedHyperGlitch(x)?'disabled ':'')+'>'+esc(x.name)+(x.club?' · '+esc(x.club):'')+(isEndedHyperGlitch(x)?' · HyperGlitch non idonea':'')+'</option>').join('');
     return '<div class="slot '+(card?'filled':'')+'"><div class="slot-label">'+label+'</div><select class="select lineup-select" data-slot="'+i+'"><option value="">Seleziona una carta…</option>'+options+'</select><div class="slot-info">'+(card?esc(pos)+' · L5 '+esc(l5)+' · L10 '+esc(l10):'Nessun giocatore selezionato')+'</div></div>';
   }).join('');
   slots.querySelectorAll('select').forEach(sel=>sel.onchange=()=>{state.lineup[Number(sel.dataset.slot)]=sel.value;persist();renderLineup();});
-  const chosen=state.lineup.map(id=>state.cards.find(card=>card.id===id)).filter(Boolean);
+  const chosen=state.lineup.map(id=>availableCards.find(card=>card.id===id)).filter(Boolean);
   const rawBonus=Number($('lineupBonus')?.value??0),bonusPct=Math.max(0,Math.min(5,Number.isFinite(rawBonus)?rawBonus:0));
   const target=Number($('lineupTarget')?.value||0),stats=chosen.map(cardScoreStats);
   const known=stats.filter(x=>x.expected!=null),capUsed=getCapUsage(chosen),capRaw=Number($('lineupCap')?.value??120),cap=Number.isFinite(capRaw)&&capRaw>=0?capRaw:120;
@@ -566,7 +572,7 @@ function renderLineup(){
   const roleNames=['GK','DF','MD','FW','Flex'];
   const roleErrors=state.lineup.map((id,i)=>{
     if(!id)return null;
-    const card=state.cards.find(item=>item.id===id);
+    const card=availableCards.find(item=>item.id===id);
     if(!card)return null;
     const kinds=positionKinds(card);
     const valid=i===4?kinds.some(role=>role!=='GK'):kinds.includes(['GK','DF','MD','FW'][i]);
@@ -672,31 +678,29 @@ function deleteCard(id){
 }
 function saveResourcesFromForm(event){
   event.preventDefault();
-  const gems=Number($("gemsInput").value),essence=Number($("essenceInput").value);
-  const collection=Number($("collectionInput").value),goal=Number($("goalInput").value);
-  const set=$("setInput").value.trim(),notes=$("notesInput").value.trim(),legacyGemsSpentBracket=$("legacyGemsSpentBracket").value;
-  if(!set){toast("Inserisci il nome del Set.");return;}
-  if(!Number.isSafeInteger(gems)||gems<0||!Number.isSafeInteger(essence)||essence<0||!Number.isFinite(collection)||collection<0||collection>100||!Number.isSafeInteger(goal)||goal<0){
-    toast("Controlla Gems, Essence, percentuale di collezione e obiettivo.");return;
+  const optionalInteger=id=>{const raw=$(id).value.trim();if(raw==='')return null;const value=Number(raw);return Number.isSafeInteger(value)&&value>=0?value:NaN;};
+  const gems=optionalInteger('gemsInput'),essence=optionalInteger('essenceInput');
+  const collectionRaw=$('collectionInput').value.trim(),collection=collectionRaw===''?null:Number(collectionRaw);
+  const goal=Number($('goalInput').value);
+  const set=$('setInput').value.trim(),notes=$('notesInput').value.trim(),legacyGemsSpentBracket=$('legacyGemsSpentBracket').value;
+  if((gems!==null&&!Number.isSafeInteger(gems))||(essence!==null&&!Number.isSafeInteger(essence))||(collection!==null&&(!Number.isFinite(collection)||collection<0||collection>100))||!Number.isSafeInteger(goal)||goal<0){
+    toast('Controlla Gems, Essence, percentuale di collezione e obiettivo. I saldi possono restare vuoti se non verificati.');return;
   }
-  if(/hyper\s?glitch/i.test(set)&&Date.now()>=Date.parse("2026-10-27T16:00:00Z")){
-    $("essenceInput").value="0";
-    toast("HyperGlitch è terminato: la sua Essence non può essere reinserita come saldo disponibile.");
-    return;
+  if(/hyper\s?glitch/i.test(set)&&Date.now()>=Date.parse('2026-10-27T16:00:00Z')){
+    toast('HyperGlitch è terminato: inserisci il nome del Set attuale, non il vecchio saldo Essence.');return;
   }
-  state.resources={
-    ...state.resources,gems,essence,set,collection,goal,notes,legacyGemsSpentBracket,
-    legacyEssenceExpired:Boolean(state.resources.legacyEssenceExpired)
-  };
+  state.resources={...state.resources,gems,essence,set,collection,goal,notes,legacyGemsSpentBracket,legacyEssenceExpired:Boolean(state.resources.legacyEssenceExpired)};
+  state.resourcesConfirmedByUser=gems!==null||essence!==null||collection!==null||Boolean(set);
   persist();
   renderLineup();
-  toast("Risorse salvate nel browser.");
+  toast('Valori locali salvati manualmente. NEXUS non li verifica tramite API Sorare.');
 }
 function resetResources(){
-  if(!window.confirm("Ripristinare i valori iniziali delle risorse? Le carte non verranno eliminate."))return;
+  if(!window.confirm("Svuotare i valori locali delle risorse? Le carte non verranno eliminate."))return;
   state.resources={...initial.resources};
+  state.resourcesConfirmedByUser=false;
   persist();
-  toast("Risorse iniziali ripristinate.");
+  toast("Risorse locali svuotate; i saldi reali vanno verificati su Sorare.");
 }
 function exportBackup(){
   try{
@@ -727,6 +731,7 @@ async function importBackupFromFile(event){
     }));
     const incomingResources=incoming.resources&&typeof incoming.resources==="object"?incoming.resources:{};
     const numberOr=(value,fallback,min,max,integer=false)=>{
+      if(value===null||value===undefined||String(value).trim()==='')return fallback;
       const parsed=Number(value);
       return Number.isFinite(parsed)&&parsed>=min&&parsed<=max&&(!integer||Number.isSafeInteger(parsed))?parsed:fallback;
     };
@@ -741,12 +746,14 @@ async function importBackupFromFile(event){
       notes:String(incomingResources.notes||"").slice(0,250)
     };
     if(/hyper\s?glitch/i.test(resources.set)&&Date.now()>=Date.parse("2026-10-27T16:00:00Z")){
-      resources.essence=0;resources.set="Nuovo Set (in attesa)";resources.legacyEssenceExpired=true;
+      resources.essence=null;resources.set="";resources.legacyEssenceExpired=true;
     }
     const ids=new Set(cards.map(card=>card.id));
     const savedLineup=Array.isArray(incoming.lineup)?incoming.lineup:[];
     const lineup=Array.from({length:5},(_,i)=>{const id=String(savedLineup[i]||"");return ids.has(id)?id:"";});
-    state={...structuredClone(initial),...incoming,cards,lineup,resources};
+    const resourcesConfirmedByUser=incoming.resourcesConfirmedByUser===true;
+    if(!resourcesConfirmedByUser){resources.gems=null;resources.essence=null;resources.collection=null;resources.set='';resources.legacyGemsSpentBracket='';}
+    state={...structuredClone(initial),...incoming,cards,lineup,resources,resourcesConfirmedByUser,sorareInventoryStatus:'unverified'};
     cardsPage=1;
     persist();
     toast("Backup importato e validato: "+cards.length+" carte.");
@@ -775,18 +782,22 @@ function bindCoreControls(){
 }
 
 function updateLoyaltyRewardEstimate(){
-  const collection=Math.max(0,Math.min(100,num($('collectionInput')?.value??state.resources.collection)));
-  const essence=Math.floor(collection/10)*1000;
-  const bracket=String($('legacyGemsSpentBracket')?.value??state.resources.legacyGemsSpentBracket??'');
+  const rawCollection=String($('collectionInput')?.value??'').trim();
+  const parsedCollection=rawCollection===''?null:Number(rawCollection);
+  const collection=parsedCollection!==null&&Number.isFinite(parsedCollection)&&parsedCollection>=0&&parsedCollection<=100?parsedCollection:null;
+  const bracket=String($('legacyGemsSpentBracket')?.value??'');
   const rewardByBracket={'750+':60,'500-749':40,'350-499':25,'200-349':15,'100-199':10,'50-99':5};
-  const collectionGems=collection>=70?10:0;
+  const collectionGems=collection===null?null:(collection>=70?10:0);
   const usageGems=Object.prototype.hasOwnProperty.call(rewardByBracket,bracket)?rewardByBracket[bracket]:null;
-  $('loyaltyEssenceEstimate').textContent=fmt(essence)+' Essence';
-  $('loyaltyGemsEstimate').textContent=usageGems==null?fmt(collectionGems)+'+ Gems (fascia da verificare)':fmt(collectionGems+usageGems)+' Gems';
-  $('loyaltyRewardDetail').textContent='Calcolo indicativo: '+Math.floor(collection/10)+' fasce da 10% × 1.000 Essence; '+(collectionGems?'+10 Gems per completamento ≥70%':'nessun bonus Gems per completamento sotto il 70%')+'; '+(usageGems==null?'bonus da Gems spese non incluso finché la fascia non è verificata.':'+'+usageGems+' Gems per fascia di spesa '+bracket+'.')+' Non sono saldo confermato né promessa di accredito e non includono eventuali pack rewards HyperGlitch non riscattati prima della chiusura.';
+  $('loyaltyEssenceEstimate').textContent=collection===null?'— (percentuale non verificata)':fmt(Math.floor(collection/10)*1000)+' Essence';
+  if(collectionGems===null&&usageGems===null)$('loyaltyGemsEstimate').textContent='— (dati non verificati)';
+  else if(collectionGems!==null&&usageGems!==null)$('loyaltyGemsEstimate').textContent=fmt(collectionGems+usageGems)+' Gems';
+  else if(collectionGems!==null)$('loyaltyGemsEstimate').textContent=fmt(collectionGems)+'+ Gems (fascia da verificare)';
+  else $('loyaltyGemsEstimate').textContent=fmt(usageGems)+'+ Gems (completamento da verificare)';
+  $('loyaltyRewardDetail').textContent='Stima condizionata ai dati inseriti manualmente: non è saldo Essence/Gems e non conferma un accredito. '+(collection===null?'Inserisci la percentuale effettiva della collezione HyperGlitch per stimare la ricompensa Essence.':'Calcolo Essence indicativo: '+Math.floor(collection/10)+' fasce da 10% × 1.000 Essence.')+' '+(usageGems===null?'La fascia di Gems spese non è verificata.':'Bonus da Gems spese stimato per la fascia '+bracket+'.')+' Le ricompense effettive vanno verificate nel tuo account Sorare.';
 }
-function renderResourcesForm(){const r=state.resources;$('gemsInput').value=r.gems;$('essenceInput').value=r.essence;$('setInput').value=r.set;$('collectionInput').value=r.collection;$('goalInput').value=r.goal;$('notesInput').value=r.notes||'';$('legacyGemsSpentBracket').value=r.legacyGemsSpentBracket??'';updateLoyaltyRewardEstimate();const ratio=r.goal>0?Math.min(100,num(r.gems)/num(r.goal)*100):0;$('goalBar').style.width=ratio+'%';$('goalCaption').textContent=`${fmt(r.gems)} / ${fmt(r.goal)} Gems`;$('goalPercent').textContent=Math.round(ratio)+'%'}
-let liveSorareItems=[];
+function renderResourcesForm(){const r=state.resources,manual=state.resourcesConfirmedByUser===true;$('gemsInput').value=manual&&r.gems!=null?r.gems:'';$('essenceInput').value=manual&&r.essence!=null?r.essence:'';$('setInput').value=manual?(r.set||''):'';$('collectionInput').value=manual&&r.collection!=null?r.collection:'';$('goalInput').value=r.goal??500;$('notesInput').value=r.notes||'';$('legacyGemsSpentBracket').value=manual?(r.legacyGemsSpentBracket??''):'';updateLoyaltyRewardEstimate();const hasGems=manual&&r.gems!=null,ratio=hasGems&&r.goal>0?Math.min(100,num(r.gems)/num(r.goal)*100):0;$('goalBar').style.width=hasGems?ratio+'%':'0%';$('goalCaption').textContent=hasGems?`${fmt(r.gems)} / ${fmt(r.goal)} Gems`:'Saldo Gems non inserito';$('goalPercent').textContent=hasGems?Math.round(ratio)+'%':'—'}
+let liveSorareItems=[],liveSorareComplete=false;
 function updateSorareAuthUI(session){
  const authenticated=Boolean(session&&session.authenticated&&session.profile&&session.profile.slug);
  isSorareAuthenticated=authenticated;
@@ -821,7 +832,7 @@ function updateSorareAuthUI(session){
  if(authenticated){$('sorareLoginForm').classList.add('hide');setSorareLoginMessage('Account collegato. Sincronizzazione automatica attiva.','success');}else $('sorareLoginForm').classList.remove('hide');
 }
 async function startSorareLogin(){if(!isSorareAuthenticated){goto('sorare');$('sorareEmail')?.focus();return;}await logoutSorareAccount();}
-async function logoutSorareAccount(){try{const r=await fetch('/api/auth/sorare/logout',{method:'POST',cache:'no-store'});if(!r.ok)throw Error('logout');activeSorareSlug='mianismo';liveSorareProfileSlug='mianismo';resetSorareOtp();$('sorarePassword').value='';$('sorareLoginForm').classList.remove('hide');updateSorareAuthUI({authenticated:false});setSorareLoginMessage('Account disconnesso. La dashboard torna ai dati pubblici.','success');toast('Account Sorare disconnesso.');await loadSorarePublicData();}catch(e){setSorareLoginMessage('Non è stato possibile disconnettere la sessione. Riprova.','error');}}
+async function logoutSorareAccount(){try{const r=await fetch('/api/auth/sorare/logout',{method:'POST',cache:'no-store'});if(!r.ok)throw Error('logout');activeSorareSlug='';liveSorareProfileSlug='';resetSorareOtp();$('sorarePassword').value='';$('sorareLoginForm').classList.remove('hide');updateSorareAuthUI({authenticated:false});setSorareLoginMessage('Account disconnesso. La dashboard torna ai dati pubblici.','success');toast('Account Sorare disconnesso.');await loadSorarePublicData();}catch(e){setSorareLoginMessage('Non è stato possibile disconnettere la sessione. Riprova.','error');}}
 async function submitSorareLogin(event){
  event.preventDefault();const button=$('sorareLoginSubmit');button.disabled=true;
  try{
@@ -847,7 +858,7 @@ async function submitSorareLogin(event){
  finally{$('sorarePassword').value='';button.disabled=false;}
 }
 function renderAnalytics(){
- const cards=state.cards||[];
+ const cards=collectionCards();
  const roles=['Portiere','Difensore','Centrocampista','Attaccante','Altro'];
  const groups=roles.map(role=>{const list=cards.filter(c=>roleClass(c.position)===roleClass(role));const scores=list.filter(c=>c.l5!==''&&c.l5!=null&&Number.isFinite(Number(c.l5))).map(c=>Number(c.l5));return {role,count:list.length,avg:scores.length?scores.reduce((a,b)=>a+b,0)/scores.length:null,scored:scores.length};});
  const maximum=Math.max(1,...groups.map(g=>g.count));
@@ -886,7 +897,7 @@ function edgeSignalLabel(item){
   return {label:'Neutro',kind:'neutral'};
 }
 function renderEdgeLab(){
-  const cards=Array.isArray(state.cards)?state.cards:[];
+  const cards=collectionCards();
   const metrics=cards.map(edgeMetrics);
   const withScores=metrics.filter(item=>item.edge!==null);
   const knownL5=metrics.filter(item=>item.l5!==null);
@@ -945,23 +956,24 @@ function renderEdgeLab(){
 function renderSorareReport(data){
   const status=data?.status||'pending';
   const ok=status==='ok';
-  $('sorareStatus').textContent=ok?'Report pronto':status==='stale'?'Dati conservati':status==='degraded'?'Dati insufficienti':status==='profile_not_found_or_not_public'?'Profilo non trovato':status==='error'?'Errore API':'In attesa';
+  $('sorareStatus').textContent=ok?'Report pronto':status==='not_authenticated'?'Account non collegato':status==='stale'?'Dati conservati':status==='degraded'?'Dati insufficienti':status==='profile_not_found_or_not_public'?'Profilo non trovato':status==='error'?'Errore API':'In attesa';
   $('sorareStatus').className='stat-value '+(ok?'green':status==='error'||status==='degraded'?'red':'orange');
   $('sorareStatusFoot').textContent=data?.statusLabel||'Da eseguire il primo controllo';
   $('sorareProfileFound').textContent=data?.profile?.found?'Sì':data?.profile?.found===false?'No':'—';
   $('sorareProfileName').textContent=data?.profile?.nickname?`${data.profile.nickname} · ${data.profile.slug}`:`Slug richiesto: ${data?.requestedSlug||'mianismo'}`;
   const items=Array.isArray(data?.cards?.items)?data.cards.items:[];
   liveSorareItems=items;
-  const importButton=$('importSorareCards');if(importButton){importButton.disabled=!items.length;importButton.textContent=items.length?'Importa/aggiorna '+items.length+' carte':'Importa carte nella collezione';}
-  $('sorareCardCount').textContent=data?.cards?.count!=null?fmt(data.cards.count):'—';
+  liveSorareComplete=Boolean(data?.cards?.complete&&data?.cards?.authenticated&&isSorareAuthenticated&&data?.cards?.profileSlug===liveSorareProfileSlug);
+  const importButton=$('importSorareCards');if(importButton){importButton.disabled=!liveSorareComplete;importButton.textContent=liveSorareComplete?(items.length?'Importa/aggiorna '+items.length+' carte':'Conferma inventario vuoto'):'Importazione bloccata: inventario non completo';}
+  $('sorareCardCount').textContent=liveSorareComplete&&data?.cards?.count!=null?fmt(data.cards.count):'—';
   const quality=data?.cards?.dataQuality;
   const tiers=data?.cards?.queryTierCounts;
   const tierLabel=tiers?Object.entries(tiers).map(([name,count])=>name+' ×'+count).join(', '):data?.cards?.queryTier;
   const diagnostic=data?.cards?.diagnostic;
   const fallbackLabel=diagnostic?.attemptedFallbacks?' · '+diagnostic.attemptedFallbacks+' fallback':'';
-  $('sorareCardFoot').textContent=data?.cards?.status==='available'?(data.cards.truncated?'Elenco parziale':'Elenco ricevuto')+(quality?' · '+(quality.withCardImage||0)+' immagini carta · '+(quality.withPlayerImage||0)+' ritratti · '+(quality.withVariant||0)+' varianti · '+(quality.withRecentScores||0)+' con storico':'')+(tierLabel?' · query '+tierLabel:'')+fallbackLabel:data?.cards?.message||'Non ancora verificato';
+  $('sorareCardFoot').textContent=liveSorareComplete?('Inventario completo verificato'+(quality?' · '+(quality.withCardImage||0)+' immagini carta · '+(quality.withPlayerImage||0)+' ritratti · '+(quality.withVariant||0)+' varianti · '+(quality.withRecentScores||0)+' con storico':'')+(tierLabel?' · query '+tierLabel:'')+fallbackLabel):(items.length?'Lettura parziale: '+items.length+' record ricevuti; totale non verificato e importazione bloccata':data?.cards?.message||'Non ancora verificato');
   $('sorareUpdated').textContent=data?.updatedAt?new Date(data.updatedAt).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'}):'Mai';
-  $('sorareCardBadge').textContent=`${items.length} identificativi`+(items.length>60?' · prime 60 mostrate':'');
+  $('sorareCardBadge').textContent=liveSorareComplete?`${items.length} carte verificate`:items.length?`${items.length} record parziali`:'Inventario non verificato';
   if(items.length){$('sorareCardsList').className='cards-grid';const reportItems=items.slice(0,60);$('sorareCardsList').innerHTML=reportItems.map((c,i)=>`<article class="player-card" style="padding:10px"><div style="height:175px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 20%,#263e4b,#101927 70%);border-radius:12px;overflow:hidden;margin-bottom:10px">${c.imageUrl?`<img src="${esc(c.imageUrl)}" alt="${esc(c.name||'Carta Sorare')}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:c.playerImageUrl?`<img src="${esc(c.playerImageUrl)}" alt="${esc(c.name||'Giocatore')}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:'<span style="font-size:40px;color:#a3ff5f">⚽</span>'}</div><div class="player-name">${esc(c.name||c.slug||'Carta Sorare')}</div><div class="player-club">${esc(c.team||'Sorare')}${c.season?' · '+esc(c.season):''}</div><div class="card-tags" style="margin-top:8px"><span class="tag">${esc(c.rarity||'Rarità n.d.')}</span>${c.serialNumber!=null?`<span class="tag">N° ${esc(c.serialNumber)}</span>`:''}${c.edition?`<span class="tag">${esc(c.edition)}</span>`:''}${c.skinEdition?.skinName?`<span class="tag">${esc(c.skinEdition.skinName)}</span>`:''}${c.skinEdition?.variantName?`<span class="tag">${esc(c.skinEdition.variantName)}</span>`:''}${c.skinEdition?.bonus!=null?`<span class="tag">${esc(variantBonusLabel(c.skinEdition.bonus))}</span>`:''}<span class="tag">L5 ${c.l5!=null?esc(fmt(c.l5)):'n.d.'}</span><span class="tag">L10 ${c.l10!=null?esc(fmt(c.l10)):'n.d.'}</span>${c.upcomingGames?.[0]?.date?`<span class="tag">Match ${esc(new Date(c.upcomingGames[0].date).toLocaleDateString('it-IT',{day:'2-digit',month:'short'}))}</span>`:''}</div><details style="margin-top:8px;color:#91a1b8;font-size:10px"><summary>Dettagli tecnici</summary><p style="overflow-wrap:anywhere">${esc(c.slug||'')}</p></details></article>`).join('')+(data.cards.truncated?'<div class="notice" style="grid-column:1/-1"><span class="notice-icon">ⓘ</span><div>Elenco parziale: la richiesta ha raggiunto il limite di pagine previsto.</div></div>':'');}
   else {$('sorareCardsList').className='empty';$('sorareCardsList').innerHTML=`<span class="empty-icon">${status==='error'?'!':'↻'}</span><strong>${esc(data?.cards?.message||data?.message||'Nessuna carta disponibile nel report')}</strong><p>${esc(data?.cards?.detail||'Dopo la prima esecuzione potremo vedere quali campi pubblici sono accessibili.')}</p>`;}
   const diagnosticText=(Array.isArray(data?.cards?.diagnostic?.fallbackErrors)?data.cards.diagnostic.fallbackErrors:[]).map(item=>(item.tier||'query')+': '+(item.error||'errore')).join(' · ').slice(0,500);
@@ -969,7 +981,7 @@ function renderSorareReport(data){
   $('sorareMessage').innerHTML=`<strong>${esc(data?.message||'In attesa del primo report.')}</strong><br>${esc(data?.detail||'Rileggi i dati per verificare la fonte pubblica.')}${pageError?'<br><strong>Dettaglio inventario:</strong> '+esc(pageError):''}${diagnosticText?'<br><strong>Query di ripiego:</strong> '+esc(diagnosticText):''}`;
 }
 function importSorareCards(silent=false){
-  if(!liveSorareItems.length){toast('Prima sincronizza le carte Sorare.');return;}
+  if(!isSorareAuthenticated||!liveSorareComplete){toast('Importazione bloccata: collega Sorare e attendi che l’inventario completo sia verificato.');return;}
   function normalizedPosition(value){
     const text=(Array.isArray(value)?value:[value]).filter(Boolean).join(' ').toLowerCase();
     if(/goalkeeper|keeper|portiere|\bgk\b/.test(text))return 'Portiere';
@@ -978,70 +990,83 @@ function importSorareCards(silent=false){
     if(/forward|attaccante|\bfw\b|\bst\b|\bfor\b/.test(text))return 'Attaccante';
     return '';
   }
-  let merged=state.cards.slice();
-  if(state.sorareProfileSlug&&state.sorareProfileSlug!==liveSorareProfileSlug)merged=merged.filter(card=>card.source!=='sorare');
-  const indexBySlug=new Map();
-  merged.forEach((card,index)=>{const key=card.sorareSlug||card.slug;if(key)indexBySlug.set(key,index);});
-  let added=0,updated=0;
+  const previousSorare=state.cards.filter(card=>card?.source==='sorare'||card?.sorareSlug);
+  const manualCards=state.cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug);
+  const sameAccount=state.sorareProfileSlug===liveSorareProfileSlug;
+  const oldBySlug=new Map((sameAccount?previousSorare:[]).map(card=>[card.sorareSlug||card.slug,card]));
+  const merged=manualCards.slice(),indexBySlug=new Map();let added=0,updated=0;
   for(const card of liveSorareItems){
-    if(!card.slug)continue;
-    const idx=indexBySlug.get(card.slug),old=idx===undefined?{}:merged[idx],skin=card.skinEdition||null;
+    if(!card?.slug)continue;
+    const old=oldBySlug.get(card.slug)||{},skin=card.skinEdition||null;
     const item={
-      ...old,id:old.id||'sorare-'+card.slug,sorareSlug:card.slug,slug:card.slug,assetId:card.assetId||old.assetId||null,
-      name:(card.name&&card.slug&&String(card.name).trim().toLowerCase()!==String(card.slug).trim().toLowerCase()?card.name:null)||old.name||card.name||card.slug,
-      club:card.team||old.club||'',
-      position:normalizedPosition(card.position)||old.position||'Altro',
-      positionCodes:Array.isArray(card.position)&&card.position.length?card.position:(old.positionCodes||[]),
-      rarity:card.rarity&&String(card.rarity).toLowerCase()!=='unknown'?card.rarity:(old.rarity||card.rarity||'Unknown'),
-      rarityTyped:card.rarityTyped||old.rarityTyped||null,
-      l5:card.l5??old.l5??'',l10:card.l10??old.l10??'',l15:card.l15??old.l15??'',age:card.age??old.age??'',
-      imageUrl:card.imageUrl||old.imageUrl||null,playerImageUrl:card.playerImageUrl||old.playerImageUrl||null,
-      teamImageUrl:card.teamImageUrl||old.teamImageUrl||null,teamSlug:card.teamSlug||old.teamSlug||null,
-      activeTeamImageUrl:card.activeTeamImageUrl||old.activeTeamImageUrl||null,activeTeamSlug:card.activeTeamSlug||old.activeTeamSlug||null,
-      skinEdition:skin||old.skinEdition||null,variantName:skin?.variantName||skin?.variant||old.variantName||null,
-      skin:skin?.skin||old.skin||null,bonus:skin?.bonus??old.bonus??null,
-      power:card.power??old.power??null,grade:card.grade??old.grade??null,
-      rawScores:Array.isArray(card.rawScores)&&card.rawScores.length?card.rawScores:(old.rawScores||[]),
-      playerRawScores:Array.isArray(card.playerRawScores)&&card.playerRawScores.length?card.playerRawScores:(old.playerRawScores||[]),
-      playerSlug:card.playerSlug||old.playerSlug||null,
-      activeTeam:card.activeTeam||old.activeTeam||null,
-      upcomingGames:Array.isArray(card.upcomingGames)&&card.upcomingGames.length?card.upcomingGames:(old.upcomingGames||[]),
-      season:card.season??old.season??null,serialNumber:card.serialNumber??old.serialNumber??null,
-      edition:card.edition||old.edition||null,setName:card.set?.name||old.setName||null,source:'sorare'
+      ...old,id:old.id||'sorare-'+card.slug,sorareSlug:card.slug,slug:card.slug,assetId:card.assetId||null,
+      name:card.name&&card.slug&&String(card.name).trim().toLowerCase()!==String(card.slug).trim().toLowerCase()?card.name:card.slug,
+      club:card.team||'',league:old.league||'',position:normalizedPosition(card.position)||'Altro',
+      positionCodes:Array.isArray(card.position)?card.position:[],rarity:card.rarity&&String(card.rarity).toLowerCase()!=='unknown'?card.rarity:'Unknown',
+      rarityTyped:card.rarityTyped||null,l5:card.l5??'',l10:card.l10??'',l15:card.l15??'',age:card.age??'',note:old.note||'',
+      imageUrl:card.imageUrl||null,playerImageUrl:card.playerImageUrl||null,teamImageUrl:card.teamImageUrl||null,teamSlug:card.teamSlug||null,
+      activeTeamImageUrl:card.activeTeamImageUrl||null,activeTeamSlug:card.activeTeamSlug||null,skinEdition:skin,
+      variantName:skin?.variantName||skin?.variant||null,skin:skin?.skin||null,bonus:skin?.bonus??null,power:card.power??null,grade:card.grade??null,
+      rawScores:Array.isArray(card.rawScores)?card.rawScores:[],playerRawScores:Array.isArray(card.playerRawScores)?card.playerRawScores:[],
+      playerSlug:card.playerSlug||null,activeTeam:card.activeTeam||null,upcomingGames:Array.isArray(card.upcomingGames)?card.upcomingGames:[],
+      season:card.season??null,serialNumber:card.serialNumber??null,edition:card.edition||null,setName:card.set?.name||null,source:'sorare'
     };
-    if(idx===undefined){indexBySlug.set(card.slug,merged.length);merged.push(item);added++;}else{merged[idx]=item;updated++;}
+    if(indexBySlug.has(card.slug)){merged[indexBySlug.get(card.slug)]=item;updated++;continue;}
+    indexBySlug.set(card.slug,merged.length);merged.push(item);
+    if(oldBySlug.has(card.slug))updated++;else added++;
   }
-  state.cards=merged;state.sorareProfileSlug=liveSorareProfileSlug;persist();
-  if(!silent)toast('Import completato: '+added+' nuove carte, '+updated+' aggiornate.');
+  state.cards=merged;state.sorareProfileSlug=liveSorareProfileSlug;state.sorareInventoryStatus='complete';
+  const ids=new Set(merged.map(card=>card.id));state.lineup=state.lineup.map(id=>ids.has(id)?id:'');
+  persist();
+  if(!silent)toast('Inventario completo riconciliato: '+liveSorareItems.length+' carte Sorare verificate; '+added+' nuove, '+updated+' aggiornate. Le carte non più presenti sono state rimosse.');
   renderLineup();
 }
-
 async function loadSorarePublicData(){
   if(sorareSyncRunning)return;
   sorareSyncRunning=true;
   const btn=$('reloadSorareData');
   if(btn){btn.disabled=true;btn.textContent='Lettura…';}
   try{
-    let session={authenticated:false,profile:null};
-    try{const sessionResponse=await fetch('/api/auth/sorare/session?t='+Date.now(),{cache:'no-store'});session=await sessionResponse.json();}catch(e){}
+    let session={authenticated:false,profile:null},sessionError='';
+    try{
+      const sessionResponse=await fetch('/api/auth/sorare/session?t='+Date.now(),{cache:'no-store'});
+      session=await sessionResponse.json();
+      if(!sessionResponse.ok)sessionError='Verifica della sessione non riuscita (HTTP '+sessionResponse.status+').';
+    }catch(error){sessionError=String(error?.message||'Impossibile verificare la sessione.');}
     updateSorareAuthUI(session);
-    activeSorareSlug=session.authenticated&&session.profile?.slug?String(session.profile.slug):'mianismo';
+    if(!session.authenticated||!session.profile?.slug){
+      activeSorareSlug='';liveSorareProfileSlug='';liveSorareItems=[];liveSorareComplete=false;
+      state.sorareInventoryStatus='unverified';renderAll();
+      renderSorareReport({
+        status:'not_authenticated',requestedSlug:'',
+        profile:{found:false,slug:'',nickname:null},
+        cards:{status:'unavailable',count:null,items:[],complete:false,authenticated:false,message:'Collega il tuo account Sorare per sincronizzare la tua collezione.',detail:sessionError||'NEXUS non carica più un profilo pubblico predefinito come se fosse il tuo account.'},
+        message:'Nessuna sessione Sorare autenticata: non importo profili pubblici come collezione personale.',
+        detail:'Accedi da Sorare Sync, poi avvia una lettura completa dell’inventario.'
+      });
+      return;
+    }
+    activeSorareSlug=String(session.profile.slug);
     liveSorareProfileSlug=activeSorareSlug;
     const profileResponse=await fetch('/api/public/profile?slug='+encodeURIComponent(activeSorareSlug)+'&t='+Date.now(),{cache:'no-store'});
     const profile=await profileResponse.json().catch(()=>({status:'error',error:'Risposta profilo non valida'}));
     const allCards=[],seen=new Set(),tierCounts={},fallbackErrors=[];
     let cardsData={status:'unavailable',error:'Nessuna risposta carta',items:[]};
     let lastGoodChunk=null,after=null,complete=false,pageError=null;
-    const seenCursors=new Set();
-    const MAX_CLIENT_PAGES=100;
+    const seenCursors=new Set(),MAX_CLIENT_PAGES=100;
     for(let page=0;page<MAX_CLIENT_PAGES;page++){
       const params=new URLSearchParams({slug:activeSorareSlug,t:String(Date.now())});
       if(after)params.set('after',after);
       const response=await fetch('/api/public/cards?'+params.toString(),{cache:'no-store'});
       const chunk=await response.json().catch(()=>({status:'unavailable',error:'Risposta carte non valida',items:[]}));
       if(!response.ok||chunk.status!=='ok'){
-        pageError=chunk.error||'Errore durante la lettura di una pagina successiva';
+        pageError=chunk.error||'Errore durante la lettura di una pagina dell’inventario';
         if(!lastGoodChunk)cardsData=chunk;
+        break;
+      }
+      if(chunk.authenticated!==true||chunk.profileSlug!==activeSorareSlug){
+        pageError='L’endpoint carte non ha confermato la sessione o l’identità dell’account collegato. Importazione bloccata.';
+        if(!lastGoodChunk)cardsData={...chunk,status:'unavailable',items:[],error:pageError};
         break;
       }
       lastGoodChunk=chunk;
@@ -1050,7 +1075,7 @@ async function loadSorarePublicData(){
       const fallback=chunk.diagnostic?.fallbackErrors||chunk.diagnostic?.fallbacks||[];
       if(Array.isArray(fallback))fallbackErrors.push(...fallback);
       for(const item of (Array.isArray(chunk.items)?chunk.items:[])){
-        const key=item.assetId||item.slug;
+        const key=item.slug;
         if(!key||seen.has(key))continue;
         seen.add(key);allCards.push(item);
       }
@@ -1061,34 +1086,29 @@ async function loadSorarePublicData(){
       if(!Array.isArray(chunk.items)||chunk.items.length===0){pageError='La paginazione ha segnalato altre carte ma ha restituito una pagina vuota.';break;}
       seenCursors.add(next);
       after=next;
-      // Sorare's anonymous limit is 20 requests/min; authenticated JWT permits 60/min. Pace page reads to avoid 429s.
       await new Promise(resolve=>setTimeout(resolve,chunk.authenticated?1200:3300));
       if(page===MAX_CLIENT_PAGES-1)pageError='Raggiunto il limite prudenziale di '+MAX_CLIENT_PAGES+' pagine; inventario parziale.';
     }
-    const profileOk=profileResponse.ok&&profile.status==='ok'&&profile.profile;
+    const profileOk=profileResponse.ok&&profile.status==='ok'&&profile.authenticated===true&&profile.profile&&profile.profile.slug===activeSorareSlug;
     const hasCardsResponse=!!lastGoodChunk;
     const resolvedNames=allCards.filter(card=>card?.name&&card?.slug&&String(card.name).trim().toLowerCase()!==String(card.slug).trim().toLowerCase()).length;
-    const usefulRecords=allCards.filter(card=>card?.imageUrl||card?.playerImageUrl||card?.team||card?.activeTeam||(Array.isArray(card?.position)&&card.position.length)||(card?.rarityTyped&&String(card.rarityTyped).toLowerCase()!=='unknown')||(Array.isArray(card?.rawScores)&&card.rawScores.length)||(Array.isArray(card?.playerRawScores)&&card.playerRawScores.length)).length;
-    const cardsQualityGood=hasCardsResponse&&allCards.length>0&&resolvedNames/allCards.length>=0.8&&usefulRecords/allCards.length>=0.8;
-    const cardsOk=hasCardsResponse&&cardsQualityGood;
+    const usefulRecords=allCards.filter(card=>card?.imageUrl||card?.playerImageUrl||card?.team||(Array.isArray(card?.position)&&card.position.length)||(card?.rarityTyped&&String(card.rarityTyped).toLowerCase()!=='unknown')||(Array.isArray(card?.rawScores)&&card.rawScores.length)||(Array.isArray(card?.playerRawScores)&&card.playerRawScores.length)).length;
+    const cardsQualityGood=hasCardsResponse&&(allCards.length===0?complete&&!pageError:(allCards.length>0&&resolvedNames/allCards.length>=0.8&&usefulRecords/allCards.length>=0.8));
     if(hasCardsResponse&&!cardsQualityGood){
-      pageError='La risposta dell’API non ha superato il controllo di qualità: nomi o dettagli essenziali non risolti. I dati salvati in precedenza non sono stati sostituiti.';
-      cardsData={...lastGoodChunk,items:[],count:null,error:pageError};
+      pageError='La risposta API non ha superato il controllo di qualità: nomi o dettagli essenziali non risolti. I vecchi dati non sono stati importati né cancellati.';
+      cardsData={...lastGoodChunk,items:[],count:null,complete:false,error:pageError};
     }
+    const inventoryComplete=Boolean(profileOk&&session.authenticated&&hasCardsResponse&&complete&&!pageError&&cardsQualityGood);
+    const cardsOk=hasCardsResponse&&cardsQualityGood;
     if(cardsOk){
       const tierNames=Object.keys(tierCounts);
       const primaryTier=tierNames.sort((a,b)=>tierCounts[b]-tierCounts[a])[0]||lastGoodChunk.queryTier||null;
       cardsData={
-        ...lastGoodChunk,items:allCards,count:allCards.length,hasMore:!complete,
-        queryTier:primaryTier,queryTierCounts:tierCounts,
-        pageError,
-        diagnostic:{
-          attemptedFallbacks:fallbackErrors.length,
-          fallbackErrors:fallbackErrors.slice(0,6)
-        },
+        ...lastGoodChunk,items:allCards,count:inventoryComplete?allCards.length:null,complete:inventoryComplete,
+        hasMore:!inventoryComplete,queryTier:primaryTier,queryTierCounts:tierCounts,pageError,
+        diagnostic:{attemptedFallbacks:fallbackErrors.length,fallbackErrors:fallbackErrors.slice(0,6)},
         dataQuality:{
-          withResolvedNames:resolvedNames,
-          withUsefulData:usefulRecords,
+          withResolvedNames:resolvedNames,withUsefulData:usefulRecords,
           withCardImage:allCards.filter(c=>c.imageUrl).length,
           withPlayerImage:allCards.filter(c=>c.playerImageUrl).length,
           withVariant:allCards.filter(c=>c.skinEdition||c.specialEdition||c.edition).length,
@@ -1097,39 +1117,41 @@ async function loadSorarePublicData(){
         }
       };
     }
-    const status=profileOk?(cardsOk?(pageError?'degraded':'ok'):'degraded'):profile.status==='not_found'?'profile_not_found_or_not_public':'error';
+    const status=!profileOk?(profile.status==='not_found'?'profile_not_found_or_not_public':'error'):(inventoryComplete?'ok':'degraded');
     const queryLabel=cardsOk?' · query '+(cardsData.queryTier||'unknown'):'';
-    const partialLabel=pageError?' · pagina parziale':'';
     renderSorareReport({
       status,
-      statusLabel:profileOk?(cardsOk?(isSorareAuthenticated?'Account autenticato · ':'Profilo pubblico · ')+allCards.length+' carte'+queryLabel+partialLabel:'Profilo attivo · carte non disponibili'):'Controllo API non riuscito',
+      statusLabel:inventoryComplete?'Account autenticato · '+allCards.length+' carte complete'+queryLabel:cardsOk?'Lettura parziale · '+allCards.length+' record · totale non verificato':'Account autenticato · inventario non disponibile',
       requestedSlug:activeSorareSlug,
       profile:{found:!!profileOk,slug:profile.profile?.slug||activeSorareSlug,nickname:profile.profile?.nickname||null},
       cards:{
         status:cardsOk?'available':'unavailable',
-        count:cardsOk?(cardsData.count??allCards.length):null,
-        items:cardsOk&&Array.isArray(cardsData.items)?cardsData.items:[],
-        dataQuality:cardsData.dataQuality||null,
-        queryTier:cardsData.queryTier||null,
-        queryTierCounts:cardsData.queryTierCounts||null,
-        diagnostic:cardsData.diagnostic||null,
-        truncated:!!cardsData.hasMore,
-        message:cardsOk?(pageError?'Inventario parziale: '+pageError:complete?'Dati pubblici ricevuti':'Elenco parziale, sincronizza di nuovo'):(cardsData.error||'Elenco carte non disponibile'),
+        count:inventoryComplete?allCards.length:null,
+        items:cardsOk?allCards:[],
+        complete:inventoryComplete,authenticated:session.authenticated,profileSlug:activeSorareSlug,
+        dataQuality:cardsData.dataQuality||null,queryTier:cardsData.queryTier||null,queryTierCounts:cardsData.queryTierCounts||null,
+        diagnostic:cardsData.diagnostic||null,truncated:!inventoryComplete,
+        message:inventoryComplete?(allCards.length?'Inventario completo letto da Sorare':'Sorare ha restituito un inventario vuoto: totale verificato pari a 0.'):(cardsOk?'Inventario parziale: '+(pageError||'paginazione non completata')+'. Nessun totale definitivo e nessuna importazione.':(cardsData.error||'Inventario non disponibile')),
         detail:cardsData.error||pageError||''
       },
-      updatedAt:cardsData.fetchedAt||new Date().toISOString(),
-      message:profileOk?(isSorareAuthenticated?'Accesso diretto Sorare verificato.':'Profilo Sorare pubblico verificato.'):'Non è stato possibile verificare il profilo Sorare.',
-      detail:cardsOk?'Immagini, varianti e statistiche mostrate solo quando esposte dall’API.':'Dettaglio API: '+(cardsData.error||profile.error||'verifica i log del backend.')
+      updatedAt:inventoryComplete?(cardsData.fetchedAt||new Date().toISOString()):null,
+      message:profileOk?'Sessione e identità Sorare verificate.':('Non è stato possibile verificare il profilo Sorare: '+(profile.error||'errore API')),
+      detail:inventoryComplete?'Dati attribuiti al profilo autenticato '+activeSorareSlug+'.':(pageError||cardsData.error||profile.error||'La sincronizzazione completa non è stata confermata.')
     });
-    if(cardsOk&&allCards.length)importSorareCards(true);
+    if(inventoryComplete){
+      importSorareCards(true);
+    }else{
+      liveSorareComplete=false;state.sorareInventoryStatus='unverified';renderAll();
+    }
   }catch(error){
-    renderSorareReport({status:'error',requestedSlug:'mianismo',message:'Errore nel collegamento alle API Vercel.',detail:String(error?.message||error),cards:{status:'unavailable',count:null,items:[],message:'Endpoint non raggiungibile.'}});
+    activeSorareSlug='';liveSorareProfileSlug='';liveSorareItems=[];liveSorareComplete=false;
+    state.sorareInventoryStatus='unverified';renderAll();
+    renderSorareReport({status:'error',requestedSlug:'',message:'Errore durante la verifica dell’account Sorare.',detail:String(error?.message||error),profile:{found:false,slug:'',nickname:null},cards:{status:'unavailable',count:null,items:[],complete:false,authenticated:false,message:'Inventario non verificato.',detail:'Nessun dato incompleto è stato importato.'}});
   }finally{
     if(btn){btn.disabled=false;btn.textContent='Rileggi dati';}
     sorareSyncRunning=false;
   }
 }
-
 function renderAll(){renderOverview();renderCards();renderResourcesForm();renderLineup();renderEdgeLab();}
 $('collectionInput').addEventListener('input',updateLoyaltyRewardEstimate);
 $('legacyGemsSpentBracket').addEventListener('change',updateLoyaltyRewardEstimate);

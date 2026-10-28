@@ -23,16 +23,16 @@ La password viene hashata nel browser usando il salt restituito da Sorare. L'end
 
 ## Inventario e sincronizzazione
 
-- All'avvio e poi ogni **2 minuti**, mentre la pagina è visibile, NEXUS verifica la sessione Sorare, legge l'account collegato (oppure usa il profilo pubblico predefinito `mianismo` quando non si è autenticati) e prova a recuperare tutte le pagine dell'inventario.
-- Le carte si importano e aggiornano in automatico: nome, immagine disponibile, squadra, rarità, stagione, variante, Power/Grade, storico score e prossime partite solo quando l'API espone quei campi. I doppioni vengono riconciliati con lo slug carta.
-- Quando si collega un altro account, l'inventario Sorare importato in precedenza viene separato da quello del nuovo account. Le eventuali schede aggiunte a mano sono conservate.
-- La paginazione è rallentata in modalità pubblica per rispettare i limiti noti dell'API Sorare. Un aggiornamento completo può richiedere buona parte dell'intervallo di due minuti per collezioni grandi; se Sorare limita le richieste, NEXUS conserva l'ultimo inventario valido invece di cancellarlo con dati incompleti.
+- All'avvio e poi ogni **2 minuti**, mentre la pagina è visibile, NEXUS verifica la sessione e legge esclusivamente lo slug restituito per l'account autenticato. Non importa un profilo pubblico predefinito come se fosse la collezione dell'utente non autenticato.
+- Una sincronizzazione è dichiarata completa soltanto se la sessione è autenticata, gli endpoint confermano lo stesso profilo e tutte le pagine superano i controlli. Una risposta parziale può essere mostrata come parziale, ma non aggiorna il catalogo né viene conteggiata come inventario totale.
+- Al termine di una sincronizzazione completa, l'archivio Sorare viene riconciliato con le carte attuali: le vecchie carte non più presenti vengono rimosse, le note manuali delle carte corrispondenti sono mantenute e le carte aggiunte manualmente vengono conservate. Un inventario completo vuoto è distinto da un errore API.
+- Se l'API limita le richieste o la paginazione non termina, NEXUS marca l'inventario come non verificato e non importa il sottoinsieme ricevuto.
 - La griglia di performance colora L5/L10 e ruolo; il mini-grafico mostra gli ultimi punteggi effettivamente disponibili. La telemetria di squadra usa solo i dati presenti nell'inventario. Se Sorare non fornisce un logo ufficiale della squadra, la carta mostra una sigla testuale, non un logo inventato.
 - `data/sorare-public.json` è una copia pubblica secondaria aggiornata dal workflow GitHub Actions ogni sei ore; la UI live interroga le API serverless su Vercel.
 
-## Limiti ufficiali da conoscere
+## Saldi e ricompense: cosa è verificato
 
-L'autenticazione diretta rende disponibili i dati che Sorare espone al JWT dell'account. Non garantisce l'accesso a dati non esposti dallo schema API, né rende automaticamente disponibili saldo Gems, premi riservati o formazioni future. Documentazione ufficiale: [Sorare API](https://github.com/sorare/api).
+Questa integrazione non legge direttamente il saldo Gems, il saldo Essence corrente o la percentuale di completamento della collezione. Per questi campi NEXUS mostra `—` finché non inserisci un valore manuale; il dato inserito manualmente è etichettato come tale, non come saldo verificato dall'API. Le stime di ricompensa sono stime basate sui dati inseriti, non saldo effettivo né prova di accredito. La documentazione Sorare descrive l'autenticazione JWT e la paginazione delle carte, ma non garantisce che ogni dato dell'interfaccia sia disponibile via API: [Sorare API](https://github.com/sorare/api).
 
 ## Test
 
@@ -42,7 +42,8 @@ Con Node.js 20 o successivo:
 node scripts/test-cards-api.cjs
 node scripts/test-sorare-sync.mjs
 node scripts/test-sorare-login.cjs
+node scripts/test-sorare-import.cjs
 node scripts/test-dashboard-syntax.mjs
 ```
 
-I valori locali di risorse, note e formazione sono dati modificabili salvati nel browser, non una conferma ufficiale del saldo Sorare. Le medie L5/L10/L15 sono valori storici, non previsioni garantite.
+I valori manuali di risorse, note e formazione sono dati modificabili salvati nel browser, non una conferma ufficiale del saldo Sorare. L'archivio carte viene aggiornato come inventario corrente solo dopo una sincronizzazione completa autenticata. Le medie L5/L10/L15 sono valori storici, non previsioni garantite.

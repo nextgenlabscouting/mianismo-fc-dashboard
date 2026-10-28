@@ -233,7 +233,7 @@ module.exports = async function handler(req, res) {
 
   const session = await getValidSession(req, res);
   const rawSlug = Array.isArray(req.query.slug) ? req.query.slug[0] : req.query.slug;
-  const slug = String(rawSlug || session?.profile?.slug || "mianismo").trim();
+  const slug = String(session?.profile?.slug || rawSlug || "mianismo").trim();
   const rawAfter = Array.isArray(req.query.after) ? req.query.after[0] : req.query.after;
   const requestedCursor = rawAfter ? String(rawAfter) : null;
 

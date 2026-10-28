@@ -1,5 +1,6 @@
 const assert = require("node:assert/strict");
 const handler = require("../api/public/cards.js");
+const { writeSession } = require("../lib/sorare-session.js");
 
 function response(status, body) {
   return {
@@ -123,11 +124,37 @@ async function testCursorAndMethodValidation() {
   assert.equal(method.headers.Allow, "GET");
 }
 
+async function testAuthenticatedSlugCannotBeOverridden() {
+  const oldSecret = process.env.SORARE_SESSION_SECRET;
+  process.env.SORARE_SESSION_SECRET = "nexus-test-secret-at-least-32-characters-long";
+  try {
+    const cookieRes = { headers: {}, setHeader(name, value) { this.headers[name] = value; }, getHeader(name) { return this.headers[name]; } };
+    writeSession(cookieRes, {
+      authType: "jwt", accessToken: "test-account-token", jwtAud: "nexus-sorare-intelligence",
+      expiresAt: Date.now() + 60 * 60 * 1000, profile: { slug: "real-account", nickname: "Real Account" }
+    });
+    const cookiePair = cookieRes.headers["Set-Cookie"].find(value => value.startsWith("nexus_sorare_session=")).split(";")[0];
+    let requestedSlug = null;
+    const res = await callHandler(async (_url, options) => {
+      requestedSlug = JSON.parse(options.body).variables.slug;
+      return response(200, sorareData(cardFixture()));
+    }, { method: "GET", query: { slug: "wrong-public-account" }, headers: { cookie: cookiePair } });
+    assert.equal(res.statusCode, 200);
+    assert.equal(requestedSlug, "real-account");
+    assert.equal(res.body.profileSlug, "real-account");
+    assert.equal(res.body.authenticated, true);
+  } finally {
+    if (oldSecret === undefined) delete process.env.SORARE_SESSION_SECRET;
+    else process.env.SORARE_SESSION_SECRET = oldSecret;
+  }
+}
+
 (async () => {
   await testVariantQueryFallback();
   await testStandardFallbackWhenOptionalFieldsFail();
   await testCursorAndMethodValidation();
-  console.log("Sorare cards API tests passed (3 suites).");
+  await testAuthenticatedSlugCannotBeOverridden();
+  console.log("Sorare cards API tests passed (4 suites including authenticated account identity).");
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;

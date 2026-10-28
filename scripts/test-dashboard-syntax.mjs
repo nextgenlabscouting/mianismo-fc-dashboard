@@ -36,7 +36,7 @@ const checks = [
   [/MAX_CLIENT_PAGES=100/, 'limite di sicurezza paginazione API'],
   [/seenCursors\.has\(next\)/, 'rilevamento cursori ripetuti'],
   [/cardsQualityGood=hasCardsResponse/, 'controllo qualità prima dell’importazione'],
-  [/eligibleCandidates=state\.cards\.filter\(isTargetSetCard\)/, 'ottimizzatore limitato al Set selezionato dall’utente'],
+  [/eligibleCandidates=collectionCards\(\)\.filter\(isTargetSetCard\)/, 'ottimizzatore limitato alle carte verificate del Set selezionato'],
   [/function currentTargetSet\(\)/, 'nessuna formazione senza un Set selezionato'],
   [/legacyEssenceExpired=true/, 'migrazione Essence HyperGlitch scaduta'],
   [/reportItems=items\.slice\(0,60\)/, 'limite rendering del pannello tecnico'],
@@ -102,6 +102,10 @@ elements.legacyGemsSpentBracket.value = '';
 updateEstimate();
 assert.match(elements.loyaltyEssenceEstimate.textContent, /^6.?000 Essence$/);
 assert.equal(elements.loyaltyGemsEstimate.textContent, '0+ Gems (fascia da verificare)');
+elements.collectionInput.value = '';
+updateEstimate();
+assert.match(elements.loyaltyEssenceEstimate.textContent, /percentuale non verificata/i);
+assert.match(elements.loyaltyGemsEstimate.textContent, /dati non verificati/i);
 
 assert.match(authSources[0], /createCipheriv\("aes-256-gcm"/, 'Il token Sorare deve essere cifrato nella sessione');
 assert.match(authSources[0], /HttpOnly; SameSite=Lax/, 'La sessione deve usare cookie HttpOnly SameSite=Lax');
@@ -112,9 +116,15 @@ assert.match(authSources[2], /writeSession\(res/, 'Il login deve creare una sess
 assert.match(authSources[3], /getValidSession/, 'L’endpoint sessione deve verificare il token');
 assert.match(authSources[5], /JWT-AUD/, 'L’API carte deve inviare JWT-AUD per il token Sorare');
 assert.match(authSources[6], /JWT-AUD/, 'L’API profilo deve inviare JWT-AUD per il token Sorare');
+assert.match(authSources[5], /session\?\.profile\?\.slug \|\| rawSlug/, 'L’API carte usa lo slug dell’account autenticato');
+assert.match(authSources[6], /session\?\.profile\?\.slug \|\| rawSlug/, 'L’API profilo usa lo slug dell’account autenticato');
 assert.match(html, /bcryptjs@2\.4\.3/, 'Il modulo password deve hashare nel browser');
 assert.doesNotMatch(html, /window\.location\.href=['"]\/api\/auth\/sorare\/login/, 'Il pulsante non deve usare OAuth');
-assert.doesNotMatch(html, /previousSorare/, 'L’importazione non deve riferirsi a una variabile non definita');
-assert.match(html, /if\(idx===undefined\)\{indexBySlug\.set\(card\.slug,merged\.length\);merged\.push\(item\);added\+\+;\}/, 'Le carte nuove incrementano il contatore senza dipendenze esterne');
+assert.match(html, /const previousSorare=state\.cards\.filter/, 'Le carte Sorare precedenti vengono riconciliate prima della sincronizzazione');
+assert.match(html, /if\(indexBySlug\.has\(card\.slug\)\)/, 'La riconciliazione evita doppioni');
+assert.match(html, /if\(!isSorareAuthenticated\|\|!liveSorareComplete\)/, 'L’importazione rifiuta sessioni non autenticate o inventari parziali');
+assert.match(html, /state\.sorareInventoryStatus='complete'/, 'Lo stato diventa completo dopo la riconciliazione');
+assert.doesNotMatch(html, /activeSorareSlug='mianismo'/, 'Non carica il profilo pubblico predefinito come account personale');
+assert.doesNotMatch(html, /state\.resources\.essence=0/, 'Non inventa un saldo Essence pari a zero');
 
 console.log('Dashboard regression checks passed (' + (checks.length + authSources.length + 11) + ' assertions).');
