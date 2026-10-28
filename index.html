@@ -67,7 +67,7 @@
 </main>
 </div>
 <nav class="mobile-nav" id="mobileNav"><button class="active" data-page="overview"><span>◫</span>Home</button><button data-page="cards"><span>▧</span>Carte</button><button data-page="lineup"><span>⚽</span>Formazione</button><button data-page="resources"><span>◈</span>Risorse</button><button data-page="sorare"><span>↻</span>Sync</button></nav>
-<div class="modal-wrap" id="cardModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><div class="modal-head"><h3 id="modalTitle">Aggiungi una carta</h3><button class="close-btn" id="closeModal" aria-label="Chiudi">✕</button></div><form id="cardForm"><input type="hidden" id="editId"><div class="form-grid"><div class="field"><label for="playerName">Nome giocatore *</label><input class="input" id="playerName" required maxlength="80" placeholder="Es. Nome Cognome"></div><div class="field"><label for="playerClub">Club</label><input class="input" id="playerClub" maxlength="80" placeholder="Nome della squadra"></div><div class="field"><label for="playerLeague">Campionato</label><select class="select" id="playerLeague"><option value="">Seleziona…</option><option>Premier League</option><option>Bundesliga</option><option>La Liga</option><option>Ligue 1</option><option>Serie A</option><option>Altro</option></select></div><div class="field"><label for="playerPosition">Ruolo</label><select class="select" id="playerPosition"><option>Portiere</option><option selected>Difensore</option><option>Centrocampista</option><option>Attaccante</option><option>Altro</option></select></div><div class="field"><label for="playerRarity">Rarità</label><select class="select" id="playerRarity"><option>Limited</option><option>Rare</option><option>Super Rare</option><option>Unique</option><option>Altro</option></select></div><div class="field"><label for="playerL5">Media L5 (se nota)</label><input class="input" id="playerL5" type="number" min="0" max="100" step="0.1" placeholder="Es. 48.6"></div><div class="field"><label for="playerL15">Media L10 (se nota)</label><input class="input" id="playerL15" type="number" min="0" max="100" step="0.1" placeholder="Es. 45.2"></div><div class="field"><label for="playerAge">Età (facoltativa)</label><input class="input" id="playerAge" type="number" min="15" max="60" placeholder="Età"></div><div class="field full"><label for="playerNote">Note</label><input class="input" id="playerNote" maxlength="250" placeholder="Es. titolare, rigorista, avversario difficile…"></div></div><div class="form-actions"><button type="button" class="btn" id="cancelModal">Annulla</button><button type="submit" class="btn btn-primary">Salva carta</button></div></form></div></div>
+<div class="modal-wrap" id="cardModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><div class="modal-head"><h3 id="modalTitle">Aggiungi una carta</h3><button class="close-btn" id="closeModal" aria-label="Chiudi">✕</button></div><form id="cardForm"><input type="hidden" id="editId"><div class="form-grid"><div class="field"><label for="playerName">Nome giocatore *</label><input class="input" id="playerName" required maxlength="80" placeholder="Es. Nome Cognome"></div><div class="field"><label for="playerClub">Club</label><input class="input" id="playerClub" maxlength="80" placeholder="Nome della squadra"></div><div class="field"><label for="playerLeague">Campionato</label><select class="select" id="playerLeague"><option value="">Seleziona…</option><option>Premier League</option><option>Bundesliga</option><option>La Liga</option><option>Ligue 1</option><option>Serie A</option><option>Altro</option></select></div><div class="field"><label for="playerPosition">Ruolo</label><select class="select" id="playerPosition"><option>Portiere</option><option selected>Difensore</option><option>Centrocampista</option><option>Attaccante</option><option>Altro</option></select></div><div class="field"><label for="playerRarity">Rarità</label><select class="select" id="playerRarity"><option>Limited</option><option>Common</option><option>Rare</option><option>Super Rare</option><option>Unique</option><option>Altro</option></select></div><div class="field"><label for="playerL5">Media L5 (se nota)</label><input class="input" id="playerL5" type="number" min="0" max="100" step="0.1" placeholder="Es. 48.6"></div><div class="field"><label for="playerL15">Media L10 (se nota)</label><input class="input" id="playerL15" type="number" min="0" max="100" step="0.1" placeholder="Es. 45.2"></div><div class="field"><label for="playerAge">Età (facoltativa)</label><input class="input" id="playerAge" type="number" min="15" max="60" placeholder="Età"></div><div class="field full"><label for="playerNote">Note</label><input class="input" id="playerNote" maxlength="250" placeholder="Es. titolare, rigorista, avversario difficile…"></div></div><div class="form-actions"><button type="button" class="btn" id="cancelModal">Annulla</button><button type="submit" class="btn btn-primary">Salva carta</button></div></form></div></div>
 <input type="file" id="unusedFile" class="hide" aria-hidden="true"><div class="toast" id="toast" role="status"></div>
 <script>
 (function(){
@@ -393,6 +393,180 @@ function renderLineup(){
 }
 function labelsRoleError(role,cardName){return role+': '+cardName+' non risulta compatibile in base al ruolo memorizzato';}
 
+function safeImageUrl(value){
+  if(!value)return null;
+  try{const url=new URL(String(value));return url.protocol==="https:"||url.protocol==="http:"?url.href:null;}catch(e){return null;}
+}
+function openModal(card=null){
+  const form=$("cardForm");
+  form.reset();
+  $("editId").value=card?.id||"";
+  $("playerName").value=card?.name||"";
+  $("playerClub").value=card?.club||card?.team||"";
+  $("playerLeague").value=card?.league||"";
+  let position=card?.position;
+  if(Array.isArray(position))position=position[0];
+  const positionMap={Goalkeeper:"Portiere",Defender:"Difensore",Midfielder:"Centrocampista",Forward:"Attaccante"};
+  position=positionMap[position]||position||"Difensore";
+  $("playerPosition").value=position;
+  const rarity=String(card?.rarity||"Limited");
+  const raritySelect=$("playerRarity");
+  if(!Array.from(raritySelect.options).some(option=>option.value===rarity)){
+    const option=document.createElement("option");option.value=rarity;option.textContent=rarity;raritySelect.append(option);
+  }
+  raritySelect.value=rarity;
+  $("playerL5").value=card?.l5!=null&&card.l5!==""?card.l5:"";
+  $("playerL15").value=card?.l10!=null&&card.l10!==""?card.l10:"";
+  $("playerAge").value=card?.age!=null&&card.age!==""?card.age:"";
+  $("playerNote").value=card?.note||"";
+  $("modalTitle").textContent=card?"Modifica carta":"Aggiungi una carta";
+  $("cardModal").classList.add("open");
+  $("playerName").focus();
+}
+function closeModal(){
+  $("cardModal").classList.remove("open");
+  $("cardForm").reset();
+  $("editId").value="";
+}
+function saveCardFromForm(event){
+  event.preventDefault();
+  const name=$("playerName").value.trim();
+  if(!name){toast("Inserisci il nome del giocatore.");$("playerName").focus();return;}
+  const optionalScore=id=>{
+    const raw=$(id).value.trim();
+    if(raw==="")return null;
+    const value=Number(raw);
+    return Number.isFinite(value)&&value>=0&&value<=100?value:NaN;
+  };
+  const l5=optionalScore("playerL5"),l10=optionalScore("playerL15");
+  if(Number.isNaN(l5)||Number.isNaN(l10)){toast("Le medie devono essere numeri tra 0 e 100.");return;}
+  const ageRaw=$("playerAge").value.trim(),age=ageRaw===""?null:Number(ageRaw);
+  if(age!==null&&(!Number.isFinite(age)||age<15||age>60)){toast("Controlla l'età inserita.");return;}
+  const id=$("editId").value||("manual-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8));
+  const index=state.cards.findIndex(card=>card.id===id);
+  const old=index>=0?state.cards[index]:{};
+  const position=$("playerPosition").value;
+  const rarity=$("playerRarity").value||"Unknown";
+  const item={
+    ...old,id,name,club:$("playerClub").value.trim(),league:$("playerLeague").value||"",
+    position,positionCodes:[position],rarity,rarityTyped:rarity.toLowerCase(),
+    l5,l10,age,note:$("playerNote").value.trim(),
+    imageUrl:safeImageUrl(old.imageUrl),playerImageUrl:safeImageUrl(old.playerImageUrl),
+    source:old.source||"manual"
+  };
+  if(index>=0)state.cards[index]=item;else state.cards.unshift(item);
+  closeModal();
+  persist();
+  toast(index>=0?"Carta aggiornata.":"Carta aggiunta.");
+}
+function deleteCard(id){
+  const card=state.cards.find(item=>item.id===id);
+  if(!card)return;
+  if(!window.confirm("Eliminare "+(card.name||"questa carta")+" dall'archivio locale?"))return;
+  state.cards=state.cards.filter(item=>item.id!==id);
+  state.lineup=state.lineup.map(value=>value===id?"":value);
+  persist();
+  toast("Carta eliminata dall'archivio locale.");
+}
+function saveResourcesFromForm(event){
+  event.preventDefault();
+  const gems=Number($("gemsInput").value),essence=Number($("essenceInput").value);
+  const collection=Number($("collectionInput").value),goal=Number($("goalInput").value);
+  const set=$("setInput").value.trim(),notes=$("notesInput").value.trim();
+  if(!set){toast("Inserisci il nome del Set.");return;}
+  if(!Number.isSafeInteger(gems)||gems<0||!Number.isSafeInteger(essence)||essence<0||!Number.isFinite(collection)||collection<0||collection>100||!Number.isSafeInteger(goal)||goal<0){
+    toast("Controlla Gems, Essence, percentuale di collezione e obiettivo.");return;
+  }
+  if(/hyper\s?glitch/i.test(set)&&Date.now()>=Date.parse("2026-10-27T16:00:00Z")){
+    $("essenceInput").value="0";
+    toast("HyperGlitch è terminato: la sua Essence non può essere reinserita come saldo disponibile.");
+    return;
+  }
+  state.resources={
+    ...state.resources,gems,essence,set,collection,goal,notes,
+    legacyEssenceExpired:Boolean(state.resources.legacyEssenceExpired)
+  };
+  persist();
+  renderLineup();
+  toast("Risorse salvate nel browser.");
+}
+function resetResources(){
+  if(!window.confirm("Ripristinare i valori iniziali delle risorse? Le carte non verranno eliminate."))return;
+  state.resources={...initial.resources};
+  persist();
+  toast("Risorse iniziali ripristinate.");
+}
+function exportBackup(){
+  try{
+    const payload={app:"MIANISMO FC",schemaVersion:1,exportedAt:new Date().toISOString(),state};
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement("a");
+    link.href=url;
+    link.download="mianismo-fc-backup-"+new Date().toISOString().slice(0,10)+".json";
+    document.body.appendChild(link);link.click();link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    toast("Backup JSON esportato.");
+  }catch(error){toast("Esportazione non riuscita: "+String(error?.message||error));}
+}
+async function importBackupFromFile(event){
+  const file=event.target.files?.[0];
+  if(!file)return;
+  try{
+    const payload=JSON.parse(await file.text());
+    const incoming=payload&&typeof payload==="object"&&payload.state&&typeof payload.state==="object"?payload.state:payload;
+    if(!incoming||typeof incoming!=="object"||!Array.isArray(incoming.cards))throw new Error("Il file non contiene un archivio carte riconoscibile.");
+    const cards=incoming.cards.filter(card=>card&&typeof card==="object"&&String(card.name||"").trim()).map(card=>({
+      ...card,
+      id:String(card.id||card.sorareSlug||card.slug||("imported-"+Math.random().toString(36).slice(2,10))),
+      name:String(card.name).trim(),
+      imageUrl:safeImageUrl(card.imageUrl),
+      playerImageUrl:safeImageUrl(card.playerImageUrl)
+    }));
+    const incomingResources=incoming.resources&&typeof incoming.resources==="object"?incoming.resources:{};
+    const numberOr=(value,fallback,min,max,integer=false)=>{
+      const parsed=Number(value);
+      return Number.isFinite(parsed)&&parsed>=min&&parsed<=max&&(!integer||Number.isSafeInteger(parsed))?parsed:fallback;
+    };
+    const resources={
+      ...initial.resources,...incomingResources,
+      gems:numberOr(incomingResources.gems,initial.resources.gems,0,Number.MAX_SAFE_INTEGER,true),
+      essence:numberOr(incomingResources.essence,initial.resources.essence,0,Number.MAX_SAFE_INTEGER,true),
+      collection:numberOr(incomingResources.collection,initial.resources.collection,0,100,false),
+      goal:numberOr(incomingResources.goal,initial.resources.goal,0,Number.MAX_SAFE_INTEGER,true),
+      set:String(incomingResources.set||initial.resources.set).trim().slice(0,60)||initial.resources.set,
+      notes:String(incomingResources.notes||"").slice(0,250)
+    };
+    if(/hyper\s?glitch/i.test(resources.set)&&Date.now()>=Date.parse("2026-10-27T16:00:00Z")){
+      resources.essence=0;resources.set="Nuovo Set (in attesa)";resources.legacyEssenceExpired=true;
+    }
+    const ids=new Set(cards.map(card=>card.id));
+    const savedLineup=Array.isArray(incoming.lineup)?incoming.lineup:[];
+    const lineup=Array.from({length:5},(_,i)=>{const id=String(savedLineup[i]||"");return ids.has(id)?id:"";});
+    state={...structuredClone(initial),...incoming,cards,lineup,resources};
+    cardsPage=1;
+    persist();
+    toast("Backup importato e validato: "+cards.length+" carte.");
+  }catch(error){
+    toast("Backup non importato: "+String(error?.message||error));
+  }finally{
+    event.target.value="";
+  }
+}
+function bindCoreControls(){
+  $("resourcesForm").addEventListener("submit",saveResourcesFromForm);
+  $("resetResources").addEventListener("click",resetResources);
+  $("cardForm").addEventListener("submit",saveCardFromForm);
+  $("addCardPage").addEventListener("click",()=>openModal());
+  $("closeModal").addEventListener("click",closeModal);
+  $("cancelModal").addEventListener("click",closeModal);
+  $("cardModal").addEventListener("click",event=>{if(event.target===$("cardModal"))closeModal();});
+  document.addEventListener("keydown",event=>{if(event.key==="Escape"&&$("cardModal").classList.contains("open"))closeModal();});
+  $("exportData").addEventListener("click",exportBackup);
+  $("importData").addEventListener("click",()=>$("importFile").click());
+  $("importFile").addEventListener("change",importBackupFromFile);
+}
+
 function renderResourcesForm(){const r=state.resources;$('gemsInput').value=r.gems;$('essenceInput').value=r.essence;$('setInput').value=r.set;$('collectionInput').value=r.collection;$('goalInput').value=r.goal;$('notesInput').value=r.notes||'';const ratio=r.goal>0?Math.min(100,num(r.gems)/num(r.goal)*100):0;$('goalBar').style.width=ratio+'%';$('goalCaption').textContent=`${fmt(r.gems)} / ${fmt(r.goal)} Gems`;$('goalPercent').textContent=Math.round(ratio)+'%'}
 let liveSorareItems=[];
 function renderSorareReport(data){
@@ -584,6 +758,7 @@ $('lineupCap').addEventListener('input',renderLineup);
 $('lineupBonus').addEventListener('input',renderLineup);
 $('clearLineup').addEventListener('click',()=>{state.lineup=['','','','',''];persist();renderLineup();});
 $('saveLineup').addEventListener('click',()=>{persist();toast('Formazione salvata in questo browser.');});
+bindCoreControls();
 renderAll();
 loadSorarePublicData();
 setInterval(()=>{if(!document.hidden)loadSorarePublicData();},900000);
