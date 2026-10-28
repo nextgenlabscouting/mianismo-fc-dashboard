@@ -406,7 +406,7 @@ function renderSorareReport(data){
   const fallbackLabel=diagnostic?.attemptedFallbacks?' · '+diagnostic.attemptedFallbacks+' fallback':'';
   $('sorareCardFoot').textContent=data?.cards?.status==='available'?(data.cards.truncated?'Elenco parziale':'Elenco ricevuto')+(quality?' · '+(quality.withCardImage||0)+' immagini carta · '+(quality.withPlayerImage||0)+' ritratti · '+(quality.withVariant||0)+' varianti · '+(quality.withRecentScores||0)+' con storico':'')+(tierLabel?' · query '+tierLabel:'')+fallbackLabel:data?.cards?.message||'Non ancora verificato';
   $('sorareUpdated').textContent=data?.updatedAt?new Date(data.updatedAt).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'}):'Mai';
-  $('sorareCardBadge').textContent=`${items.length} identificativi`;
+  $('sorareCardBadge').textContent=`${items.length} identificativi`+(items.length>60?' · prime 60 mostrate':'');
   if(items.length){$('sorareCardsList').className='cards-grid';const reportItems=items.slice(0,60);$('sorareCardsList').innerHTML=reportItems.map((c,i)=>`<article class="player-card" style="padding:10px"><div style="height:175px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 20%,#263e4b,#101927 70%);border-radius:12px;overflow:hidden;margin-bottom:10px">${c.imageUrl?`<img src="${esc(c.imageUrl)}" alt="${esc(c.name||'Carta Sorare')}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:c.playerImageUrl?`<img src="${esc(c.playerImageUrl)}" alt="${esc(c.name||'Giocatore')}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:'<span style="font-size:40px;color:#a3ff5f">⚽</span>'}</div><div class="player-name">${esc(c.name||c.slug||'Carta Sorare')}</div><div class="player-club">${esc(c.team||'Sorare')}${c.season?' · '+esc(c.season):''}</div><div class="card-tags" style="margin-top:8px"><span class="tag">${esc(c.rarity||'Rarità n.d.')}</span>${c.serialNumber!=null?`<span class="tag">N° ${esc(c.serialNumber)}</span>`:''}${c.edition?`<span class="tag">${esc(c.edition)}</span>`:''}${c.skinEdition?.skinName?`<span class="tag">${esc(c.skinEdition.skinName)}</span>`:''}${c.skinEdition?.variantName?`<span class="tag">${esc(c.skinEdition.variantName)}</span>`:''}${c.skinEdition?.bonus!=null?`<span class="tag">Bonus API: ${esc(c.skinEdition.bonus)}</span>`:''}<span class="tag">L5 ${c.l5!=null?esc(fmt(c.l5)):'n.d.'}</span><span class="tag">L10 ${c.l10!=null?esc(fmt(c.l10)):'n.d.'}</span>${c.upcomingGames?.[0]?.date?`<span class="tag">Match ${esc(new Date(c.upcomingGames[0].date).toLocaleDateString('it-IT',{day:'2-digit',month:'short'}))}</span>`:''}</div><details style="margin-top:8px;color:#91a1b8;font-size:10px"><summary>Dettagli tecnici</summary><p style="overflow-wrap:anywhere">${esc(c.slug||'')}</p></details></article>`).join('')+(data.cards.truncated?'<div class="notice" style="grid-column:1/-1"><span class="notice-icon">ⓘ</span><div>Elenco parziale: la richiesta ha raggiunto il limite di pagine previsto.</div></div>':'');}
   else {$('sorareCardsList').className='empty';$('sorareCardsList').innerHTML=`<span class="empty-icon">${status==='error'?'!':'↻'}</span><strong>${esc(data?.cards?.message||data?.message||'Nessuna carta disponibile nel report')}</strong><p>${esc(data?.cards?.detail||'Dopo la prima esecuzione potremo vedere quali campi pubblici sono accessibili.')}</p>`;}
   const diagnosticText=(Array.isArray(data?.cards?.diagnostic?.fallbackErrors)?data.cards.diagnostic.fallbackErrors:[]).map(item=>(item.tier||'query')+': '+(item.error||'errore')).join(' · ').slice(0,500);
@@ -498,7 +498,15 @@ async function loadSorarePublicData(){
       if(page===MAX_CLIENT_PAGES-1)pageError='Raggiunto il limite prudenziale di '+MAX_CLIENT_PAGES+' pagine; inventario parziale.';
     }
     const profileOk=profileResponse.ok&&profile.status==='ok'&&profile.profile;
-    const cardsOk=!!lastGoodChunk;
+    const hasCardsResponse=!!lastGoodChunk;
+    const resolvedNames=allCards.filter(card=>card?.name&&card?.slug&&String(card.name).trim().toLowerCase()!==String(card.slug).trim().toLowerCase()).length;
+    const usefulRecords=allCards.filter(card=>card?.imageUrl||card?.playerImageUrl||card?.team||card?.activeTeam||(Array.isArray(card?.position)&&card.position.length)||(card?.rarityTyped&&String(card.rarityTyped).toLowerCase()!=='unknown')||(Array.isArray(card?.rawScores)&&card.rawScores.length)||(Array.isArray(card?.playerRawScores)&&card.playerRawScores.length)).length;
+    const cardsQualityGood=hasCardsResponse&&allCards.length>0&&resolvedNames/allCards.length>=0.8&&usefulRecords/allCards.length>=0.8;
+    const cardsOk=hasCardsResponse&&cardsQualityGood;
+    if(hasCardsResponse&&!cardsQualityGood){
+      pageError='La risposta dell’API non ha superato il controllo di qualità: nomi o dettagli essenziali non risolti. I dati salvati in precedenza non sono stati sostituiti.';
+      cardsData={...lastGoodChunk,items:[],count:null,error:pageError};
+    }
     if(cardsOk){
       const tierNames=Object.keys(tierCounts);
       const primaryTier=tierNames.sort((a,b)=>tierCounts[b]-tierCounts[a])[0]||lastGoodChunk.queryTier||null;
@@ -511,6 +519,8 @@ async function loadSorarePublicData(){
           fallbackErrors:fallbackErrors.slice(0,6)
         },
         dataQuality:{
+          withResolvedNames:resolvedNames,
+          withUsefulData:usefulRecords,
           withCardImage:allCards.filter(c=>c.imageUrl).length,
           withPlayerImage:allCards.filter(c=>c.playerImageUrl).length,
           withVariant:allCards.filter(c=>c.skinEdition||c.specialEdition||c.edition).length,
@@ -519,7 +529,7 @@ async function loadSorarePublicData(){
         }
       };
     }
-    const status=profileOk?'ok':profile.status==='not_found'?'profile_not_found_or_not_public':'error';
+    const status=profileOk?(cardsOk?(pageError?'degraded':'ok'):'degraded'):profile.status==='not_found'?'profile_not_found_or_not_public':'error';
     const queryLabel=cardsOk?' · query '+(cardsData.queryTier||'unknown'):'';
     const partialLabel=pageError?' · pagina parziale':'';
     renderSorareReport({
@@ -529,8 +539,8 @@ async function loadSorarePublicData(){
       profile:{found:!!profileOk,slug:profile.profile?.slug||'mianismo',nickname:profile.profile?.nickname||null},
       cards:{
         status:cardsOk?'available':'unavailable',
-        count:cardsData.count??null,
-        items:Array.isArray(cardsData.items)?cardsData.items:[],
+        count:cardsOk?(cardsData.count??allCards.length):null,
+        items:cardsOk&&Array.isArray(cardsData.items)?cardsData.items:[],
         dataQuality:cardsData.dataQuality||null,
         queryTier:cardsData.queryTier||null,
         queryTierCounts:cardsData.queryTierCounts||null,
