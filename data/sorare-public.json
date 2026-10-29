@@ -3,8 +3,8 @@
   "source": "Sorare GraphQL API — public read-only sync",
   "requestedSlug": "mianismo",
   "updatedAt": "2026-10-28T22:11:50.413Z",
-  "status": "ok",
-  "statusLabel": "Inventario sincronizzato",
+  "status": "stale",
+  "statusLabel": "Ultimo inventario valido conservato",
   "profile": {
     "found": true,
     "slug": "mianismo",
@@ -108366,7 +108366,7 @@
     "sourceMode": "vercel-api",
     "pagesFetched": 33,
     "fetchedAt": "2026-10-28T22:11:50.400Z",
-    "stale": false,
+    "stale": true,
     "dataQuality": {
       "withResolvedNames": 1600,
       "withUsefulData": 1600,
@@ -108376,13 +108376,16 @@
       "withRecentScores": 1428,
       "withUpcomingGames": 1588
     },
-    "message": "Carte pubbliche con dettagli verificati ricevute.",
+    "message": "Dati precedenti conservati: l’ultimo aggiornamento non ha superato i controlli di integrità.",
     "detail": null,
     "diagnostics": {
       "attemptedFallbacks": 0,
       "fallbackErrors": []
-    }
+    },
+    "refreshAttemptedAt": "2026-10-29T04:26:48.157Z",
+    "refreshError": "Risposta inventario rifiutata: nomi o dettagli essenziali non risolti (1600 record). Nessun dato degradato verrà presentato come inventario valido."
   },
-  "message": "Profilo trovato; 1600 carte con dettagli risolti elaborate tramite vercel-api.",
-  "detail": "La disponibilità di immagini, varianti, punteggi e partite dipende dai campi esposti dall’API."
+  "message": "Aggiornamento non accettato; mantenuto l’ultimo inventario che aveva superato i controlli.",
+  "detail": "Risposta inventario rifiutata: nomi o dettagli essenziali non risolti (1600 record). Nessun dato degradato verrà presentato come inventario valido.",
+  "refreshAttemptedAt": "2026-10-29T04:26:48.157Z"
 }
