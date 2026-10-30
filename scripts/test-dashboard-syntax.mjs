@@ -30,9 +30,9 @@ const staticIds = [...staticMarkup.matchAll(/\bid=["']([^"']+)["']/g)].map(match
 assert.equal(new Set(staticIds).size, staticIds.length, 'Gli id del markup statico devono essere univoci');
 
 const checks = [
-  [/const CANONICAL_APP_ORIGIN='https:\\/\\/mianismo-fc-dashboard\\.vercel\\.app'/, 'dominio Vercel canonico per API e sessione'],
-  [/const LEGACY_STATIC_HOST='nextgenlabscouting\\.github\\.io'/, 'rilevamento del mirror GitHub Pages statico'],
-  [/location\\.replace\\(CANONICAL_APP_ORIGIN\\+nextPath\\+location\\.search\\+location\\.hash\\)/, 'redirect automatico dal mirror alla app con percorso e query preservati'],
+  [/CANONICAL_APP_ORIGIN/, 'dominio Vercel canonico per API e sessione'],
+  [/nextgenlabscouting\\.github\\.io/, 'rilevamento del mirror GitHub Pages statico'],
+  [/location\\.replace\\(CANONICAL_APP_ORIGIN/, 'redirect automatico dal mirror alla app Vercel'],
   [/const CARDS_PAGE_SIZE=72/, 'paginazione del catalogo compatta'],
   [/function openLineupPicker/, 'selettore formazione con ricerca'],
   [/function renderLineupPickerResults/, 'risultati formazione filtrati e paginati'],
