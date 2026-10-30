@@ -87,7 +87,7 @@ const helperEnd = scripts[0][1].indexOf('\nfunction renderResourcesForm(){', hel
 assert.ok(helperStart >= 0 && helperEnd > helperStart, 'Il calcolo loyalty deve essere estraibile per test');
 const helperSource = scripts[0][1].slice(helperStart, helperEnd);
 const elements = {
-  collectionInput: { value: '80' },
+  legacyCollectionInput: { value: '80' },
   legacyGemsSpentBracket: { value: '200-349' },
   loyaltyEssenceEstimate: { textContent: '' },
   loyaltyGemsEstimate: { textContent: '' },
@@ -95,19 +95,19 @@ const elements = {
 };
 const updateEstimate = new Function('$', 'state', 'num', 'fmt', helperSource + String.fromCharCode(10) + 'return updateLoyaltyRewardEstimate;')(
   id => elements[id] || { value: '' },
-  { resources: { collection: 80, legacyGemsSpentBracket: '200-349' } },
+  { resources: { legacyCollectionCompletion: 80, legacyGemsSpentBracket: '200-349' } },
   value => Number.isFinite(Number(value)) ? Number(value) : 0,
   value => Number(value).toLocaleString('it-IT', { maximumFractionDigits: 1 })
 );
 updateEstimate();
 assert.match(elements.loyaltyEssenceEstimate.textContent, /^8.?000 Essence$/);
 assert.equal(elements.loyaltyGemsEstimate.textContent, '25 Gems');
-elements.collectionInput.value = '65';
+elements.legacyCollectionInput.value = '65';
 elements.legacyGemsSpentBracket.value = '';
 updateEstimate();
 assert.match(elements.loyaltyEssenceEstimate.textContent, /^6.?000 Essence$/);
 assert.equal(elements.loyaltyGemsEstimate.textContent, '0+ Gems (fascia da verificare)');
-elements.collectionInput.value = '';
+elements.legacyCollectionInput.value = '';
 updateEstimate();
 assert.match(elements.loyaltyEssenceEstimate.textContent, /percentuale non verificata/i);
 assert.match(elements.loyaltyGemsEstimate.textContent, /dati non verificati/i);
