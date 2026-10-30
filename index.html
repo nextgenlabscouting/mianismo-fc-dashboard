@@ -349,7 +349,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
 const KEY='nexusSorareIntelligenceV1';
 const DIVINATION_SET='Divination';
 const DIVINATION_PREVIOUS_SNAPSHOT=Object.freeze({gems:320,collection:80,gemsSpentBracket:'200-349'});
-const initial={cards:[],lineup:['','','','',''],resources:{gems:null,essence:null,set:DIVINATION_SET,collection:null,goal:500,notes:'',legacyEssenceExpired:true,legacyCollectionCompletion:80,legacyGemsAtRollover:320,legacyGemsSpentBracket:'200-349'},resourcesConfirmedByUser:false,divinationTasks:{},sorareInventoryStatus:'unverified',lastSaved:null};
+const initial={cards:[],lineup:['','','','',''],resources:{gems:null,essence:null,set:DIVINATION_SET,collection:null,goal:500,notes:'',legacyEssenceExpired:true,legacyCollectionCompletion:80,legacyGemsAtRollover:320,legacyGemsSpentBracket:'200-349',divinationMigrationApplied:true},resourcesConfirmedByUser:false,divinationTasks:{},sorareInventoryStatus:'unverified',lastSaved:null};
 let state=loadState();
 let cardsPage=1;const CARDS_PAGE_SIZE=72;let lineupPickerSlot=-1,lineupPickerPage=1;const LINEUP_PICKER_PAGE_SIZE=40;
 let activeSorareSlug='',liveSorareProfileSlug='',isSorareAuthenticated=false,sorareSyncRunning=false;
@@ -360,7 +360,7 @@ function loadState(){
    if(!localStorage.getItem(KEY))try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}
    const oldResources=v.resources&&typeof v.resources==='object'?v.resources:{};
    const merged={...structuredClone(initial),...v,resources:{...initial.resources,...oldResources},cards:Array.isArray(v.cards)?v.cards:[],lineup:Array.isArray(v.lineup)?v.lineup:['','','','',''],divinationTasks:{...initial.divinationTasks,...(v.divinationTasks||{})},sorareProfileSlug:typeof v.sorareProfileSlug==='string'?v.sorareProfileSlug:''};
-   const oldCycle=/hyper\s?glitch/i.test(String(oldResources.set||''))||oldResources.legacyEssenceExpired===true;
+   const oldCycle=/hyper\s?glitch/i.test(String(oldResources.set||''))||(oldResources.legacyEssenceExpired===true&&oldResources.divinationMigrationApplied!==true);
    if(oldCycle){
     const oldPct=Number(oldResources.legacyCollectionCompletion??oldResources.collection);if(Number.isFinite(oldPct)&&oldPct>=0&&oldPct<=100)merged.resources.legacyCollectionCompletion=oldPct;
     const oldGems=Number(oldResources.legacyGemsAtRollover??oldResources.gems);if(Number.isSafeInteger(oldGems)&&oldGems>=0)merged.resources.legacyGemsAtRollover=oldGems;
@@ -1281,7 +1281,7 @@ async function loadSorarePublicData(){
 }
 function renderDivinationTasks(){const boxes=[...document.querySelectorAll('[data-divination-task]')];boxes.forEach(box=>{box.checked=state.divinationTasks?.[box.dataset.divinationTask]===true;});const done=boxes.filter(box=>box.checked).length;const label=$('divinationTaskProgress');if(label)label.textContent=done+' / '+boxes.length+' completate';}
 function renderAll(){renderOverview();renderCards();renderResourcesForm();renderLineup();renderEdgeLab();renderDivinationTasks();}
-$('collectionInput').addEventListener('input',updateLoyaltyRewardEstimate);
+$('legacyCollectionInput').addEventListener('input',updateLoyaltyRewardEstimate);
 $('legacyGemsSpentBracket').addEventListener('change',updateLoyaltyRewardEstimate);
 $('cardSearch').addEventListener('input',()=>{cardsPage=1;renderCards();});
 $('positionFilter').addEventListener('change',()=>{cardsPage=1;renderCards();});
