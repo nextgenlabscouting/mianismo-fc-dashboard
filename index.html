@@ -812,15 +812,12 @@ function saveResourcesFromForm(event){
   const gems=optionalInteger('gemsInput'),essence=optionalInteger('essenceInput');
   const collectionRaw=$('collectionInput').value.trim(),collection=collectionRaw===''?null:Number(collectionRaw);
   const goal=Number($('goalInput').value);
-  const set=$('setInput').value.trim(),notes=$('notesInput').value.trim(),legacyGemsSpentBracket=$('legacyGemsSpentBracket').value;
-  if((gems!==null&&!Number.isSafeInteger(gems))||(essence!==null&&!Number.isSafeInteger(essence))||(collection!==null&&(!Number.isFinite(collection)||collection<0||collection>100))||!Number.isSafeInteger(goal)||goal<0){
+  const set=DIVINATION_SET,notes=$('notesInput').value.trim(),legacyGemsSpentBracket=$('legacyGemsSpentBracket').value,legacyCollectionRaw=$('legacyCollectionInput').value.trim(),legacyCollectionCompletion=legacyCollectionRaw===''?null:Number(legacyCollectionRaw);
+  if((gems!==null&&!Number.isSafeInteger(gems))||(essence!==null&&!Number.isSafeInteger(essence))||(collection!==null&&(!Number.isFinite(collection)||collection<0||collection>100))||(legacyCollectionCompletion!==null&&(!Number.isFinite(legacyCollectionCompletion)||legacyCollectionCompletion<0||legacyCollectionCompletion>100))||!Number.isSafeInteger(goal)||goal<0){
     toast('Controlla Gems, Essence, percentuale di collezione e obiettivo. I saldi possono restare vuoti se non verificati.');return;
   }
-  if(/hyper\s?glitch/i.test(set)&&Date.now()>=Date.parse('2026-10-27T16:00:00Z')){
-    toast('HyperGlitch è terminato: inserisci il nome del Set attuale, non il vecchio saldo Essence.');return;
-  }
-  state.resources={...state.resources,gems,essence,set,collection,goal,notes,legacyGemsSpentBracket,legacyEssenceExpired:Boolean(state.resources.legacyEssenceExpired)};
-  state.resourcesConfirmedByUser=gems!==null||essence!==null||collection!==null||Boolean(set);
+  state.resources={...state.resources,gems,essence,set:DIVINATION_SET,collection,goal,notes,legacyGemsSpentBracket,legacyCollectionCompletion,legacyEssenceExpired:true};
+  state.resourcesConfirmedByUser=gems!==null||essence!==null||collection!==null;
   persist();
   renderLineup();
   toast('Valori locali salvati manualmente. NEXUS non li verifica tramite API Sorare.');
@@ -912,7 +909,7 @@ function bindCoreControls(){
 }
 
 function updateLoyaltyRewardEstimate(){
-  const rawCollection=String($('collectionInput')?.value??'').trim();
+  const rawCollection=String($('legacyCollectionInput')?.value??'').trim();
   const parsedCollection=rawCollection===''?null:Number(rawCollection);
   const collection=parsedCollection!==null&&Number.isFinite(parsedCollection)&&parsedCollection>=0&&parsedCollection<=100?parsedCollection:null;
   const bracket=String($('legacyGemsSpentBracket')?.value??'');
@@ -924,9 +921,9 @@ function updateLoyaltyRewardEstimate(){
   else if(collectionGems!==null&&usageGems!==null)$('loyaltyGemsEstimate').textContent=fmt(collectionGems+usageGems)+' Gems';
   else if(collectionGems!==null)$('loyaltyGemsEstimate').textContent=fmt(collectionGems)+'+ Gems (fascia da verificare)';
   else $('loyaltyGemsEstimate').textContent=fmt(usageGems)+'+ Gems (completamento da verificare)';
-  $('loyaltyRewardDetail').textContent='Stima condizionata ai dati inseriti manualmente: non è saldo Essence/Gems e non conferma un accredito. '+(collection===null?'Inserisci la percentuale effettiva della collezione HyperGlitch per stimare la ricompensa Essence.':'Calcolo Essence indicativo: '+Math.floor(collection/10)+' fasce da 10% × 1.000 Essence.')+' '+(usageGems===null?'La fascia di Gems spese non è verificata.':'Bonus da Gems spese stimato per la fascia '+bracket+'.')+' Le ricompense effettive vanno verificate nel tuo account Sorare.';
+  $('loyaltyRewardDetail').textContent='Stima di transizione Hyperglitch → Divination: non è saldo Essence/Gems e non conferma un accredito. '+(collection===null?'Inserisci il completamento Hyperglitch alla chiusura per stimare la ricompensa Essence.':'Calcolo Essence indicativo: '+Math.floor(collection/10)+' fasce da 10% × 1.000 Essence.')+' '+(usageGems===null?'La fascia di Gems spese non è verificata.':'Bonus da Gems spese stimato per la fascia '+bracket+'.')+' Le ricompense effettive vanno verificate nel tuo account Sorare.';
 }
-function renderResourcesForm(){const r=state.resources,manual=state.resourcesConfirmedByUser===true;$('gemsInput').value=manual&&r.gems!=null?r.gems:'';$('essenceInput').value=manual&&r.essence!=null?r.essence:'';$('setInput').value=manual?(r.set||''):'';$('collectionInput').value=manual&&r.collection!=null?r.collection:'';$('goalInput').value=r.goal??500;$('notesInput').value=r.notes||'';$('legacyGemsSpentBracket').value=manual?(r.legacyGemsSpentBracket??''):'';updateLoyaltyRewardEstimate();const hasGems=manual&&r.gems!=null,ratio=hasGems&&r.goal>0?Math.min(100,num(r.gems)/num(r.goal)*100):0;$('goalBar').style.width=hasGems?ratio+'%':'0%';$('goalCaption').textContent=hasGems?`${fmt(r.gems)} / ${fmt(r.goal)} Gems`:'Saldo Gems non inserito';$('goalPercent').textContent=hasGems?Math.round(ratio)+'%':'—'}
+function renderResourcesForm(){const r=state.resources,manual=state.resourcesConfirmedByUser===true;$('gemsInput').value=manual&&r.gems!=null?r.gems:'';$('essenceInput').value=manual&&r.essence!=null?r.essence:'';$('setInput').value=DIVINATION_SET;$('collectionInput').value=manual&&r.collection!=null?r.collection:'';$('legacyCollectionInput').value=r.legacyCollectionCompletion??DIVINATION_PREVIOUS_SNAPSHOT.collection;$('goalInput').value=r.goal??500;$('notesInput').value=r.notes||'';$('legacyGemsSpentBracket').value=r.legacyGemsSpentBracket??DIVINATION_PREVIOUS_SNAPSHOT.gemsSpentBracket;updateLoyaltyRewardEstimate();const hasGems=manual&&r.gems!=null,ratio=hasGems&&r.goal>0?Math.min(100,num(r.gems)/num(r.goal)*100):0;$('goalBar').style.width=hasGems?ratio+'%':'0%';$('goalCaption').textContent=hasGems?`${fmt(r.gems)} / ${fmt(r.goal)} Gems`:'Saldo Gems non inserito';$('goalPercent').textContent=hasGems?Math.round(ratio)+'%':'—'}
 let liveSorareItems=[],liveSorareComplete=false;
 function updateSorareAuthUI(session){
  const authenticated=Boolean(session&&session.authenticated&&session.profile&&session.profile.slug);
