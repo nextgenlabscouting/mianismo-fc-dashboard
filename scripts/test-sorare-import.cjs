@@ -18,7 +18,7 @@ function makeHarness({ cards = [], items = [], liveSlug = "test-user", previousS
   const calls = { persisted: 0, toasts: [], renders: 0 };
   const importer = new Function(
     "state", "liveSorareItems", "liveSorareProfileSlug", "persist", "toast", "renderLineup", "liveSorareComplete", "isSorareAuthenticated", "isEndedHyperGlitch",
-    functionSource + "\\nreturn importSorareCards;"
+    functionSource + "\nreturn importSorareCards;"
   )(
     state,
     items,
