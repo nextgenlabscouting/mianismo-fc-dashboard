@@ -78,6 +78,7 @@ const checks = [
   [/async function restoreSorareSession\(\)/, 'ripristino sessione senza nuova sincronizzazione'],
   [/restoreSorareSession\(\);/, 'ripristino automatico della sola sessione al caricamento'],
   [/merged\.cards=merged\.cards\.filter\(card=>!isEndedHyperGlitch\(card\)\)/, 'rimozione definitiva delle carte Hyperglitch dai dati salvati'],
+  [/function isEndedHyperGlitch\\(card\\)[\\s\\S]*?setFields\.some\(isDivination\)\)return false/, 'Divination ha precedenza sul filtro Hyperglitch'],
   [/function collectionCards\(\).*filter\(card=>!isEndedHyperGlitch\(card\)/, 'esclusione Hyperglitch da tutte le viste operative'],
   [/if\(isEndedHyperGlitch\(item\)\)continue/, 'blocco reimportazione delle carte Hyperglitch'],
   [/lastSorareSyncAt=new Date\(\)\.toISOString\(\)/, 'memorizzazione data ultima sincronizzazione'],
