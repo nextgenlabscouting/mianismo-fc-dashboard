@@ -61,7 +61,7 @@ const checks = [
   [/\$\("exportData"\)\.addEventListener\("click",exportBackup\)/, 'pulsante esportazione collegato'],
   [/\$\("importFile"\)\.addEventListener\("change",importBackupFromFile\)/, 'input importazione collegato']
 ,
-  [/<title>NEXUS — Sorare Intelligence<\/title>/, 'brand indipendente dall’account'],
+  [/<title>NEXUS — Divination Intelligence<\/title>/, 'brand indipendente dall’account'],
   [/id="page-analytics"/, 'Edge Lab presente come area autonoma'],
   [/function edgeMetrics\(card\)/, 'Edge Index calcolato su medie e volatilità disponibili'],
   [/function renderEdgeLab\(\)/, 'Decision Queue e classifica aggiornate dalla collezione'],
