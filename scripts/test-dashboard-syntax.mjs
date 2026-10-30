@@ -75,7 +75,7 @@ const checks = [
   [/function updateSorareAuthUI\(session\)/, 'stato account Sorare diretto'],
   [/setInterval\(\(\)=>\{if\(!document\.hidden\)loadSorarePublicData\(\);\},120000\)/, 'sincronizzazione ogni 2 minuti'],
   [/const KEY='nexusSorareIntelligenceV1';/, 'chiave locale con il nuovo brand'],
-  [/localStorage.getItem\\('mianismoFcDashboardV1'\\)/, 'migrazione dei dati salvati dalla vecchia versione'],
+  [/localStorage.getItem\('mianismoFcDashboardV1'\)/, 'migrazione dei dati salvati dalla vecchia versione'],
   [/const DIVINATION_SET='Divination'/, 'Divination è il Set predefinito'],
   [/id="page-divination"/, 'Divination Hub presente'],
   [/id="legacyCollectionInput"/, 'loyalty Hyperglitch separata dalla collezione Divination'],
