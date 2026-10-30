@@ -32,7 +32,6 @@ assert.equal(new Set(staticIds).size, staticIds.length, 'Gli id del markup stati
 const checks = [
   [/CANONICAL_APP_ORIGIN/, 'dominio Vercel canonico per API e sessione'],
   [/nextgenlabscouting/, 'rilevamento del mirror GitHub Pages statico'],
-  [/CANONICAL_APP_ORIGIN/, 'dominio Vercel canonico per API e sessione'],
   [/const CARDS_PAGE_SIZE=72/, 'paginazione del catalogo compatta'],
   [/function openLineupPicker/, 'selettore formazione con ricerca'],
   [/function renderLineupPickerResults/, 'risultati formazione filtrati e paginati'],
