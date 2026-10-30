@@ -412,6 +412,13 @@ function loadState(){
    if(!['','750+','500-749','350-499','200-349','100-199','50-99'].includes(String(merged.resources.legacyGemsSpentBracket??'')))merged.resources.legacyGemsSpentBracket=DIVINATION_PREVIOUS_SNAPSHOT.gemsSpentBracket;
    merged.resourcesConfirmedByUser=v.resourcesConfirmedByUser===true;
    if(!merged.resourcesConfirmedByUser)merged.resources={...merged.resources,gems:null,essence:null,collection:null,set:DIVINATION_SET};
+   const cardCountBeforeCleanup=merged.cards.length;
+   merged.cards=merged.cards.filter(card=>!isEndedHyperGlitch(card));
+   if(merged.cards.length!==cardCountBeforeCleanup){
+    const savedIds=new Set(merged.cards.map(card=>card.id));
+    merged.lineup=merged.lineup.map(id=>savedIds.has(id)?id:'');
+    try{localStorage.setItem(KEY,JSON.stringify(merged));}catch(e){}
+   }
    const hasSavedSorare=Boolean(merged.sorareProfileSlug)&&merged.cards.some(card=>card?.source==='sorare'&&card?.sorareSlug);
    if(!hasSavedSorare)merged.sorareInventoryStatus='unverified';else if(merged.sorareInventoryStatus!=='complete')merged.sorareInventoryStatus='stale';
    return merged;
@@ -426,7 +433,7 @@ function num(v){return Number.isFinite(Number(v))?Number(v):0}
 function fmt(v){return num(v).toLocaleString('it-IT',{maximumFractionDigits:1})}
 function fmtKnown(v){return v===null||v===undefined||v===''?'—':fmt(v)}
 function hasSavedSorareInventory(){return Boolean(state.sorareProfileSlug)&&Array.isArray(state.cards)&&state.cards.some(card=>card?.source==='sorare'&&card?.sorareSlug)}
-function collectionCards(){const cards=Array.isArray(state.cards)?state.cards:[];const showCache=(state.sorareInventoryStatus==='complete'||state.sorareInventoryStatus==='stale')&&Boolean(state.sorareProfileSlug);return showCache?cards:cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug)}
+function collectionCards(){const cards=(Array.isArray(state.cards)?state.cards:[]).filter(card=>!isEndedHyperGlitch(card));const showCache=(state.sorareInventoryStatus==='complete'||state.sorareInventoryStatus==='stale')&&Boolean(state.sorareProfileSlug);return showCache?cards:cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug)}
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
 function goto(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));const titles={overview:['Home','Il tuo club, le tue carte e la tua stagione.','FOOTBALL / HOME'],divination:['Arcade · Divination','Il tabellone del Set attivo e le tue ricompense.','FOOTBALL / PLAY / ARCADE'],scores:['Scores','Partite in calendario e performance della tua collezione.','FOOTBALL / SCORES'],market:['Market','Scouting e navigazione del mercato Sorare.','FOOTBALL / MARKET'],cards:['My Cards','La tua galleria, le collezioni e gli oggetti del tuo account.','FOOTBALL / MY CARDS'],analytics:['NEXUS Edge Lab','Forma, volatilità, copertura dei dati e segnali di scouting.','NEXUS / INTELLIGENCE'],lineup:['Lineup Lab · Divination','Costruisci e valuta la tua bozza con i dati disponibili.','NEXUS / LINEUP LAB'],resources:['Resources','Gems, Essence, collezione e ricompense di transizione.','NEXUS / RESOURCES'],sorare:['Account Sync','Connessione Sorare diretta, inventario e stato sincronizzazione.','NEXUS / ACCOUNT']};$('pageTitle').textContent=titles[page][0];$('pageSubtitle').textContent=titles[page][1];$('pageEyebrow').textContent=titles[page][2]||'NEXUS';if($('appSidebar'))$('appSidebar').classList.remove('mobile-open');window.scrollTo({top:0,behavior:'smooth'});if(page==='lineup')renderLineup();if(page==='analytics')renderEdgeLab();if(page==='scores')renderScores();if(page==='market')renderMarket()}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.page)));document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.goto)));
@@ -447,7 +454,7 @@ function cardHTML(c){
  const edition=c.skinEdition?.variantName||c.skinEdition?.skinName||c.edition||c.specialEdition||"";
  return '<article class="player-card collection-card" data-card-id="'+esc(c.id)+'"><div class="compact-card-art '+(hasCardImage?"is-card":"is-player")+'">'+artwork+'<span class="compact-card-rarity">'+esc(rarity)+'</span>'+(c.serialNumber!=null?'<span class="compact-card-serial">#'+esc(c.serialNumber)+'</span>':'')+'</div><div class="compact-card-body"><div class="compact-card-name" title="'+esc(c.name||"Giocatore non identificato")+'">'+esc(c.name||"Giocatore non identificato")+'</div><div class="compact-card-team" title="'+esc(team)+'">'+esc(team)+'</div><div class="compact-card-position">'+esc(positionText)+'</div><div class="compact-card-scores"><span>L5 <b>'+esc(l5)+'</b></span><span>L10 <b>'+esc(l10)+'</b></span></div>'+(edition?'<div class="compact-card-edition" title="'+esc(edition)+'">'+esc(edition)+'</div>':'')+'</div><div class="card-actions compact-actions"><button class="btn btn-small" data-edit="'+esc(c.id)+'">Dettagli</button><button class="btn btn-small" data-delete="'+esc(c.id)+'">Rimuovi</button></div></article>';
 }
-function isEndedHyperGlitch(card){const source=[card?.setName,card?.set?.name,card?.edition,card?.specialEdition,card?.sorareSlug,card?.slug].filter(Boolean).join(' ').toLowerCase();return /hyper\s?glitch|glitch_(standard|shiny|holo|legendary)/i.test(source)}
+function isEndedHyperGlitch(card){const skin=card?.skinEdition||{};const source=[card?.setName,card?.set?.name,card?.set?.slug,card?.setSlug,card?.edition,card?.specialEdition,card?.sorareSlug,card?.slug,skin.skin,skin.skinName,skin.variant,skin.variantName].filter(Boolean).join(' ').toLowerCase();return /hyper[\s_-]*glitch|(?:^|[^a-z])glitch(?:[^a-z]|$)|glitch[_-](?:standard|shiny|holo|legendary)/i.test(source)}
 function currentTargetSet(){const name=String(state.resources?.set||DIVINATION_SET).trim();return !name||/nuovo set|in attesa|hyper\s?glitch/i.test(name)?DIVINATION_SET.toLocaleLowerCase():name.toLocaleLowerCase();}
 function isTargetSetCard(card){const target=currentTargetSet(),actual=String(card?.setName||card?.set?.name||'').trim().toLocaleLowerCase();return Boolean(target&&actual&&actual===target&&!isEndedHyperGlitch(card));}
 function cardVariantLabel(card){
@@ -982,7 +989,7 @@ function updateSorareAuthUI(session){
  if(logout)logout.classList.toggle('hide',!authenticated);
  const form=$('sorareLoginForm');
  if(form)form.classList.toggle('hide',authenticated);
- if(authenticated){setSorareLoginMessage('Account collegato. Sincronizzazione automatica attiva.','success');}
+ if(authenticated){setSorareLoginMessage('Account collegato. Inventario salvato; aggiorna solo quando vuoi.','success');}
  else if(form)setSorareLoginMessage('La password viene hashata nel browser prima di contattare Sorare. Potrebbe essere richiesto un codice 2FA.');
 }
 let sorareOtpChallenge=null;
@@ -1130,11 +1137,12 @@ function renderSorareReport(data){
   $('sorareStatusFoot').textContent=data?.statusLabel||'Da eseguire il primo controllo';
   $('sorareProfileFound').textContent=data?.profile?.found?'Sì':data?.profile?.found===false?'No':'—';
   $('sorareProfileName').textContent=data?.profile?.nickname?`${data.profile.nickname} · ${data.profile.slug}`:`Slug richiesto: ${data?.requestedSlug||'mianismo'}`;
-  const items=Array.isArray(data?.cards?.items)?data.cards.items:[];
+  const receivedItems=Array.isArray(data?.cards?.items)?data.cards.items:[];
+  const items=receivedItems.filter(card=>!isEndedHyperGlitch(card));
   liveSorareItems=items;
   liveSorareComplete=Boolean(data?.cards?.complete&&data?.cards?.authenticated&&isSorareAuthenticated&&data?.cards?.profileSlug===liveSorareProfileSlug);
   const importButton=$('importSorareCards');if(importButton){importButton.disabled=!liveSorareComplete;importButton.textContent=liveSorareComplete?(items.length?'Importa/aggiorna '+items.length+' carte':'Conferma inventario vuoto'):'Importazione bloccata: inventario non completo';}
-  $('sorareCardCount').textContent=liveSorareComplete&&data?.cards?.count!=null?fmt(data.cards.count):'—';
+  $('sorareCardCount').textContent=liveSorareComplete?fmt(items.length):'—';
   const quality=data?.cards?.dataQuality;
   const tiers=data?.cards?.queryTierCounts;
   const tierLabel=tiers?Object.entries(tiers).map(([name,count])=>name+' ×'+count).join(', '):data?.cards?.queryTier;
@@ -1159,8 +1167,8 @@ function importSorareCards(silent=false){
     if(/forward|attaccante|\bfw\b|\bst\b|\bfor\b/.test(text))return 'Attaccante';
     return '';
   }
-  const previousSorare=state.cards.filter(card=>card?.source==='sorare'||card?.sorareSlug);
-  const manualCards=state.cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug);
+  const previousSorare=state.cards.filter(card=>(card?.source==='sorare'||card?.sorareSlug)&&!isEndedHyperGlitch(card));
+  const manualCards=state.cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug&&!isEndedHyperGlitch(card));
   const sameAccount=state.sorareProfileSlug===liveSorareProfileSlug;
   const oldBySlug=new Map((sameAccount?previousSorare:[]).map(card=>[card.sorareSlug||card.slug,card]));
   const merged=manualCards.slice(),indexBySlug=new Map();let added=0,updated=0;
@@ -1178,13 +1186,14 @@ function importSorareCards(silent=false){
       variantName:skin?.variantName||skin?.variant||null,skin:skin?.skin||null,bonus:skin?.bonus??null,power:card.power??null,grade:card.grade??null,
       rawScores:Array.isArray(card.rawScores)?card.rawScores:[],playerRawScores:Array.isArray(card.playerRawScores)?card.playerRawScores:[],
       playerSlug:card.playerSlug||null,activeTeam:card.activeTeam||null,upcomingGames:Array.isArray(card.upcomingGames)?card.upcomingGames:[],
-      season:card.season??null,serialNumber:card.serialNumber??null,edition:card.edition||null,setName:card.set?.name||null,source:'sorare'
+      season:card.season??null,serialNumber:card.serialNumber??null,edition:card.edition||null,set:card.set||null,setName:card.set?.name||card.setName||null,setSlug:card.set?.slug||card.setSlug||null,source:'sorare'
     };
+    if(isEndedHyperGlitch(item))continue;
     if(indexBySlug.has(card.slug)){merged[indexBySlug.get(card.slug)]=item;updated++;continue;}
     indexBySlug.set(card.slug,merged.length);merged.push(item);
     if(oldBySlug.has(card.slug))updated++;else added++;
   }
-  state.cards=merged;state.sorareProfileSlug=liveSorareProfileSlug;state.sorareInventoryStatus='complete';
+  state.cards=merged.filter(card=>!isEndedHyperGlitch(card));state.sorareProfileSlug=liveSorareProfileSlug;state.sorareInventoryStatus='complete';state.lastSorareSyncAt=new Date().toISOString();
   const ids=new Set(merged.map(card=>card.id));state.lineup=state.lineup.map(id=>ids.has(id)?id:'');
   persist();
   if(!silent)toast('Inventario verificato: '+liveSorareItems.length+' carte correnti; nuove: '+added+'; aggiornate: '+updated+'. Le carte Sorare non più presenti sono state rimosse.');
@@ -1370,8 +1379,7 @@ renderAll();
 const queryParams=new URLSearchParams(window.location.search);
 const authError=queryParams.get('auth_error');
 if(authError){goto('sorare');setTimeout(()=>setSorareLoginMessage('Errore di autenticazione: '+authError,'error'),300);queryParams.delete('auth_error');history.replaceState({},'',location.pathname+(queryParams.toString()?'?'+queryParams.toString():''));}
-loadSorarePublicData();
-setInterval(()=>{if(!document.hidden)loadSorarePublicData();},120000);
+restoreSorareSession();
 })();
 </script>
 </body></html>
