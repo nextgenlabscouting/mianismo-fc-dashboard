@@ -5,6 +5,7 @@ NEXUS è una dashboard indipendente per leggere e organizzare una collezione Sor
 ## Produzione
 
 - App: https://mianismo-fc-dashboard.vercel.app/
+- Mirror statico GitHub Pages: reindirizza automaticamente all'app Vercel; non ospita le API di autenticazione.
 - Repository: https://github.com/nextgenlabscouting/mianismo-fc-dashboard
 - API carte: https://mianismo-fc-dashboard.vercel.app/api/public/cards
 - Stato account: https://mianismo-fc-dashboard.vercel.app/api/auth/sorare/session
