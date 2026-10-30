@@ -78,7 +78,6 @@ const checks = [
   [/async function restoreSorareSession\(\)/, 'ripristino sessione senza nuova sincronizzazione'],
   [/restoreSorareSession\(\);/, 'ripristino automatico della sola sessione al caricamento'],
   [/merged\.cards=merged\.cards\.filter\(card=>!isEndedHyperGlitch\(card\)\)/, 'rimozione definitiva delle carte Hyperglitch dai dati salvati'],
-  [/function isEndedHyperGlitch\\(card\\)[\\s\\S]*?setFields\.some\(isDivination\)\)return false/, 'Divination ha precedenza sul filtro Hyperglitch'],
   [/function collectionCards\(\).*filter\(card=>!isEndedHyperGlitch\(card\)/, 'esclusione Hyperglitch da tutte le viste operative'],
   [/if\(isEndedHyperGlitch\(item\)\)continue/, 'blocco reimportazione delle carte Hyperglitch'],
   [/lastSorareSyncAt=new Date\(\)\.toISOString\(\)/, 'memorizzazione data ultima sincronizzazione'],
@@ -95,6 +94,8 @@ const checks = [
 ];
 
 assert.doesNotMatch(scripts[0][1], /setInterval\s*\([^;]*loadSorarePublicData/, 'La dashboard non deve sincronizzare Sorare in automatico a intervalli');
+assert.ok(scripts[0][1].includes('if(setFields.some(isDivination))return false;'), 'Divination ha sempre precedenza sul filtro Hyperglitch');
+assert.ok(scripts[0][1].includes('legacySnapshot.cards.filter(card=>card&&typeof card===\'object\'&&confirmedDivination(card)'), 'Il vecchio archivio locale può recuperare carte Divination confermate');
 assert.doesNotMatch(html, /automaticamente ogni 2 minuti|Sincronizzazione automatica attiva/i, 'L’interfaccia non deve più promettere letture automatiche');
 assert.match(html, /Inventario salvato; aggiornamento manuale/, 'Lo stato account deve indicare l’aggiornamento manuale');
 
