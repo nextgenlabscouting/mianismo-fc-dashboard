@@ -43,7 +43,7 @@ NEXUS usa il flusso di autenticazione API documentato da Sorare tramite email, p
 
 1. In **Vercel Project Settings → Environment Variables**, configura `SORARE_SESSION_SECRET` con un segreto casuale di almeno 32 caratteri. È usato per cifrare il cookie di sessione.
 2. Salva la variabile e ridistribuisci il progetto.
-3. Apri NEXUS, vai su **Sorare Sync** e inserisci email e password Sorare. Se Sorare richiede 2FA, inserisci il codice monouso ricevuto.
+3. Apri NEXUS, vai su **Sorare Sync** e inserisci email e password Sorare una sola volta. Se Sorare richiede 2FA, inserisci il codice monouso ricevuto. NEXUS ripristina poi la sessione dal cookie e usa l'archivio locale alle aperture successive; per aggiornare le carte usa manualmente **Rileggi dati**.
 
 La password viene hashata nel browser usando il salt restituito da Sorare. L'endpoint di login riceve l'hash, non la password originale. Email e hash non vengono scritti nei log o salvati come preferenze; il JWT Sorare viene conservato in un cookie HttpOnly cifrato AES-256-GCM e scade secondo la data restituita da Sorare (normalmente fino a 30 giorni). NEXUS non può revocare il JWT Sorare: il logout cancella la sessione locale. Il flusso 2FA dà precedenza alla sfida OTP anche se Sorare allega il marcatore legacy `2fa_missing`. Se la sfida non arriva, NEXUS mostra un errore recuperabile invece di richiedere un codice impossibile da verificare.
 
@@ -51,11 +51,13 @@ La password viene hashata nel browser usando il salt restituito da Sorare. L'end
 
 ## Inventario e sincronizzazione
 
-- All'avvio e poi ogni **2 minuti**, mentre la pagina è visibile, NEXUS verifica la sessione e legge esclusivamente lo slug restituito per l'account autenticato. Non importa un profilo pubblico predefinito come se fosse la collezione dell'utente non autenticato.
-- Una sincronizzazione è dichiarata completa soltanto se la sessione è autenticata, gli endpoint confermano lo stesso profilo e tutte le pagine superano i controlli. Una risposta parziale può essere mostrata come parziale, ma non aggiorna il catalogo né viene conteggiata come inventario totale.
-- Al termine di una sincronizzazione completa, l'archivio Sorare viene riconciliato con le carte attuali: le vecchie carte non più presenti vengono rimosse, le note manuali delle carte corrispondenti sono mantenute e le carte aggiunte manualmente vengono conservate. Un inventario completo vuoto è distinto da un errore API.
-- Se l'API limita le richieste o la paginazione non termina, NEXUS marca l'inventario come non verificato e non importa il sottoinsieme ricevuto.
-- La griglia di performance colora L5/L10 e ruolo; il mini-grafico mostra gli ultimi punteggi effettivamente disponibili. La telemetria di squadra usa solo i dati presenti nell'inventario. Se Sorare non fornisce un logo ufficiale della squadra, la carta mostra una sigla testuale, non un logo inventato.
+- Dopo il login riuscito, NEXUS esegue una sincronizzazione iniziale e salva l'archivio nel browser. Alle aperture successive verifica soltanto il cookie di sessione e riapre le carte già salvate: **non rilegge la collezione e non richiede un nuovo login finché la sessione Sorare è valida**.
+- Non esiste più il polling automatico ogni 2 minuti. Una nuova lettura completa parte solo dopo un nuovo login o quando l'utente preme **Rileggi dati**.
+- Una sincronizzazione è dichiarata completa soltanto se la sessione è autenticata, gli endpoint confermano lo stesso profilo e tutte le pagine superano i controlli. Una risposta parziale non sostituisce l'archivio locale.
+- Le carte Hyperglitch vengono escluse dall'importazione, rimosse dall'archivio locale esistente e filtrate anche dai backup importati. Questa pulizia riguarda esclusivamente NEXUS: non modifica né cancella le carte nell'account Sorare ufficiale.
+- Al termine di una sincronizzazione completa, l'archivio Sorare viene riconciliato con le carte attuali: le vecchie carte non più presenti vengono rimosse, le note manuali delle carte corrispondenti sono mantenute e le carte aggiunte manualmente vengono conservate.
+- Se l'API limita le richieste o la paginazione non termina, NEXUS conserva l'ultimo archivio valido e non importa un sottoinsieme incompleto.
+- La griglia di performance colora L5/L10 e ruolo; il mini-grafico mostra gli ultimi punteggi effettivamente disponibili. La telemetria di squadra usa solo i dati presenti nell'inventario.
 - `data/sorare-public.json` è una copia pubblica secondaria aggiornata dal workflow GitHub Actions ogni sei ore; la UI live interroga le API serverless su Vercel.
 
 ## Saldi e ricompense: cosa è verificato
