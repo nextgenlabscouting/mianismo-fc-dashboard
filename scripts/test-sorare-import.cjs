@@ -7,13 +7,18 @@ const start = html.indexOf("function importSorareCards(silent=false){");
 const end = html.indexOf("\nasync function loadSorarePublicData(){", start);
 assert.ok(start >= 0 && end > start, "La funzione importSorareCards deve esistere");
 const functionSource = html.slice(start, end);
+const detectorStart = html.indexOf("function isEndedHyperGlitch(card){");
+const detectorEnd = html.indexOf("\nfunction currentTargetSet()", detectorStart);
+assert.ok(detectorStart >= 0 && detectorEnd > detectorStart, "Il filtro Set deve esistere");
+const detectorSource = html.slice(detectorStart, detectorEnd);
+const isEndedHyperGlitch = new Function(detectorSource + "\nreturn isEndedHyperGlitch;")();
 
 function makeHarness({ cards = [], items = [], liveSlug = "test-user", previousSlug = null, complete = true, authenticated = true } = {}) {
   const state = { cards: structuredClone(cards), sorareProfileSlug: previousSlug === null ? liveSlug : previousSlug, lineup: [] };
   const calls = { persisted: 0, toasts: [], renders: 0 };
   const importer = new Function(
     "state", "liveSorareItems", "liveSorareProfileSlug", "persist", "toast", "renderLineup", "liveSorareComplete", "isSorareAuthenticated", "isEndedHyperGlitch",
-    functionSource + "\nreturn importSorareCards;"
+    functionSource + "\\nreturn importSorareCards;"
   )(
     state,
     items,
@@ -23,11 +28,7 @@ function makeHarness({ cards = [], items = [], liveSlug = "test-user", previousS
     () => { calls.renders++; },
     complete,
     authenticated,
-    card => {
-      const skin = card?.skinEdition || {};
-      const source = [card?.setName, card?.set?.name, card?.set?.slug, card?.setSlug, card?.edition, card?.specialEdition, card?.sorareSlug, card?.slug, skin.skin, skin.skinName, skin.variant, skin.variantName].filter(Boolean).join(" ").toLowerCase();
-      return /hyper[\\s_-]*glitch|(?:^|[^a-z])glitch(?:[^a-z]|$)|glitch[_-](?:standard|shiny|holo|legendary)/i.test(source);
-    }
+    isEndedHyperGlitch
   );
   return { state, calls, importer };
 }
@@ -151,4 +152,32 @@ const newCard = {
   assert.equal(state.cards.some(card => /hyperglitch|glitch/i.test([card.setName, card.edition, card.slug].join(" "))), false);
 }
 
-console.log("Sorare import regression tests passed (new/update, stale replacement, partial/auth guards, empty inventory, account isolation, Hyperglitch purge).");
+
+{
+  const divinationCard = {
+    ...newCard,
+    slug: "divination-glitch-standard-asset",
+    name: "Divination Player",
+    edition: "Glitch Limited",
+    specialEdition: "Glitch Special",
+    skinEdition: { skin: "glitch", skinName: "Glitch", variant: "glitch_standard", variantName: "Glitch Standard" },
+    set: { name: "Divination", slug: "divination" },
+    setName: "Divination"
+  };
+  const explicitHyperglitch = {
+    ...newCard,
+    slug: "player-hyperglitch-limited",
+    name: "Old Hyperglitch Player",
+    set: { name: "HyperGlitch", slug: "hyperglitch" },
+    setName: "HyperGlitch"
+  };
+  assert.equal(isEndedHyperGlitch(divinationCard), false, "Una carta Divination non deve essere classificata Hyperglitch per edition, slug o skin");
+  assert.equal(isEndedHyperGlitch(explicitHyperglitch), true, "Una carta con Set HyperGlitch esplicito deve essere esclusa");
+  const { state, importer } = makeHarness({ items: [divinationCard, explicitHyperglitch] });
+  importer(true);
+  assert.equal(state.cards.length, 1, "L'importazione deve conservare Divination ed escludere Hyperglitch");
+  assert.equal(state.cards[0].setName, "Divination");
+  assert.equal(state.cards[0].name, "Divination Player");
+}
+
+console.log("Sorare import regression tests passed (new/update, stale replacement, partial/auth guards, empty inventory, account isolation, Hyperglitch purge, Divination preservation).");
