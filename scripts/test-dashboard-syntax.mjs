@@ -94,6 +94,8 @@ const checks = [
 ];
 
 assert.doesNotMatch(scripts[0][1], /setInterval\s*\([^;]*loadSorarePublicData/, 'La dashboard non deve sincronizzare Sorare in automatico a intervalli');
+assert.doesNotMatch(html, /automaticamente ogni 2 minuti|Sincronizzazione automatica attiva/i, 'L’interfaccia non deve più promettere letture automatiche');
+assert.match(html, /Inventario salvato; aggiornamento manuale/, 'Lo stato account deve indicare l’aggiornamento manuale');
 
 const restoreStart = scripts[0][1].indexOf('async function restoreSorareSession(){');
 const restoreEnd = scripts[0][1].indexOf('\nfunction renderHeaderChrome(){', restoreStart);
