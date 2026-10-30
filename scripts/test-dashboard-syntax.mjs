@@ -75,7 +75,15 @@ const checks = [
   [/function updateSorareAuthUI\(session\)/, 'stato account Sorare diretto'],
   [/setInterval\(\(\)=>\{if\(!document\.hidden\)loadSorarePublicData\(\);\},120000\)/, 'sincronizzazione ogni 2 minuti'],
   [/const KEY='nexusSorareIntelligenceV1';/, 'chiave locale con il nuovo brand'],
-  [/localStorage.getItem\('mianismoFcDashboardV1'\)/, 'migrazione dei dati salvati dalla vecchia versione']
+  [/localStorage.getItem\\('mianismoFcDashboardV1'\\)/, 'migrazione dei dati salvati dalla vecchia versione'],
+  [/const DIVINATION_SET='Divination'/, 'Divination è il Set predefinito'],
+  [/id="page-divination"/, 'Divination Hub presente'],
+  [/id="legacyCollectionInput"/, 'loyalty Hyperglitch separata dalla collezione Divination'],
+  [/divinationMigrationApplied:true/, 'migrazione del vecchio stato al nuovo Set'],
+  [/id="divinationTaskProgress"/, 'checklist Divination presente'],
+  [/Vite per livello/, 'quattro vite per livello documentate'],
+  [/PO · DIF · CEN · ATT · Extra/, 'cinque ruoli del Game Board documentati'],
+  [/--bg:#070510/, 'tema Divination nero, viola e oro']
 ];
 
 for (const [pattern, label] of checks) {
