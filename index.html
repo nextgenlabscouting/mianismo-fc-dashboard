@@ -396,6 +396,10 @@ let activeSorareSlug='',liveSorareProfileSlug='',isSorareAuthenticated=false,sor
 function loadState(){
  try{
   const raw=localStorage.getItem(KEY)||localStorage.getItem('mianismoFcDashboardV1')||'null',v=JSON.parse(raw);
+  let legacySnapshot=null;
+  if(localStorage.getItem(KEY)){
+   try{legacySnapshot=JSON.parse(localStorage.getItem('mianismoFcDashboardV1')||'null')}catch(e){}
+  }
   if(v&&typeof v==='object'){
    if(!localStorage.getItem(KEY))try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}
    const oldResources=v.resources&&typeof v.resources==='object'?v.resources:{};
@@ -419,8 +423,25 @@ function loadState(){
     merged.lineup=merged.lineup.map(id=>savedIds.has(id)?id:'');
     try{localStorage.setItem(KEY,JSON.stringify(merged));}catch(e){}
    }
+   let recoveredDivination=false;
+   if(legacySnapshot&&Array.isArray(legacySnapshot.cards)){
+    const confirmedDivination=card=>[card?.setName,card?.set?.name,card?.set?.slug,card?.setSlug].some(value=>/^divination(?:$|[\s_-])/i.test(String(value||'').trim()));
+    const existingKeys=new Set(merged.cards.map(card=>card?.sorareSlug||card?.slug||card?.id).filter(Boolean));
+    const recovered=legacySnapshot.cards.filter(card=>card&&typeof card==='object'&&confirmedDivination(card)&&!isEndedHyperGlitch(card)&&!existingKeys.has(card.sorareSlug||card.slug||card.id));
+    if(recovered.length){
+     merged.cards.push(...recovered);
+     const ids=new Set(merged.cards.map(card=>card.id));
+     const legacyLineup=Array.isArray(legacySnapshot.lineup)?legacySnapshot.lineup:[];
+     merged.lineup=merged.lineup.map((id,index)=>id||(ids.has(legacyLineup[index])?legacyLineup[index]:''));
+     if(!merged.sorareProfileSlug&&legacySnapshot.sorareProfileSlug)merged.sorareProfileSlug=legacySnapshot.sorareProfileSlug;
+     if(!merged.lastSorareSyncAt&&legacySnapshot.lastSorareSyncAt)merged.lastSorareSyncAt=legacySnapshot.lastSorareSyncAt;
+     merged.sorareInventoryStatus='stale';
+     recoveredDivination=true;
+    }
+   }
    const hasSavedSorare=Boolean(merged.sorareProfileSlug)&&merged.cards.some(card=>card?.source==='sorare'&&card?.sorareSlug);
    if(!hasSavedSorare)merged.sorareInventoryStatus='unverified';else if(merged.sorareInventoryStatus!=='complete')merged.sorareInventoryStatus='stale';
+   if(recoveredDivination){try{localStorage.setItem(KEY,JSON.stringify(merged));}catch(e){}}
    return merged;
   }
  }catch(e){}
@@ -454,7 +475,15 @@ function cardHTML(c){
  const edition=c.skinEdition?.variantName||c.skinEdition?.skinName||c.edition||c.specialEdition||"";
  return '<article class="player-card collection-card" data-card-id="'+esc(c.id)+'"><div class="compact-card-art '+(hasCardImage?"is-card":"is-player")+'">'+artwork+'<span class="compact-card-rarity">'+esc(rarity)+'</span>'+(c.serialNumber!=null?'<span class="compact-card-serial">#'+esc(c.serialNumber)+'</span>':'')+'</div><div class="compact-card-body"><div class="compact-card-name" title="'+esc(c.name||"Giocatore non identificato")+'">'+esc(c.name||"Giocatore non identificato")+'</div><div class="compact-card-team" title="'+esc(team)+'">'+esc(team)+'</div><div class="compact-card-position">'+esc(positionText)+'</div><div class="compact-card-scores"><span>L5 <b>'+esc(l5)+'</b></span><span>L10 <b>'+esc(l10)+'</b></span></div>'+(edition?'<div class="compact-card-edition" title="'+esc(edition)+'">'+esc(edition)+'</div>':'')+'</div><div class="card-actions compact-actions"><button class="btn btn-small" data-edit="'+esc(c.id)+'">Dettagli</button><button class="btn btn-small" data-delete="'+esc(c.id)+'">Rimuovi</button></div></article>';
 }
-function isEndedHyperGlitch(card){const skin=card?.skinEdition||{};const source=[card?.setName,card?.set?.name,card?.set?.slug,card?.setSlug,card?.edition,card?.specialEdition,card?.sorareSlug,card?.slug,skin.skin,skin.skinName,skin.variant,skin.variantName].filter(Boolean).join(' ').toLowerCase();return /hyper[\s_-]*glitch|(?:^|[^a-z])glitch(?:[^a-z]|$)|glitch[_-](?:standard|shiny|holo|legendary)/i.test(source)}
+function isEndedHyperGlitch(card){
+ const setFields=[card?.setName,card?.set?.name,card?.set?.slug,card?.setSlug].filter(value=>value!=null&&String(value).trim()).map(value=>String(value).trim());
+ const isDivination=value=>/^divination(?:$|[\s_-])/i.test(value);
+ const isHyperGlitch=value=>/^hyper[\s_-]*glitch(?:$|[\s_-])/i.test(value)||/^glitch[_-](?:standard|shiny|holo|legendary)(?:$|[\s_-])/i.test(value);
+ if(setFields.some(isDivination))return false;
+ if(setFields.length)return setFields.some(isHyperGlitch);
+ const editionFields=[card?.edition,card?.specialEdition].filter(value=>value!=null&&String(value).trim()).map(value=>String(value).trim());
+ return editionFields.some(value=>/^hyper[\s_-]*glitch(?:$|[\s_-])/i.test(value));
+}
 function currentTargetSet(){const name=String(state.resources?.set||DIVINATION_SET).trim();return !name||/nuovo set|in attesa|hyper\s?glitch/i.test(name)?DIVINATION_SET.toLocaleLowerCase():name.toLocaleLowerCase();}
 function isTargetSetCard(card){const target=currentTargetSet(),actual=String(card?.setName||card?.set?.name||'').trim().toLocaleLowerCase();return Boolean(target&&actual&&actual===target&&!isEndedHyperGlitch(card));}
 function cardVariantLabel(card){
