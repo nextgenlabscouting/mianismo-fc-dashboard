@@ -75,7 +75,12 @@ const checks = [
   [/id="roleDistribution"/, 'grafico distribuzione ruoli'],
   [/id="rolePerformance"/, 'grafico media L5 per ruolo'],
   [/function updateSorareAuthUI\(session\)/, 'stato account Sorare diretto'],
-  [/setInterval\(\(\)=>\{if\(!document\.hidden\)loadSorarePublicData\(\);\},120000\)/, 'sincronizzazione ogni 2 minuti'],
+  [/async function restoreSorareSession\(\)/, 'ripristino sessione senza nuova sincronizzazione'],
+  [/restoreSorareSession\(\);/, 'ripristino automatico della sola sessione al caricamento'],
+  [/merged\.cards=merged\.cards\.filter\(card=>!isEndedHyperGlitch\(card\)\)/, 'rimozione definitiva delle carte Hyperglitch dai dati salvati'],
+  [/function collectionCards\(\).*filter\(card=>!isEndedHyperGlitch\(card\)/, 'esclusione Hyperglitch da tutte le viste operative'],
+  [/if\(isEndedHyperGlitch\(item\)\)continue/, 'blocco reimportazione delle carte Hyperglitch'],
+  [/lastSorareSyncAt=new Date\(\)\.toISOString\(\)/, 'memorizzazione data ultima sincronizzazione'],
   [/const KEY='nexusSorareIntelligenceV1';/, 'chiave locale con il nuovo brand'],
   [/localStorage.getItem\('mianismoFcDashboardV1'\)/, 'migrazione dei dati salvati dalla vecchia versione'],
   [/const DIVINATION_SET='Divination'/, 'Divination è il Set predefinito'],
@@ -88,6 +93,7 @@ const checks = [
   [/--bg:#070510/, 'tema Divination nero, viola e oro']
 ];
 
+assert.doesNotMatch(scripts[0][1], /setInterval\\s*\\([^;]*loadSorarePublicData/, 'La dashboard non deve sincronizzare Sorare in automatico a intervalli');
 assert.ok(scripts[0][1].includes('location.replace(CANONICAL_APP_ORIGIN+nextPath+location.search+location.hash)'), 'Il mirror statico deve preservare pagina, query e hash nel redirect Vercel');
 
 for (const [pattern, label] of checks) {
