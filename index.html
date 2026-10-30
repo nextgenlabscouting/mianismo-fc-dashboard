@@ -1330,6 +1330,63 @@ async function loadSorarePublicData(){
     sorareSyncRunning=false;
   }
 }
+async function restoreSorareSession(){
+  try{
+    const response=await fetch('/api/auth/sorare/session',{cache:'no-store'});
+    const session=await response.json().catch(()=>({authenticated:false,profile:null}));
+    updateSorareAuthUI(session);
+    if(!response.ok||!session.authenticated||!session.profile?.slug){
+      activeSorareSlug='';liveSorareProfileSlug='';liveSorareItems=[];liveSorareComplete=false;
+      state.sorareInventoryStatus=hasSavedSorareInventory()?'stale':'unverified';
+      renderAll();
+      renderSorareReport({
+        status:'not_authenticated',requestedSlug:'',
+        profile:{found:false,slug:'',nickname:null},
+        cards:{status:'unavailable',count:null,items:[],complete:false,authenticated:false,message:hasSavedSorareInventory()?'Archivio locale conservato. Ricollega Sorare solo se la sessione è scaduta.':'Collega Sorare una sola volta per avviare la sincronizzazione iniziale.',detail:'Nessuna sincronizzazione automatica viene avviata all’apertura.'},
+        message:'Sessione Sorare non attiva.',
+        detail:'I dati locali già salvati restano disponibili. La sincronizzazione si avvia soltanto dopo il login o quando premi Rileggi dati.'
+      });
+      return;
+    }
+    const slug=String(session.profile.slug);
+    activeSorareSlug=slug;liveSorareProfileSlug=slug;
+    if(state.sorareProfileSlug&&state.sorareProfileSlug!==slug){
+      const manualCards=state.cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug);
+      const manualIds=new Set(manualCards.map(card=>card.id));
+      state.cards=manualCards;
+      state.lineup=state.lineup.map(id=>manualIds.has(id)?id:'');
+      state.sorareInventoryStatus='unverified';
+      state.sorareProfileSlug=slug;
+      persist();
+    }else{
+      state.sorareProfileSlug=slug;
+      const cachedCount=state.cards.filter(card=>(card?.source==='sorare'||card?.sorareSlug)&&!isEndedHyperGlitch(card)).length;
+      state.sorareInventoryStatus=cachedCount?(state.sorareInventoryStatus==='complete'?'complete':'stale'):'unverified';
+      renderAll();
+    }
+    const cachedCards=state.cards.filter(card=>(card?.source==='sorare'||card?.sorareSlug)&&!isEndedHyperGlitch(card));
+    const lastSync=state.lastSorareSyncAt?new Date(state.lastSorareSyncAt).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'}):'Non ancora sincronizzato';
+    $('sorareStatus').textContent='Sessione attiva';
+    $('sorareStatus').className='stat-value green';
+    $('sorareStatusFoot').textContent=cachedCards.length?'Archivio locale ripristinato · nessuna nuova lettura':'Account collegato · inventario da importare';
+    $('sorareProfileFound').textContent='Sì';
+    $('sorareProfileName').textContent=(session.profile.nickname||slug)+' · '+slug;
+    $('sorareCardCount').textContent=cachedCards.length?fmt(cachedCards.length):'—';
+    $('sorareCardFoot').textContent=cachedCards.length?'Carte già salvate in questo browser. Nessuna nuova richiesta a Sorare.':'Nessun archivio locale associato a questo account. Premi Rileggi dati per importarlo.';
+    $('sorareUpdated').textContent=lastSync;
+    $('sorareCardBadge').textContent=cachedCards.length?cachedCards.length+' carte in archivio':'Inventario non importato';
+    $('sorareCardsList').className='notice';
+    $('sorareCardsList').innerHTML='<span class="notice-icon">✓</span><div><strong>Sessione Sorare ripristinata</strong><br>'+esc(cachedCards.length?cachedCards.length+' carte già presenti nell’archivio locale. Nessun caricamento ripetuto.':'Account collegato. Avvia una sola sincronizzazione iniziale con “Rileggi dati”.')+'<br><span class="muted">Ultimo aggiornamento: '+esc(lastSync)+'</span></div>';
+    $('importSorareCards').disabled=true;
+    $('importSorareCards').textContent='Inventario già salvato';
+    setSorareLoginMessage('Accesso Sorare già attivo. Non serve rifare il login; i dati vengono caricati dall’archivio locale.','success');
+  }catch(error){
+    updateSorareAuthUI({authenticated:false,profile:null});
+    state.sorareInventoryStatus=hasSavedSorareInventory()?'stale':'unverified';
+    renderAll();
+    setSorareLoginMessage('Verifica della sessione non riuscita: '+String(error?.message||error),'error');
+  }
+}
 function renderHeaderChrome(){const manual=state.resourcesConfirmedByUser===true,r=state.resources||{},g=manual?fmtKnown(r.gems):'—',e=manual?fmtKnown(r.essence):'—';['headerGems','sideGems'].forEach(id=>{if($(id))$(id).textContent=g;});['headerEssence','sideEssence','cardsEssenceBalance'].forEach(id=>{if($(id))$(id).textContent=e;});if($('cardsGemsBalance'))$('cardsGemsBalance').textContent=g;if($('sideAccountState'))$('sideAccountState').textContent=isSorareAuthenticated?'Account collegato':'Collega il tuo account';if($('galleryCount'))$('galleryCount').textContent=collectionCards().length+' carte';if($('gallerySource'))$('gallerySource').textContent=state.sorareInventoryStatus==='complete'?'Inventario verificato':state.sorareInventoryStatus==='stale'?'Ultimo inventario salvato':'Inventario non verificato';if($('marketOwnedCount'))$('marketOwnedCount').textContent=collectionCards().length+' CARTE';}
 function renderCollections(){const box=$('collectionsGrid');if(!box)return;const cards=collectionCards(),groups=new Map();cards.forEach(card=>{const name=String(card.set?.name||card.setName||card.edition||'Set non specificato').trim()||'Set non specificato';if(!groups.has(name))groups.set(name,[]);groups.get(name).push(card);});const entries=[...groups.entries()].sort((a,b)=>a[0].localeCompare(b[0]));$('collectionsCount').textContent=entries.length+' COLLECTIONS';$('collectionsEmpty').classList.toggle('hide',entries.length>0);box.innerHTML=entries.map(([name,items])=>{const thumbs=items.slice(0,4).map(card=>{const src=safeImageUrl(cardVisualUrl(card));return src?'<img src="'+esc(src)+'" alt="" loading="lazy">':'<span>'+esc(cardInitials(card.name))+'</span>';}).join('');return '<article class="collection-tile"><div class="collection-preview">'+thumbs+'</div><div class="collection-tile-meta"><div><strong>'+esc(name)+'</strong><small>'+items.length+' '+(items.length===1?'carta':'carte')+'</small></div><span>›</span></div></article>';}).join('');}
 function setCardsView(view){const allowed=['gallery','collections','boxes','essence'];if(!allowed.includes(view))return;document.querySelectorAll('[data-cards-view]').forEach(b=>b.classList.toggle('active',b.dataset.cardsView===view));allowed.forEach(key=>{const el=$('cards'+key[0].toUpperCase()+key.slice(1)+'View');if(el)el.classList.toggle('hide',key!==view);});if(view==='collections')renderCollections();if(view==='essence')renderHeaderChrome();}
