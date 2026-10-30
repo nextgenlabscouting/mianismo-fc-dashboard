@@ -361,7 +361,7 @@ function loadState(){
    if(!localStorage.getItem(KEY))try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}
    const oldResources=v.resources&&typeof v.resources==='object'?v.resources:{};
    const merged={...structuredClone(initial),...v,resources:{...initial.resources,...oldResources},cards:Array.isArray(v.cards)?v.cards:[],lineup:Array.isArray(v.lineup)?v.lineup:['','','','',''],divinationTasks:{...initial.divinationTasks,...(v.divinationTasks||{})},sorareProfileSlug:typeof v.sorareProfileSlug==='string'?v.sorareProfileSlug:''};
-   const oldCycle=/hyper\s?glitch/i.test(String(oldResources.set||''))||(oldResources.legacyEssenceExpired===true&&oldResources.divinationMigrationApplied!==true);
+   const oldCycle=oldResources.divinationMigrationApplied!==true;
    if(oldCycle){
     const oldPct=Number(oldResources.legacyCollectionCompletion??oldResources.collection);if(Number.isFinite(oldPct)&&oldPct>=0&&oldPct<=100)merged.resources.legacyCollectionCompletion=oldPct;
     const oldGems=Number(oldResources.legacyGemsAtRollover??oldResources.gems);if(Number.isSafeInteger(oldGems)&&oldGems>=0)merged.resources.legacyGemsAtRollover=oldGems;
@@ -876,10 +876,11 @@ async function importBackupFromFile(event){
       set:DIVINATION_SET,
       notes:String(incomingResources.notes||"").slice(0,250)
     };
-    if(/hyperglitch/i.test(String(incomingResources.set||""))){resources.legacyCollectionCompletion=numberOr(incomingResources.legacyCollectionCompletion,incomingResources.collection,initial.resources.legacyCollectionCompletion,100,false);resources.legacyGemsAtRollover=numberOr(incomingResources.legacyGemsAtRollover,incomingResources.gems,initial.resources.legacyGemsAtRollover,Number.MAX_SAFE_INTEGER,true);resources.gems=null;resources.essence=null;resources.collection=null;resources.set=DIVINATION_SET;resources.legacyEssenceExpired=true;resources.divinationMigrationApplied=true;}
+    const previousAppBackup=incomingResources.divinationMigrationApplied!==true;
+    if(previousAppBackup){resources.legacyCollectionCompletion=numberOr(incomingResources.legacyCollectionCompletion,incomingResources.collection,initial.resources.legacyCollectionCompletion,100,false);resources.legacyGemsAtRollover=numberOr(incomingResources.legacyGemsAtRollover,incomingResources.gems,initial.resources.legacyGemsAtRollover,Number.MAX_SAFE_INTEGER,true);resources.gems=null;resources.essence=null;resources.collection=null;resources.set=DIVINATION_SET;resources.legacyEssenceExpired=true;resources.divinationMigrationApplied=true;}
     const ids=new Set(cards.map(card=>card.id));
     const savedLineup=Array.isArray(incoming.lineup)?incoming.lineup:[];
-    const lineup=Array.from({length:5},(_,i)=>{const id=String(savedLineup[i]||"");return ids.has(id)?id:"";});if(/hyperglitch/i.test(String(incomingResources.set||"")))lineup.fill("");
+    const lineup=Array.from({length:5},(_,i)=>{const id=String(savedLineup[i]||"");return ids.has(id)?id:"";});if(previousAppBackup)lineup.fill("");
     const resourcesConfirmedByUser=incoming.resourcesConfirmedByUser===true;
     if(!resourcesConfirmedByUser){resources.gems=null;resources.essence=null;resources.collection=null;resources.set=DIVINATION_SET;}
     state={...structuredClone(initial),...incoming,divinationTasks:{...initial.divinationTasks,...(incoming.divinationTasks||{})},cards,lineup,resources,resourcesConfirmedByUser,sorareInventoryStatus:'unverified'};
