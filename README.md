@@ -24,6 +24,12 @@ Le ricompense di transizione mostrate in NEXUS sono stime basate sullo snapshot 
 
 La pagina **Risorse** separa il completamento storico Hyperglitch dal completamento corrente Divination. NEXUS non può leggere via questa integrazione i saldi Gems, Essence o il completamento della collezione: inserisci i valori correnti solo dopo averli verificati su Sorare.
 
+### Meccaniche base Sorare Set Football
+
+Il Centro Assistenza Sorare descrive una formazione di cinque carte: portiere, difensore, centrocampista, attaccante e un giocatore extra. Ogni livello parte con quattro vite; un tentativo che non raggiunge il target consuma una vita, mentre esaurirle riporta al primo livello. Una volta validato il target, la progressione è immediata. Il punteggio della serie non viene modificato da aggiornamenti arrivati oltre cinque minuti dalla fine della partita.
+
+La guida generale descrive cinque Tier (Icon, Star, Impact, Roster, Reserve), pack Bronze/Silver/Gold, scarto permanente di carte in cambio di Essence, Collection Bonus fino al 5%, Daily/Collection Missions e Wheel Tickets. Queste sono meccaniche generali di Sorare Set Football, non una conferma automatica di prezzi, odds, target, premi o eccezioni specifiche del board Divination: verifica sempre la schermata in-app. Fonte: [Centro Assistenza Sorare — Cos’è Sorare Set (Football)](https://sorare.com/it/help/a/33949360053917/qu-est-ce-que-sorare-set-football).
+
 ### Regole del nuovo board
 
 Il regolamento generale Sorare Set descrive team composti da cinque o più carte secondo lo sport. Tuttavia, non riutilizzare automaticamente cap, numero di vite, soglie, MVP, tier, prezzi dei pack, odds, missioni o bonus del Set precedente. Questi parametri vanno verificati nel Game Board Divination in-app. Il cap L10 120 e l'MVP escluso mostrati dal lineup builder restano uno scenario operativo, non una regola Divination confermata.
