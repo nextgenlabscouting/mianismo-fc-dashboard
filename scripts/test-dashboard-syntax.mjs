@@ -93,7 +93,7 @@ const checks = [
   [/--bg:#070510/, 'tema Divination nero, viola e oro']
 ];
 
-assert.doesNotMatch(scripts[0][1], /setInterval\\s*\\([^;]*loadSorarePublicData/, 'La dashboard non deve sincronizzare Sorare in automatico a intervalli');
+assert.doesNotMatch(scripts[0][1], /setInterval\s*\([^;]*loadSorarePublicData/, 'La dashboard non deve sincronizzare Sorare in automatico a intervalli');
 assert.ok(scripts[0][1].includes('location.replace(CANONICAL_APP_ORIGIN+nextPath+location.search+location.hash)'), 'Il mirror statico deve preservare pagina, query e hash nel redirect Vercel');
 
 for (const [pattern, label] of checks) {
