@@ -347,11 +347,38 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
 (function(){
 'use strict';
 const KEY='nexusSorareIntelligenceV1';
-const initial={cards:[],lineup:['','','','',''],resources:{gems:null,essence:null,set:'',collection:null,goal:500,notes:'',legacyEssenceExpired:false,legacyGemsSpentBracket:''},resourcesConfirmedByUser:false,sorareInventoryStatus:'unverified',lastSaved:null};
+const DIVINATION_SET='Divination';
+const DIVINATION_PREVIOUS_SNAPSHOT=Object.freeze({gems:320,collection:80,gemsSpentBracket:'200-349'});
+const initial={cards:[],lineup:['','','','',''],resources:{gems:null,essence:null,set:DIVINATION_SET,collection:null,goal:500,notes:'',legacyEssenceExpired:true,legacyCollectionCompletion:80,legacyGemsAtRollover:320,legacyGemsSpentBracket:'200-349'},resourcesConfirmedByUser:false,divinationTasks:{},sorareInventoryStatus:'unverified',lastSaved:null};
 let state=loadState();
 let cardsPage=1;const CARDS_PAGE_SIZE=72;let lineupPickerSlot=-1,lineupPickerPage=1;const LINEUP_PICKER_PAGE_SIZE=40;
 let activeSorareSlug='',liveSorareProfileSlug='',isSorareAuthenticated=false,sorareSyncRunning=false;
-function loadState(){try{const raw=localStorage.getItem(KEY)||localStorage.getItem('mianismoFcDashboardV1')||'null';const v=JSON.parse(raw);if(v&&typeof v==='object'){if(!localStorage.getItem(KEY))try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}const merged={...structuredClone(initial),...v,resources:{...initial.resources,...(v.resources||{})},cards:Array.isArray(v.cards)?v.cards:[],lineup:Array.isArray(v.lineup)?v.lineup:['','','','',''],sorareProfileSlug:typeof v.sorareProfileSlug==='string'?v.sorareProfileSlug:''};merged.resourcesConfirmedByUser=v.resourcesConfirmedByUser===true;if(!merged.resourcesConfirmedByUser)merged.resources={...merged.resources,gems:null,essence:null,set:'',collection:null,legacyGemsSpentBracket:''};if(/hyperglitch/i.test(String(merged.resources.set||''))&&Date.now()>=Date.parse('2026-10-27T16:00:00Z')){merged.resources.essence=null;merged.resources.set='';merged.resources.legacyEssenceExpired=true;}const hasSavedSorare=Boolean(merged.sorareProfileSlug)&&merged.cards.some(card=>card?.source==='sorare'&&card?.sorareSlug);if(!hasSavedSorare)merged.sorareInventoryStatus='unverified';else if(merged.sorareInventoryStatus!=='complete')merged.sorareInventoryStatus='stale';return merged;}}catch(e){}return structuredClone(initial)}
+function loadState(){
+ try{
+  const raw=localStorage.getItem(KEY)||localStorage.getItem('mianismoFcDashboardV1')||'null',v=JSON.parse(raw);
+  if(v&&typeof v==='object'){
+   if(!localStorage.getItem(KEY))try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}
+   const oldResources=v.resources&&typeof v.resources==='object'?v.resources:{};
+   const merged={...structuredClone(initial),...v,resources:{...initial.resources,...oldResources},cards:Array.isArray(v.cards)?v.cards:[],lineup:Array.isArray(v.lineup)?v.lineup:['','','','',''],divinationTasks:{...initial.divinationTasks,...(v.divinationTasks||{})},sorareProfileSlug:typeof v.sorareProfileSlug==='string'?v.sorareProfileSlug:''};
+   const oldCycle=/hyper\s?glitch/i.test(String(oldResources.set||''))||oldResources.legacyEssenceExpired===true;
+   if(oldCycle){
+    const oldPct=Number(oldResources.legacyCollectionCompletion??oldResources.collection);if(Number.isFinite(oldPct)&&oldPct>=0&&oldPct<=100)merged.resources.legacyCollectionCompletion=oldPct;
+    const oldGems=Number(oldResources.legacyGemsAtRollover??oldResources.gems);if(Number.isSafeInteger(oldGems)&&oldGems>=0)merged.resources.legacyGemsAtRollover=oldGems;
+    merged.resources.gems=null;merged.resources.essence=null;merged.resources.collection=null;merged.resources.set=DIVINATION_SET;merged.resources.legacyEssenceExpired=true;merged.resources.divinationMigrationApplied=true;merged.lineup=['','','','',''];
+   }
+   if(!merged.resources.set||/nuovo set|in attesa|hyper\s?glitch/i.test(String(merged.resources.set)))merged.resources.set=DIVINATION_SET;
+   merged.resources.legacyCollectionCompletion=Number.isFinite(Number(merged.resources.legacyCollectionCompletion))?Math.max(0,Math.min(100,Number(merged.resources.legacyCollectionCompletion))):DIVINATION_PREVIOUS_SNAPSHOT.collection;
+   merged.resources.legacyGemsAtRollover=Number.isSafeInteger(Number(merged.resources.legacyGemsAtRollover))?Math.max(0,Number(merged.resources.legacyGemsAtRollover)):DIVINATION_PREVIOUS_SNAPSHOT.gems;
+   if(!['','750+','500-749','350-499','200-349','100-199','50-99'].includes(String(merged.resources.legacyGemsSpentBracket??'')))merged.resources.legacyGemsSpentBracket=DIVINATION_PREVIOUS_SNAPSHOT.gemsSpentBracket;
+   merged.resourcesConfirmedByUser=v.resourcesConfirmedByUser===true;
+   if(!merged.resourcesConfirmedByUser)merged.resources={...merged.resources,gems:null,essence:null,collection:null,set:DIVINATION_SET};
+   const hasSavedSorare=Boolean(merged.sorareProfileSlug)&&merged.cards.some(card=>card?.source==='sorare'&&card?.sorareSlug);
+   if(!hasSavedSorare)merged.sorareInventoryStatus='unverified';else if(merged.sorareInventoryStatus!=='complete')merged.sorareInventoryStatus='stale';
+   return merged;
+  }
+ }catch(e){}
+ return structuredClone(initial);
+}
 function persist(){state.lastSaved=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify(state));$('syncLabel').textContent='Salvato in questo browser';}catch(e){$('syncLabel').textContent='Salvataggio non disponibile';toast('Impossibile salvare in questo browser. Esporta un backup.');}renderAll()}
 function $(id){return document.getElementById(id)}
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -361,7 +388,7 @@ function fmtKnown(v){return v===null||v===undefined||v===''?'—':fmt(v)}
 function hasSavedSorareInventory(){return Boolean(state.sorareProfileSlug)&&Array.isArray(state.cards)&&state.cards.some(card=>card?.source==='sorare'&&card?.sorareSlug)}
 function collectionCards(){const cards=Array.isArray(state.cards)?state.cards:[];const showCache=(state.sorareInventoryStatus==='complete'||state.sorareInventoryStatus==='stale')&&Boolean(state.sorareProfileSlug);return showCache?cards:cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug)}
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
-function goto(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));const titles={overview:['La tua stagione, sotto controllo.','Il tuo account Sorare, le carte e l’analisi delle performance in un’unica piattaforma.'],cards:['La tua collezione.','Organizza le carte e conserva le statistiche che vuoi confrontare.'],analytics:['NEXUS Edge Lab.','Segnali, volatilità e copertura dei dati calcolati dalla tua collezione.'],lineup:['Costruisci la tua formazione.','Componi una bozza e confronta le medie inserite.'],resources:['Gestisci ogni risorsa.','Saldo, obiettivi e note operative in un unico pannello.'],sorare:['Sorare Sync.','Accesso diretto email/password, inventario automatico e statistiche aggiornate ogni 2 minuti.']};$('pageTitle').textContent=titles[page][0];$('pageSubtitle').textContent=titles[page][1];window.scrollTo({top:0,behavior:'smooth'});if(page==='lineup')renderLineup();if(page==='analytics')renderEdgeLab()}
+function goto(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));const titles={overview:['Divination Command.','Panoramica del nuovo Set, della collezione e delle risorse.'],divination:['Divination Hub.','Ricompense di transizione, regole e piano operativo free-to-play.'],cards:['La tua collezione.','Organizza le carte e conserva le statistiche che vuoi confrontare.'],analytics:['NEXUS Edge Lab.','Segnali, volatilità e copertura dei dati calcolati dalla tua collezione.'],lineup:['Costruisci la tua formazione.','Componi una bozza e confronta le medie inserite.'],resources:['Gestisci ogni risorsa.','Saldo, obiettivi e note operative in un unico pannello.'],sorare:['Sorare Sync.','Accesso diretto email/password, inventario automatico e statistiche aggiornate ogni 2 minuti.']};$('pageTitle').textContent=titles[page][0];$('pageSubtitle').textContent=titles[page][1];window.scrollTo({top:0,behavior:'smooth'});if(page==='lineup')renderLineup();if(page==='analytics')renderEdgeLab()}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.page)));document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.goto)));
 function cardVisualUrl(c){return c.imageUrl||c.playerImageUrl||c.avatarUrl||''}
 function cardInitials(name){return String(name||'?').split(/\\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase()}
@@ -381,7 +408,7 @@ function cardHTML(c){
  return '<article class="player-card collection-card" data-card-id="'+esc(c.id)+'"><div class="compact-card-art '+(hasCardImage?"is-card":"is-player")+'">'+artwork+'<span class="compact-card-rarity">'+esc(rarity)+'</span>'+(c.serialNumber!=null?'<span class="compact-card-serial">#'+esc(c.serialNumber)+'</span>':'')+'</div><div class="compact-card-body"><div class="compact-card-name" title="'+esc(c.name||"Giocatore non identificato")+'">'+esc(c.name||"Giocatore non identificato")+'</div><div class="compact-card-team" title="'+esc(team)+'">'+esc(team)+'</div><div class="compact-card-position">'+esc(positionText)+'</div><div class="compact-card-scores"><span>L5 <b>'+esc(l5)+'</b></span><span>L10 <b>'+esc(l10)+'</b></span></div>'+(edition?'<div class="compact-card-edition" title="'+esc(edition)+'">'+esc(edition)+'</div>':'')+'</div><div class="card-actions compact-actions"><button class="btn btn-small" data-edit="'+esc(c.id)+'">Dettagli</button><button class="btn btn-small" data-delete="'+esc(c.id)+'">Rimuovi</button></div></article>';
 }
 function isEndedHyperGlitch(card){const source=[card?.setName,card?.set?.name,card?.edition,card?.specialEdition,card?.sorareSlug,card?.slug].filter(Boolean).join(' ').toLowerCase();return /hyper\s?glitch|glitch_(standard|shiny|holo|legendary)/i.test(source)}
-function currentTargetSet(){const name=String(state.resources?.set||'').trim();return !name||/nuovo set|in attesa|hyper\s?glitch/i.test(name)?'':name.toLocaleLowerCase();}
+function currentTargetSet(){const name=String(state.resources?.set||DIVINATION_SET).trim();return !name||/nuovo set|in attesa|hyper\s?glitch/i.test(name)?DIVINATION_SET.toLocaleLowerCase():name.toLocaleLowerCase();}
 function isTargetSetCard(card){const target=currentTargetSet(),actual=String(card?.setName||card?.set?.name||'').trim().toLocaleLowerCase();return Boolean(target&&actual&&actual===target&&!isEndedHyperGlitch(card));}
 function cardVariantLabel(card){
   const skin=card.skinEdition||{};
@@ -641,7 +668,7 @@ function buildOptimalLineup(){
   toast('Bozza euristica proposta · cap simulato '+fmt(best.capUsed)+'/'+fmt(cap)+' L10 · target '+(target>0?fmt(target):'non impostato')+'. Non certifica idoneità o regole ufficiali del Set.');
 }
 function closeLineupPicker(){const modal=$('lineupPickerModal');if(modal)modal.classList.remove('open');lineupPickerSlot=-1;}
-function openLineupPicker(slot){const labels=['Portiere','Difensore','Centrocampista','Attaccante','Flex / posizione aggiuntiva'];lineupPickerSlot=Number(slot);lineupPickerPage=1;$('lineupPickerSearch').value='';$('lineupPickerRarity').value='';$('lineupPickerSort').value='l5';$('lineupPickerTargetOnly').checked=false;$('lineupPickerTitle').textContent='Seleziona '+labels[lineupPickerSlot].toLowerCase();const target=currentTargetSet();$('lineupPickerSubtitle').textContent=collectionCards().length+' carte in archivio · ruolo '+labels[lineupPickerSlot]+(target?' · Set selezionato: '+state.resources.set:' · Set non verificato');$('lineupPickerModal').classList.add('open');renderLineupPickerResults();$('lineupPickerSearch').focus();}
+function openLineupPicker(slot){const labels=['Portiere','Difensore','Centrocampista','Attaccante','Flex / posizione aggiuntiva'];lineupPickerSlot=Number(slot);lineupPickerPage=1;$('lineupPickerSearch').value='';$('lineupPickerRarity').value='';$('lineupPickerSort').value='l5';$('lineupPickerTargetOnly').checked=true;$('lineupPickerTitle').textContent='Seleziona '+labels[lineupPickerSlot].toLowerCase();const target=currentTargetSet();$('lineupPickerSubtitle').textContent=collectionCards().length+' carte in archivio · ruolo '+labels[lineupPickerSlot]+(target?' · Set selezionato: '+state.resources.set:' · Set non verificato');$('lineupPickerModal').classList.add('open');renderLineupPickerResults();$('lineupPickerSearch').focus();}
 function renderLineupPickerResults(){
  const box=$('lineupPickerResults');if(!box||lineupPickerSlot<0)return;
  const slot=lineupPickerSlot,role=['GK','DF','MD','FW',null][slot],all=collectionCards(),roleCards=all.filter(c=>{const kinds=positionKinds(c);return role?kinds.includes(role):(!kinds.length||kinds.some(k=>k!=='GK'));});
