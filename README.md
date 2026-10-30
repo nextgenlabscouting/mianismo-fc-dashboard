@@ -1,4 +1,4 @@
-# NEXUS — Sorare Intelligence
+# NEXUS — Divination Intelligence
 
 NEXUS è una dashboard indipendente per leggere e organizzare una collezione Sorare, analizzare gli score storici disponibili e preparare bozze di formazione. **NEXUS è il nome dell'app; lo slug Sorare è soltanto l'account da cui leggere le carte.** L'interfaccia non è un prodotto ufficiale Sorare.
 
@@ -8,6 +8,27 @@ NEXUS è una dashboard indipendente per leggere e organizzare una collezione Sor
 - Repository: https://github.com/nextgenlabscouting/mianismo-fc-dashboard
 - API carte: https://mianismo-fc-dashboard.vercel.app/api/public/cards
 - Stato account: https://mianismo-fc-dashboard.vercel.app/api/auth/sorare/session
+
+## Divination — Set attivo dal 30 ottobre 2026
+
+NEXUS adotta l'identità Divination: interfaccia scura con palette viola/oro, una pagina **Divination Hub** e una checklist operativa per il passaggio al nuovo Set. Il nome NEXUS resta il brand dell'app; Divination è il Set Sorare attualmente selezionato.
+
+### Snapshot storico Hyperglitch
+
+Le ricompense di transizione mostrate in NEXUS sono stime basate sullo snapshot storico che avevi dichiarato, non su dati live dell'account:
+- Completamento Hyperglitch: 80% → stima 8.000 Essence del nuovo Set (1.000 per ogni 10%).
+- Soglia collezione ≥70%: +10 Gems.
+- Fascia Gems spese 200–349 (ricompense escluse): +15 Gems.
+- Bonus Gems stimato: +25. Le 320 Gems riportate prima del passaggio e le 345 Gems teoriche dopo il bonus non sono un saldo corrente verificato.
+- L'Essence Hyperglitch residua non viene trasferita. Le vecchie carte restano nello storico/archivio ma non sono idonee alle formazioni del nuovo Set.
+
+La pagina **Risorse** separa il completamento storico Hyperglitch dal completamento corrente Divination. NEXUS non può leggere via questa integrazione i saldi Gems, Essence o il completamento della collezione: inserisci i valori correnti solo dopo averli verificati su Sorare.
+
+### Regole del nuovo board
+
+Il regolamento generale Sorare Set descrive team composti da cinque o più carte secondo lo sport. Tuttavia, non riutilizzare automaticamente cap, numero di vite, soglie, MVP, tier, prezzi dei pack, odds, missioni o bonus del Set precedente. Questi parametri vanno verificati nel Game Board Divination in-app. Il cap L10 120 e l'MVP escluso mostrati dal lineup builder restano uno scenario operativo, non una regola Divination confermata.
+
+Ordine consigliato F2P: riscuotere/controllare le ricompense già maturate, verificare i saldi, leggere il board, completare le opportunità gratuite e solo dopo valutare l'uso di Essence o Gems. Evita di rottamare carte prima di controllare collezioni, missioni e bonus.
 
 ## Collegare l'account Sorare senza OAuth
 
