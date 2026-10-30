@@ -896,7 +896,7 @@ async function importBackupFromFile(event){
     const payload=JSON.parse(await file.text());
     const incoming=payload&&typeof payload==="object"&&payload.state&&typeof payload.state==="object"?payload.state:payload;
     if(!incoming||typeof incoming!=="object"||!Array.isArray(incoming.cards))throw new Error("Il file non contiene un archivio carte riconoscibile.");
-    const cards=incoming.cards.filter(card=>card&&typeof card==="object"&&String(card.name||"").trim()).map(card=>({
+    const cards=incoming.cards.filter(card=>card&&typeof card==="object"&&String(card.name||"").trim()&&!isEndedHyperGlitch(card)).map(card=>({
       ...card,
       id:String(card.id||card.sorareSlug||card.slug||("imported-"+Math.random().toString(36).slice(2,10))),
       name:String(card.name).trim(),
