@@ -94,6 +94,14 @@ const checks = [
 ];
 
 assert.doesNotMatch(scripts[0][1], /setInterval\s*\([^;]*loadSorarePublicData/, 'La dashboard non deve sincronizzare Sorare in automatico a intervalli');
+
+const restoreStart = scripts[0][1].indexOf('async function restoreSorareSession(){');
+const restoreEnd = scripts[0][1].indexOf('\nfunction renderHeaderChrome(){', restoreStart);
+assert.ok(restoreStart >= 0 && restoreEnd > restoreStart, 'Il ripristino sessione deve essere separato dalla sincronizzazione inventario');
+const restoreSource = scripts[0][1].slice(restoreStart, restoreEnd);
+assert.doesNotMatch(restoreSource, /loadSorarePublicData|\/api\/public\/(?:cards|profile)/, 'Il ripristino sessione non deve leggere le carte o il profilo remoto');
+assert.match(html, /incoming\.cards\.filter\(card=>card&&typeof card==="object"&&String\(card\.name\|\|"""\)\.trim\(\)&&!isEndedHyperGlitch\(card\)\)/, 'Anche i backup importati devono escludere le carte Hyperglitch');
+
 assert.ok(scripts[0][1].includes('location.replace(CANONICAL_APP_ORIGIN+nextPath+location.search+location.hash)'), 'Il mirror statico deve preservare pagina, query e hash nel redirect Vercel');
 
 for (const [pattern, label] of checks) {
