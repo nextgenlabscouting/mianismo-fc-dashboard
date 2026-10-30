@@ -869,18 +869,19 @@ async function importBackupFromFile(event){
       collection:numberOr(incomingResources.collection,initial.resources.collection,0,100,false),
       goal:numberOr(incomingResources.goal,initial.resources.goal,0,Number.MAX_SAFE_INTEGER,true),
       legacyGemsSpentBracket:["","750+","500-749","350-499","200-349","100-199","50-99"].includes(String(incomingResources.legacyGemsSpentBracket??initial.resources.legacyGemsSpentBracket))?String(incomingResources.legacyGemsSpentBracket??initial.resources.legacyGemsSpentBracket):initial.resources.legacyGemsSpentBracket,
-      set:String(incomingResources.set||initial.resources.set).trim().slice(0,60)||initial.resources.set,
+      legacyCollectionCompletion:numberOr(incomingResources.legacyCollectionCompletion,incomingResources.collection??initial.resources.legacyCollectionCompletion,0,100,false),
+      legacyGemsAtRollover:numberOr(incomingResources.legacyGemsAtRollover,incomingResources.gems??initial.resources.legacyGemsAtRollover,0,Number.MAX_SAFE_INTEGER,true),
+      divinationMigrationApplied:true,
+      set:DIVINATION_SET,
       notes:String(incomingResources.notes||"").slice(0,250)
     };
-    if(/hyper\s?glitch/i.test(resources.set)&&Date.now()>=Date.parse("2026-10-27T16:00:00Z")){
-      resources.essence=null;resources.set="";resources.legacyEssenceExpired=true;
-    }
+    if(/hyperglitch/i.test(String(incomingResources.set||""))){resources.legacyCollectionCompletion=numberOr(incomingResources.legacyCollectionCompletion,incomingResources.collection,initial.resources.legacyCollectionCompletion,100,false);resources.legacyGemsAtRollover=numberOr(incomingResources.legacyGemsAtRollover,incomingResources.gems,initial.resources.legacyGemsAtRollover,Number.MAX_SAFE_INTEGER,true);resources.gems=null;resources.essence=null;resources.collection=null;resources.set=DIVINATION_SET;resources.legacyEssenceExpired=true;resources.divinationMigrationApplied=true;}
     const ids=new Set(cards.map(card=>card.id));
     const savedLineup=Array.isArray(incoming.lineup)?incoming.lineup:[];
-    const lineup=Array.from({length:5},(_,i)=>{const id=String(savedLineup[i]||"");return ids.has(id)?id:"";});
+    const lineup=Array.from({length:5},(_,i)=>{const id=String(savedLineup[i]||"");return ids.has(id)?id:"";});if(/hyperglitch/i.test(String(incomingResources.set||"")))lineup.fill("");
     const resourcesConfirmedByUser=incoming.resourcesConfirmedByUser===true;
-    if(!resourcesConfirmedByUser){resources.gems=null;resources.essence=null;resources.collection=null;resources.set='';resources.legacyGemsSpentBracket='';}
-    state={...structuredClone(initial),...incoming,cards,lineup,resources,resourcesConfirmedByUser,sorareInventoryStatus:'unverified'};
+    if(!resourcesConfirmedByUser){resources.gems=null;resources.essence=null;resources.collection=null;resources.set=DIVINATION_SET;}
+    state={...structuredClone(initial),...incoming,divinationTasks:{...initial.divinationTasks,...(incoming.divinationTasks||{})},cards,lineup,resources,resourcesConfirmedByUser,sorareInventoryStatus:'unverified'};
     cardsPage=1;
     persist();
     toast("Backup importato e validato: "+cards.length+" carte.");
