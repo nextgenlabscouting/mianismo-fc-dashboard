@@ -494,11 +494,9 @@ function basketballCards(){return (Array.isArray(state.nbaCards)?state.nbaCards:
 function collectionCards(){const sport=state.activeSport==='nba'?'nba':'football';return sport==='nba'?basketballCards():footballCards();}
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
 function applySportModeUI(){
- const nba=state.activeSport==='nba';
- $('sportModeFootball')?.classList.toggle('active',!nba);
- $('sportModeNBA')?.classList.toggle('active',nba);
- $('sportModeFootball')?.setAttribute('aria-pressed',String(!nba));
- $('sportModeNBA')?.setAttribute('aria-pressed',String(nba));
+ const nba=state.activeSport==='nba',sport=nba?'nba':'football';
+ $('sportModeFootball')?.classList.toggle('active',!nba);$('sportModeNBA')?.classList.toggle('active',nba);
+ $('sportModeFootball')?.setAttribute('aria-pressed',String(!nba));$('sportModeNBA')?.setAttribute('aria-pressed',String(nba));
  if($('sportNavLabel'))$('sportNavLabel').textContent=nba?'NBA / SORARE':'FOOTBALL / SORARE';
  ['divination','lineup','resources'].forEach(page=>{
   document.querySelectorAll('[data-page="'+page+'"]').forEach(button=>button.classList.toggle('sport-hidden',nba));
@@ -506,25 +504,45 @@ function applySportModeUI(){
  });
  $('footballModeStrip')?.classList.toggle('sport-hidden',nba);
  document.querySelectorAll('.header-currency,.sidebar-wallet').forEach(node=>node.classList.toggle('sport-hidden',nba));
- const cardsEyebrow=document.querySelector('#page-cards .section-heading .eyebrow');
- const cardsTitle=document.querySelector('#page-cards .section-title');
- const cardsDescription=document.querySelector('#page-cards .section-description');
- const scoresEyebrow=document.querySelector('#page-scores .eyebrow');
- const scoresTitle=document.querySelector('#page-scores .section-title');
- const scoresDescription=document.querySelector('#page-scores .section-description');
+ const cardsEyebrow=document.querySelector('#page-cards .section-heading .eyebrow'),cardsTitle=document.querySelector('#page-cards .section-title'),cardsDescription=document.querySelector('#page-cards .section-description');
+ const scoresEyebrow=document.querySelector('#page-scores .eyebrow'),scoresTitle=document.querySelector('#page-scores .section-title'),scoresDescription=document.querySelector('#page-scores .section-description');
  if(cardsEyebrow)cardsEyebrow.textContent=nba?'NBA / MY CARDS':'FOOTBALL / MY CARDS';
  if(cardsTitle)cardsTitle.textContent=nba?'NBA My Cards':'My Cards';
  if(cardsDescription)cardsDescription.textContent=nba?'Archivio NBA isolato: nessuna carta o giocatore di calcio viene mostrato qui.':'La tua galleria, le collezioni e gli oggetti del tuo account Sorare Football.';
  if(scoresEyebrow)scoresEyebrow.textContent=nba?'NBA / SCORES':'FOOTBALL / SCORES';
  if(scoresTitle)scoresTitle.textContent=nba?'NBA Scores':'Scores';
  if(scoresDescription)scoresDescription.textContent=nba?'Partite e forma recente esclusivamente dei giocatori NBA.':'Partite in calendario e forma recente dei giocatori della tua collezione.';
- const heroLabel=document.querySelector('#page-overview .hero-label');
- const heroTitle=document.querySelector('#page-overview .hero h2');
- const heroCopy=document.querySelector('#page-overview .hero p');
+ const addManual=$('addCardPage');if(addManual)addManual.textContent=nba?'＋ Aggiungi giocatore NBA':'＋ Aggiunta manuale';
+ document.querySelectorAll('[data-cards-view="collections"],[data-cards-view="boxes"],[data-cards-view="essence"]').forEach(button=>button.classList.toggle('sport-hidden',nba));
+ ['cardsCollectionsView','cardsBoxesView','cardsEssenceView'].forEach(id=>$(id)?.classList.toggle('sport-hidden',nba));
+ if(nba){
+  document.querySelectorAll('[data-cards-view]').forEach(button=>button.classList.toggle('active',button.dataset.cardsView==='gallery'));
+  ['cardsCollectionsView','cardsBoxesView','cardsEssenceView'].forEach(id=>$(id)?.classList.add('hide'));
+  $('cardsGalleryView')?.classList.remove('hide');
+ }
+ const posFilter=$('positionFilter');
+ if(posFilter&&posFilter.dataset.sport!==sport){
+  const values=nba?['Guard','Forward','Center','Altro']:['Portiere','Difensore','Centrocampista','Attaccante','Altro'];
+  posFilter.innerHTML='<option value="">Tutti i ruoli</option>'+values.map(value=>'<option>'+value+'</option>').join('');
+  posFilter.value='';posFilter.dataset.sport=sport;
+ }
+ const edgeFilter=$('edgeRoleFilter');
+ if(edgeFilter&&edgeFilter.dataset.sport!==sport){
+  const values=nba?['Guard','Forward','Center','Altro']:['Portiere','Difensore','Centrocampista','Attaccante','Altro'];
+  edgeFilter.innerHTML='<option value="Tutti">Tutti i ruoli</option>'+values.map(value=>'<option>'+value+'</option>').join('');
+  edgeFilter.value='Tutti';edgeFilter.dataset.sport=sport;
+ }
+ const heroLabel=document.querySelector('#page-overview .hero-label'),heroTitle=document.querySelector('#page-overview .hero h2'),heroCopy=document.querySelector('#page-overview .hero p');
  if(heroLabel)heroLabel.textContent=nba?'NEXUS · NBA INTELLIGENCE':'NEXUS · DIVINATION / 30 OCT 2026';
  if(heroTitle)heroTitle.innerHTML=nba?'NBA.<br><span class="green">Own your edge.</span>':'Read the signs.<br><span class="green">Build your edge.</span>';
- if(heroCopy)heroCopy.textContent=nba?'Il tuo spazio NBA indipendente: giocatori, carte, punteggi e analisi. Nessun dato calcistico entra in questo archivio.':'Una nuova stagione, una nuova collezione. Monitora Divination, proteggi le Gems, usa l’Essence con criterio e pianifica ogni mossa senza spesa impulsiva.';
+ if(heroCopy)heroCopy.textContent=nba?'Il tuo spazio NBA indipendente: archivio, schede, analisi e dati NBA. Nessun giocatore di calcio entra in questo spazio.':'Una nuova stagione, una nuova collezione. Monitora Divination, proteggi le Gems, usa l’Essence con criterio e pianifica ogni mossa senza spesa impulsiva.';
  document.querySelectorAll('[data-goto="resources"],[data-goto="divination"],[data-goto="lineup"]').forEach(button=>button.classList.toggle('sport-hidden',nba));
+ const stats=$('statCards')?.closest('.stats');
+ if(stats)stats.querySelectorAll('.stat').forEach((tile,index)=>tile.classList.toggle('sport-hidden',nba&&index>0));
+ const systemPanel=document.querySelector('#page-overview .section-grid .panel:nth-child(2)');
+ if(systemPanel)systemPanel.classList.toggle('sport-hidden',nba);
+ const radarPanel=$('weekendRadar')?.closest('.panel');
+ if(radarPanel)radarPanel.classList.toggle('sport-hidden',nba);
  $('navCardCount').textContent=collectionCards().length;
 }
 function switchSport(sport){
@@ -681,33 +699,30 @@ function renderWeekendRadar(){
   }).join('');
 }
 function renderOverview(){
-  const r=state.resources,manualResources=state.resourcesConfirmedByUser===true,inventoryVerified=state.sorareInventoryStatus==='complete';
-  const sorareCards=state.cards.filter(card=>card?.source==='sorare'||card?.sorareSlug),manualCount=state.cards.length-sorareCards.length;
-  $('statCards').textContent=inventoryVerified?fmt(sorareCards.length):'—';
-  $('statCardsFoot').textContent=inventoryVerified?`${sorareCards.length} carte Sorare verificate · ${manualCount} manuali locali`:state.sorareInventoryStatus==='stale'?'Ultimo inventario locale conservato · sincronizzazione live da verificare':`Inventario Sorare non verificato · ${manualCount} carte manuali locali`;
-  $('statGems').textContent=manualResources?fmtKnown(r.gems):'—';
-  $('statEssence').textContent=manualResources?fmtKnown(r.essence):'—';
-  $('statEssenceFoot').textContent=manualResources&&r.essence!=null?'Valore manuale · non sincronizzato via API':'Saldo non disponibile: NEXUS non lo legge dall’API Sorare';
-  $('statCollection').textContent=manualResources&&r.collection!=null?fmt(r.collection)+'%':'—';
-  $('resourceGemsDisplay').textContent=manualResources?fmtKnown(r.gems):'—';
-  $('resourceEssenceDisplay').textContent=manualResources?fmtKnown(r.essence):'—';
-  $('resourceSetDisplay').textContent='Set: '+(manualResources&&r.set?r.set:'Non verificato');
-  $('resourceCollectionDisplay').textContent=manualResources&&r.collection!=null?fmt(r.collection)+'%':'—';
-  $('collectionBar').style.width=manualResources&&r.collection!=null?Math.max(0,Math.min(100,num(r.collection)))+'%':'0%';
-  const cards=collectionCards().slice(0,3);
-  if(cards.length){
-    $('overviewCards').className='cards-grid';
-    $('overviewCards').innerHTML=cards.map(cardHTML).join('');
-    bindCardActions($('overviewCards'));
-  }else{
-    $('overviewCards').className='empty';
-    $('overviewCards').innerHTML='<span class="empty-icon">▧</span><strong>La tua collezione parte da qui</strong><p>Importa le carte da Sorare Sync o aggiungile manualmente.</p><button class="btn btn-primary btn-small" id="addFirstCard">↻ Riprova sincronizzazione</button>';
-    if($('addFirstCard'))$('addFirstCard').onclick=()=>loadSorarePublicData();
-  }
-  renderAnalytics();
-  renderWeekendRadar();
+ const cards=collectionCards(),sport=state.activeSport,sorareCards=cards.filter(card=>card?.source==='sorare'||card?.sorareSlug),manualCount=cards.length-sorareCards.length;
+ const verified=state.sorareInventoryStatus==='complete'||state.sorareInventoryStatus==='stale';
+ $('statCards').textContent=fmt(cards.length);
+ $('statCardsFoot').textContent=verified?sorareCards.length+' carte Sorare · '+manualCount+' manuali · '+(sport==='nba'?'archivio NBA':'archivio Football'):'Archivio '+(sport==='nba'?'NBA':'Football')+' · sincronizzazione da verificare';
+ const r=state.resources,manualResources=state.resourcesConfirmedByUser===true;
+ $('statGems').textContent=sport==='football'&&manualResources?fmtKnown(r.gems):'—';
+ $('statEssence').textContent=sport==='football'&&manualResources?fmtKnown(r.essence):'—';
+ $('statEssenceFoot').textContent=sport==='football'&&manualResources&&r.essence!=null?'Valore manuale · non sincronizzato via API':'Le risorse Gems / Essence sono specifiche del workspace Football';
+ $('statCollection').textContent=sport==='football'&&manualResources&&r.collection!=null?fmt(r.collection)+'%':'—';
+ $('resourceGemsDisplay').textContent=manualResources?fmtKnown(r.gems):'—';
+ $('resourceEssenceDisplay').textContent=manualResources?fmtKnown(r.essence):'—';
+ $('resourceSetDisplay').textContent='Set: '+(manualResources&&r.set?r.set:'Non verificato');
+ $('resourceCollectionDisplay').textContent=manualResources&&r.collection!=null?fmt(r.collection)+'%':'—';
+ $('collectionBar').style.width=manualResources&&r.collection!=null?Math.max(0,Math.min(100,num(r.collection)))+'%':'0%';
+ if(cards.length){
+  $('overviewCards').className='cards-grid';$('overviewCards').innerHTML=cards.slice(0,3).map(cardHTML).join('');bindCardActions($('overviewCards'));
+ }else{
+  $('overviewCards').className='empty';
+  $('overviewCards').innerHTML='<span class="empty-icon">'+(sport==='nba'?'🏀':'⚽')+'</span><strong>Nessun giocatore '+(sport==='nba'?'NBA':'Football')+' nell’archivio</strong><p>Sincronizza Sorare o aggiungi manualmente un giocatore '+(sport==='nba'?'NBA':'di calcio')+'.</p><button class="btn btn-primary btn-small" id="addFirstCard">＋ Aggiungi o sincronizza</button>';
+  if($('addFirstCard'))$('addFirstCard').onclick=()=>{if(isSorareAuthenticated)loadSorarePublicData();else openModal();};
+ }
+ renderAnalytics();
+ if(sport==='football')renderWeekendRadar();
 }
-
 function bindCardActions(root){root.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openModal(findStoredCard(b.dataset.edit)));root.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteCard(b.dataset.delete))}
 function positionKinds(card){
   const source=[];
