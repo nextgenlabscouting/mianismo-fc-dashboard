@@ -1289,76 +1289,98 @@ function renderEdgeLab(){
 }
 
 function renderSorareReport(data){
-  const status=data?.status||'pending';
-  const ok=status==='ok';
-  $('sorareStatus').textContent=ok?'Report pronto':status==='not_authenticated'?'Account non collegato':status==='stale'?'Dati conservati':status==='degraded'?'Dati insufficienti':status==='profile_not_found_or_not_public'?'Profilo non trovato':status==='error'?'Errore API':'In attesa';
-  $('sorareStatus').className='stat-value '+(ok?'green':status==='error'||status==='degraded'?'red':'orange');
-  $('sorareStatusFoot').textContent=data?.statusLabel||'Da eseguire il primo controllo';
-  $('sorareProfileFound').textContent=data?.profile?.found?'Sì':data?.profile?.found===false?'No':'—';
-  $('sorareProfileName').textContent=data?.profile?.nickname?`${data.profile.nickname} · ${data.profile.slug}`:`Slug richiesto: ${data?.requestedSlug||'mianismo'}`;
-  const receivedItems=Array.isArray(data?.cards?.items)?data.cards.items:[];
-  const items=receivedItems.filter(card=>!isEndedHyperGlitch(card));
-  liveSorareItems=items;
-  liveSorareComplete=Boolean(data?.cards?.complete&&data?.cards?.authenticated&&isSorareAuthenticated&&data?.cards?.profileSlug===liveSorareProfileSlug);
-  const importButton=$('importSorareCards');if(importButton){importButton.disabled=!liveSorareComplete;importButton.textContent=liveSorareComplete?(items.length?'Importa/aggiorna '+items.length+' carte':'Conferma inventario vuoto'):'Importazione bloccata: inventario non completo';}
-  $('sorareCardCount').textContent=liveSorareComplete?fmt(items.length):'—';
-  const quality=data?.cards?.dataQuality;
-  const tiers=data?.cards?.queryTierCounts;
-  const tierLabel=tiers?Object.entries(tiers).map(([name,count])=>name+' ×'+count).join(', '):data?.cards?.queryTier;
-  const diagnostic=data?.cards?.diagnostic;
-  const fallbackLabel=diagnostic?.attemptedFallbacks?' · '+diagnostic.attemptedFallbacks+' fallback':'';
-  $('sorareCardFoot').textContent=liveSorareComplete?('Inventario completo verificato'+(quality?' · '+(quality.withCardImage||0)+' immagini carta · '+(quality.withPlayerImage||0)+' ritratti · '+(quality.withVariant||0)+' varianti · '+(quality.withRecentScores||0)+' con storico':'')+(tierLabel?' · query '+tierLabel:'')+fallbackLabel):(items.length?'Lettura parziale: '+items.length+' record ricevuti; totale non verificato e importazione bloccata':data?.cards?.message||'Non ancora verificato');
-  $('sorareUpdated').textContent=data?.updatedAt?new Date(data.updatedAt).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'}):'Mai';
-  $('sorareCardBadge').textContent=liveSorareComplete?`${items.length} carte verificate`:items.length?`${items.length} record parziali`:'Inventario non verificato';
-  if(items.length){$('sorareCardsList').className='cards-grid collection-grid';const reportItems=items.slice(0,60);$('sorareCardsList').innerHTML=reportItems.map((c,i)=>`<article class="player-card" style="padding:10px"><div style="height:112px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 20%,#263e4b,#101927 70%);border-radius:12px;overflow:hidden;margin-bottom:10px">${c.imageUrl?`<img src="${esc(c.imageUrl)}" alt="${esc(c.name||'Carta Sorare')}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:c.playerImageUrl?`<img src="${esc(c.playerImageUrl)}" alt="${esc(c.name||'Giocatore')}" loading="lazy" style="width:100%;height:100%;object-fit:contain">`:'<span style="font-size:40px;color:#a3ff5f">⚽</span>'}</div><div class="player-name">${esc(c.name||c.slug||'Carta Sorare')}</div><div class="player-club">${esc(c.team||'Sorare')}${c.season?' · '+esc(c.season):''}</div><div class="card-tags" style="margin-top:8px"><span class="tag">${esc(c.rarity||'Rarità n.d.')}</span>${c.serialNumber!=null?`<span class="tag">N° ${esc(c.serialNumber)}</span>`:''}${c.edition?`<span class="tag">${esc(c.edition)}</span>`:''}${c.skinEdition?.skinName?`<span class="tag">${esc(c.skinEdition.skinName)}</span>`:''}${c.skinEdition?.variantName?`<span class="tag">${esc(c.skinEdition.variantName)}</span>`:''}${c.skinEdition?.bonus!=null?`<span class="tag">${esc(variantBonusLabel(c.skinEdition.bonus))}</span>`:''}<span class="tag">L5 ${c.l5!=null?esc(fmt(c.l5)):'n.d.'}</span><span class="tag">L10 ${c.l10!=null?esc(fmt(c.l10)):'n.d.'}</span>${c.upcomingGames?.[0]?.date?`<span class="tag">Match ${esc(new Date(c.upcomingGames[0].date).toLocaleDateString('it-IT',{day:'2-digit',month:'short'}))}</span>`:''}</div><details style="margin-top:8px;color:#91a1b8;font-size:10px"><summary>Dettagli tecnici</summary><p style="overflow-wrap:anywhere">${esc(c.slug||'')}</p></details></article>`).join('')+(data.cards.truncated?'<div class="notice" style="grid-column:1/-1"><span class="notice-icon">ⓘ</span><div>Elenco parziale: la richiesta ha raggiunto il limite di pagine previsto.</div></div>':'');}
-  else {$('sorareCardsList').className='empty';$('sorareCardsList').innerHTML=`<span class="empty-icon">${status==='error'?'!':'↻'}</span><strong>${esc(data?.cards?.message||data?.message||'Nessuna carta disponibile nel report')}</strong><p>${esc(data?.cards?.detail||'Dopo la prima esecuzione potremo vedere quali campi pubblici sono accessibili.')}</p>`;}
-  const diagnosticText=(Array.isArray(data?.cards?.diagnostic?.fallbackErrors)?data.cards.diagnostic.fallbackErrors:[]).map(item=>(item.tier||'query')+': '+(item.error||'errore')).join(' · ').slice(0,500);
-  const pageError=data?.cards?.detail;
-  $('sorareMessage').innerHTML=`<strong>${esc(data?.message||'In attesa del primo report.')}</strong><br>${esc(data?.detail||'Rileggi i dati per verificare la fonte pubblica.')}${pageError?'<br><strong>Dettaglio inventario:</strong> '+esc(pageError):''}${diagnosticText?'<br><strong>Query di ripiego:</strong> '+esc(diagnosticText):''}`;
+ const status=data?.status||'pending',ok=status==='ok';
+ $('sorareStatus').textContent=ok?'Report pronto':status==='not_authenticated'?'Account non collegato':status==='stale'?'Dati conservati':status==='degraded'?'Dati insufficienti':status==='profile_not_found_or_not_public'?'Profilo non trovato':status==='error'?'Errore API':'In attesa';
+ $('sorareStatus').className='stat-value '+(ok?'green':status==='error'||status==='degraded'?'red':'orange');
+ $('sorareStatusFoot').textContent=data?.statusLabel||'Da eseguire il primo controllo';
+ $('sorareProfileFound').textContent=data?.profile?.found?'Sì':data?.profile?.found===false?'No':'—';
+ $('sorareProfileName').textContent=data?.profile?.nickname?data.profile.nickname+' · '+data.profile.slug:'Slug richiesto: '+(data?.requestedSlug||'account');
+ const received=Array.isArray(data?.cards?.items)?data.cards.items:[];
+ const items=received.filter(card=>normalizeSport(card.sport)!=='football'||!isEndedHyperGlitch(card));
+ liveSorareItems=items;
+ liveSorareFootballItems=items.filter(card=>normalizeSport(card.sport)==='football'&&!isEndedHyperGlitch(card));
+ liveSorareNbaItems=items.filter(card=>normalizeSport(card.sport)==='nba');
+ liveSorareCompleteBySport={football:Boolean(data?.cards?.footballComplete),nba:Boolean(data?.cards?.nbaComplete)};
+ liveSorareComplete=Boolean(data?.cards?.complete&&data?.cards?.authenticated&&isSorareAuthenticated&&data?.cards?.profileSlug===liveSorareProfileSlug);
+ const footballCount=liveSorareFootballItems.length,nbaCount=liveSorareNbaItems.length,unknownCount=items.length-footballCount-nbaCount;
+ const importButton=$('importSorareCards');
+ if(importButton){importButton.disabled=!liveSorareComplete;importButton.textContent=liveSorareComplete?'Importa '+footballCount+' Football · '+nbaCount+' NBA':'Importazione bloccata: entrambe le letture sport devono essere complete';}
+ $('sorareCardCount').textContent=liveSorareComplete?fmt(items.length):'—';
+ const quality=data?.cards?.dataQuality,tiers=data?.cards?.queryTierCounts;
+ const tierLabel=tiers?Object.entries(tiers).map(([name,count])=>name+' ×'+count).join(', '):data?.cards?.queryTier;
+ const diagnostic=data?.cards?.diagnostic,fallbackLabel=diagnostic?.attemptedFallbacks?' · '+diagnostic.attemptedFallbacks+' fallback':'';
+ $('sorareCardFoot').textContent=liveSorareComplete?'Football '+footballCount+' · NBA '+nbaCount+(unknownCount?' · da classificare '+unknownCount:'')+(quality?' · '+(quality.withCardImage||0)+' immagini · '+(quality.withRecentScores||0)+' con storico':'')+(tierLabel?' · query '+tierLabel:'')+fallbackLabel:(items.length?'Lettura non completa: Football '+footballCount+' · NBA '+nbaCount+'. Inventario precedente conservato.':data?.cards?.message||'Non ancora verificato');
+ $('sorareUpdated').textContent=data?.updatedAt?new Date(data.updatedAt).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'}):'Mai';
+ $('sorareCardBadge').textContent=liveSorareComplete?'Football '+footballCount+' · NBA '+nbaCount:items.length+' record parziali';
+ if(items.length){
+  $('sorareCardsList').className='cards-grid collection-grid';
+  $('sorareCardsList').innerHTML=items.slice(0,60).map(card=>{
+   const sport=normalizeSport(card.sport),isNba=sport==='nba',icon=isNba?'🏀':'⚽';
+   return '<article class="player-card" style="padding:10px"><div style="height:112px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 20%,#263e4b,#101927 70%);border-radius:12px;overflow:hidden;margin-bottom:10px">'+(card.imageUrl?'<img src="'+esc(card.imageUrl)+'" alt="'+esc(card.name||'Carta Sorare')+'" loading="lazy" style="width:100%;height:100%;object-fit:contain">':card.playerImageUrl?'<img src="'+esc(card.playerImageUrl)+'" alt="'+esc(card.name||'Giocatore')+'" loading="lazy" style="width:100%;height:100%;object-fit:contain">':'<span style="font-size:40px;color:#a3ff5f">'+icon+'</span>')+'</div><div class="player-name">'+esc(card.name||card.slug||'Carta Sorare')+'</div><div class="player-club">'+esc(card.team||'Sorare')+' · '+(isNba?'NBA':sport==='football'?'Football':'Da classificare')+(card.season?' · '+esc(card.season):'')+'</div><div class="card-tags" style="margin-top:8px"><span class="tag">'+esc(card.rarity||'Rarità n.d.')+'</span>'+(card.serialNumber!=null?'<span class="tag">N° '+esc(card.serialNumber)+'</span>':'')+(card.edition?'<span class="tag">'+esc(card.edition)+'</span>':'')+'<span class="tag">L5 '+(card.l5!=null?esc(fmt(card.l5)):'n.d.')+'</span><span class="tag">L10 '+(card.l10!=null?esc(fmt(card.l10)):'n.d.')+'</span></div></article>';
+  }).join('');
+ }else{
+  $('sorareCardsList').className='empty';
+  $('sorareCardsList').innerHTML='<span class="empty-icon">'+(status==='error'?'!':'↻')+'</span><strong>'+esc(data?.cards?.message||data?.message||'Nessuna carta disponibile nel report')+'</strong><p>'+esc(data?.cards?.detail||'Dopo la prima esecuzione potremo vedere quali campi pubblici sono accessibili.')+'</p>';
+ }
+ const diagnosticText=(Array.isArray(data?.cards?.diagnostic?.fallbackErrors)?data.cards.diagnostic.fallbackErrors:[]).map(item=>(item.tier||'query')+': '+(item.error||'errore')).join(' · ').slice(0,500);
+ const pageError=data?.cards?.detail;
+ $('sorareMessage').innerHTML='<strong>'+esc(data?.message||'In attesa del primo report.')+'</strong><br>'+esc(data?.detail||'Rileggi i dati per verificare la fonte pubblica.')+(pageError?'<br><strong>Dettaglio inventario:</strong> '+esc(pageError):'')+(diagnosticText?'<br><strong>Query di ripiego:</strong> '+esc(diagnosticText):'');
 }
 function importSorareCards(silent=false){
-  if(!isSorareAuthenticated||!liveSorareComplete){toast('Importazione bloccata: collega Sorare e attendi che l’inventario completo sia verificato.');return;}
-  function normalizedPosition(value){
-    const text=(Array.isArray(value)?value:[value]).filter(Boolean).join(' ').toLowerCase();
-    if(/goalkeeper|keeper|portiere|\bgk\b/.test(text))return 'Portiere';
-    if(/defender|difensore|\bdf\b|\bdef\b/.test(text))return 'Difensore';
-    if(/midfielder|centrocampista|\bmd\b|\bmid\b/.test(text))return 'Centrocampista';
-    if(/forward|attaccante|\bfw\b|\bst\b|\bfor\b/.test(text))return 'Attaccante';
-    return '';
-  }
-  const previousSorare=state.cards.filter(card=>(card?.source==='sorare'||card?.sorareSlug)&&!isEndedHyperGlitch(card));
-  const manualCards=state.cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug&&!isEndedHyperGlitch(card));
+ if(!isSorareAuthenticated||!liveSorareComplete){toast('Importazione bloccata: collega Sorare e attendi che gli inventari Football e NBA siano entrambi completi.');return;}
+ function normalizedFootballPosition(value){
+  const text=(Array.isArray(value)?value:[value]).filter(Boolean).join(' ').toLowerCase();
+  if(/goalkeeper|keeper|portiere|\bgk\b/.test(text))return 'Portiere';
+  if(/defender|difensore|\bdf\b|\bdef\b/.test(text))return 'Difensore';
+  if(/midfielder|centrocampista|\bmd\b|\bmid\b/.test(text))return 'Centrocampista';
+  if(/forward|attaccante|\bfw\b|\bst\b/.test(text))return 'Attaccante';
+  return 'Altro';
+ }
+ function mergeSportInventory(sport,incoming,previous,manual){
   const sameAccount=state.sorareProfileSlug===liveSorareProfileSlug;
-  const oldBySlug=new Map((sameAccount?previousSorare:[]).map(card=>[card.sorareSlug||card.slug,card]));
-  const merged=manualCards.slice(),indexBySlug=new Map();let added=0,updated=0;
-  for(const card of liveSorareItems){
-    if(!card?.slug)continue;
-    const old=oldBySlug.get(card.slug)||{},skin=card.skinEdition||null;
-    const item={
-      ...old,id:old.id||'sorare-'+card.slug,sorareSlug:card.slug,slug:card.slug,assetId:card.assetId||null,
-      name:card.name&&card.slug&&String(card.name).trim().toLowerCase()!==String(card.slug).trim().toLowerCase()?card.name:card.slug,
-      club:card.team||'',league:old.league||'',position:normalizedPosition(card.position)||'Altro',
-      positionCodes:Array.isArray(card.position)?card.position:[],rarity:card.rarity&&String(card.rarity).toLowerCase()!=='unknown'?card.rarity:'Unknown',
-      rarityTyped:card.rarityTyped||null,l5:card.l5??'',l10:card.l10??'',l15:card.l15??'',age:card.age??'',note:old.note||'',
-      imageUrl:card.imageUrl||null,playerImageUrl:card.playerImageUrl||null,teamImageUrl:card.teamImageUrl||null,teamSlug:card.teamSlug||null,
-      activeTeamImageUrl:card.activeTeamImageUrl||null,activeTeamSlug:card.activeTeamSlug||null,skinEdition:skin,
-      variantName:skin?.variantName||skin?.variant||null,skin:skin?.skin||null,bonus:skin?.bonus??null,power:card.power??null,grade:card.grade??null,
-      rawScores:Array.isArray(card.rawScores)?card.rawScores:[],playerRawScores:Array.isArray(card.playerRawScores)?card.playerRawScores:[],
-      playerSlug:card.playerSlug||null,activeTeam:card.activeTeam||null,upcomingGames:Array.isArray(card.upcomingGames)?card.upcomingGames:[],
-      season:card.season??null,serialNumber:card.serialNumber??null,edition:card.edition||null,set:card.set||null,setName:card.set?.name||card.setName||null,setSlug:card.set?.slug||card.setSlug||null,source:'sorare'
-    };
-    if(isEndedHyperGlitch(item))continue;
-    if(indexBySlug.has(card.slug)){merged[indexBySlug.get(card.slug)]=item;updated++;continue;}
-    indexBySlug.set(card.slug,merged.length);merged.push(item);
-    if(oldBySlug.has(card.slug))updated++;else added++;
+  const oldBySlug=new Map((sameAccount?previous:[]).map(card=>[card.sorareSlug||card.slug,card]));
+  const merged=manual.slice(),indexBySlug=new Map();let added=0,updated=0,quarantined=0;
+  for(const card of incoming){
+   if(!card?.slug)continue;
+   if(normalizeSport(card.sport)!==sport){quarantined++;continue;}
+   const old=oldBySlug.get(card.slug)||{},skin=card.skinEdition||null,isFootball=sport==='football';
+   const item={
+    ...old,id:old.id||'sorare-'+sport+'-'+card.slug,sport,sorareSlug:card.slug,slug:card.slug,assetId:card.assetId||null,
+    name:card.name&&card.slug&&String(card.name).trim().toLowerCase()!==String(card.slug).trim().toLowerCase()?card.name:card.slug,
+    club:card.team||'',league:isFootball?(old.league||''):'NBA',
+    position:isFootball?normalizedFootballPosition(card.position):(Array.isArray(card.position)?card.position.join(' / '):String(card.position||'Altro')),
+    positionCodes:Array.isArray(card.position)?card.position:[card.position].filter(Boolean),
+    rarity:card.rarity&&String(card.rarity).toLowerCase()!=='unknown'?card.rarity:'Unknown',
+    rarityTyped:card.rarityTyped||null,l5:card.l5??'',l10:card.l10??'',l15:card.l15??'',age:card.age??'',note:old.note||'',
+    imageUrl:card.imageUrl||null,playerImageUrl:card.playerImageUrl||null,teamImageUrl:card.teamImageUrl||null,teamSlug:card.teamSlug||null,
+    activeTeamImageUrl:card.activeTeamImageUrl||null,activeTeamSlug:card.activeTeamSlug||null,skinEdition:skin,
+    variantName:skin?.variantName||skin?.variant||null,skin:skin?.skin||null,bonus:skin?.bonus??null,power:card.power??null,grade:card.grade??null,
+    rawScores:Array.isArray(card.rawScores)?card.rawScores:[],playerRawScores:Array.isArray(card.playerRawScores)?card.playerRawScores:[],
+    playerSlug:card.playerSlug||null,activeTeam:card.activeTeam||null,upcomingGames:Array.isArray(card.upcomingGames)?card.upcomingGames:[],
+    season:card.season??null,serialNumber:card.serialNumber??null,edition:card.edition||null,set:card.set||null,setName:card.set?.name||card.setName||null,setSlug:card.set?.slug||card.setSlug||null,source:'sorare'
+   };
+   if(isFootball&&isEndedHyperGlitch(item))continue;
+   if(indexBySlug.has(card.slug)){merged[indexBySlug.get(card.slug)]=item;updated++;continue;}
+   indexBySlug.set(card.slug,merged.length);merged.push(item);
+   if(oldBySlug.has(card.slug))updated++;else added++;
   }
-  state.cards=merged.filter(card=>!isEndedHyperGlitch(card));state.sorareProfileSlug=liveSorareProfileSlug;state.sorareInventoryStatus='complete';state.lastSorareSyncAt=new Date().toISOString();
-  const ids=new Set(merged.map(card=>card.id));state.lineup=state.lineup.map(id=>ids.has(id)?id:'');
-  persist();
-  if(!silent)toast('Inventario verificato: '+liveSorareItems.length+' carte correnti; nuove: '+added+'; aggiornate: '+updated+'. Le carte Sorare non più presenti sono state rimosse.');
-  renderLineup();
-}
-async function loadSorarePublicData(){
+  return {cards:merged,added,updated,quarantined};
+ }
+ const prevFootball=state.cards.filter(card=>card?.source==='sorare'||card?.sorareSlug);
+ const prevNba=state.nbaCards.filter(card=>card?.source==='sorare'||card?.sorareSlug);
+ const manualFootball=state.cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug&&!isEndedHyperGlitch(card));
+ const manualNba=state.nbaCards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug);
+ const football=mergeSportInventory('football',liveSorareFootballItems,prevFootball,manualFootball);
+ const nba=mergeSportInventory('nba',liveSorareNbaItems,prevNba,manualNba);
+ state.cards=football.cards;state.nbaCards=nba.cards;
+ state.unclassifiedCards=Array.isArray(state.unclassifiedCards)?state.unclassifiedCards:[];
+ state.sorareProfileSlug=liveSorareProfileSlug;state.sorareInventoryStatus='complete';state.lastSorareSyncAt=new Date().toISOString();
+ const footballIds=new Set(state.cards.map(card=>card.id)),nbaIds=new Set(state.nbaCards.map(card=>card.id));
+ state.lineup=state.lineup.map(id=>footballIds.has(id)?id:'');state.nbaLineup=state.nbaLineup.filter(id=>nbaIds.has(id));
+ persist();
+ if(!silent)toast('Inventari separati: Football '+state.cards.length+' · NBA '+state.nbaCards.length+'. Nuove: '+(football.added+nba.added)+' · aggiornate: '+(football.updated+nba.updated)+'.');
+ renderLineup();
+}async function loadSorarePublicData(){
   if(sorareSyncRunning)return;
   sorareSyncRunning=true;
   const btn=$('reloadSorareData');
