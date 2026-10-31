@@ -390,11 +390,32 @@ if(location.hostname===LEGACY_STATIC_HOST&&(location.pathname===LEGACY_PROJECT_P
 }
 const KEY='nexusSorareIntelligenceV1';
 const DIVINATION_SET='Divination';
+function normalizeSport(value){
+ const key=String(value||'').trim().toUpperCase();
+ if(key==='FOOTBALL'||key==='SOCCER')return 'football';
+ if(key==='NBA'||key==='BASKETBALL')return 'nba';
+ return '';
+}
+function detectCardSport(card,fallback='unclassified'){
+ const explicit=normalizeSport(card?.sport||card?.sportCode||card?.sportType||card?.collection);
+ if(explicit)return explicit;
+ const fields=[card?.positionCodes,card?.position,card?.positions].flatMap(value=>Array.isArray(value)?value:[value]).filter(Boolean).map(value=>String(value).trim().toLowerCase());
+ const text=fields.join(' ');
+ if(/point guard|shooting guard|small forward|power forward|center|centre|\\bguard\\b|\\bpg\\b|\\bsg\\b|\\bsf\\b|\\bpf\\b/.test(text))return 'nba';
+ if(/goalkeeper|keeper|portiere|defender|difensore|midfielder|centrocampista|striker|attaccante|\\bgk\\b|\\bdf\\b|\\bmd\\b|\\bfw\\b/.test(text))return 'football';
+ const setFields=[card?.setName,card?.set?.name,card?.set?.slug,card?.setSlug].map(value=>String(value||'').toLowerCase()).join(' ');
+ if(/divination/.test(setFields))return 'football';
+ const league=String(card?.league||card?.competition||'').toLowerCase();
+ if(/\\bnba\\b|national basketball/.test(league))return 'nba';
+ if(card?.source==='manual')return fallback==='nba'?'nba':'football';
+ return fallback;
+}
 const DIVINATION_PREVIOUS_SNAPSHOT=Object.freeze({gems:320,collection:80,gemsSpentBracket:'200-349'});
-const initial={cards:[],lineup:['','','','',''],resources:{gems:null,essence:null,set:DIVINATION_SET,collection:null,goal:500,notes:'',legacyEssenceExpired:true,legacyCollectionCompletion:80,legacyGemsAtRollover:320,legacyGemsSpentBracket:'200-349',divinationMigrationApplied:true},resourcesConfirmedByUser:false,divinationTasks:{},sorareInventoryStatus:'unverified',lastSaved:null};
+const initial={cards:[],nbaCards:[],unclassifiedCards:[],lineup:['','','','',''],nbaLineup:[],activeSport:'football',sportSeparationVersion:1,resources:{gems:null,essence:null,set:DIVINATION_SET,collection:null,goal:500,notes:'',legacyEssenceExpired:true,legacyCollectionCompletion:80,legacyGemsAtRollover:320,legacyGemsSpentBracket:'200-349',divinationMigrationApplied:true},resourcesConfirmedByUser:false,divinationTasks:{},sorareInventoryStatus:'unverified',lastSaved:null};
 let state=loadState();
 let cardsPage=1;const CARDS_PAGE_SIZE=72;let lineupPickerSlot=-1,lineupPickerPage=1;const LINEUP_PICKER_PAGE_SIZE=40;let lineupOptions=[],lineupActiveOption=0,lineupBuildInfo=null;
 let activeSorareSlug='',liveSorareProfileSlug='',isSorareAuthenticated=false,sorareSyncRunning=false;
+let liveSorareItems=[],liveSorareFootballItems=[],liveSorareNbaItems=[],liveSorareComplete=false,liveSorareCompleteBySport={football:false,nba:false};
 function loadState(){
  try{
   const raw=localStorage.getItem(KEY)||localStorage.getItem('mianismoFcDashboardV1')||'null',v=JSON.parse(raw);
@@ -405,7 +426,21 @@ function loadState(){
   if(v&&typeof v==='object'){
    if(!localStorage.getItem(KEY))try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}
    const oldResources=v.resources&&typeof v.resources==='object'?v.resources:{};
-   const merged={...structuredClone(initial),...v,resources:{...initial.resources,...oldResources},cards:Array.isArray(v.cards)?v.cards:[],lineup:Array.isArray(v.lineup)?v.lineup:['','','','',''],divinationTasks:{...initial.divinationTasks,...(v.divinationTasks||{})},sorareProfileSlug:typeof v.sorareProfileSlug==='string'?v.sorareProfileSlug:''};
+   const merged={...structuredClone(initial),...v,resources:{...initial.resources,...oldResources},cards:[],nbaCards:[],unclassifiedCards:[],lineup:Array.isArray(v.lineup)?v.lineup:['','','','',''],nbaLineup:Array.isArray(v.nbaLineup)?v.nbaLineup:[],activeSport:normalizeSport(v.activeSport)==='nba'?'nba':'football',divinationTasks:{...initial.divinationTasks,...(v.divinationTasks||{})},sorareProfileSlug:typeof v.sorareProfileSlug==='string'?v.sorareProfileSlug:''};
+   const seenCardIds=new Set();
+   const savedCards=[...(Array.isArray(v.cards)?v.cards:[]),...(Array.isArray(v.nbaCards)?v.nbaCards:[]),...(Array.isArray(v.unclassifiedCards)?v.unclassifiedCards:[])];
+   savedCards.forEach((rawCard,index)=>{
+    if(!rawCard||typeof rawCard!=='object'||!String(rawCard.name||'').trim())return;
+    const id=String(rawCard.id||rawCard.sorareSlug||rawCard.slug||('migrated-'+index));
+    if(seenCardIds.has(id))return;
+    seenCardIds.add(id);
+    const sport=detectCardSport(rawCard,rawCard.source==='manual'?'football':'unclassified');
+    const card={...rawCard,id,sport};
+    if(sport==='football'){
+     if(!isEndedHyperGlitch(card))merged.cards.push(card);
+    }else if(sport==='nba')merged.nbaCards.push(card);
+    else merged.unclassifiedCards.push(card);
+   });
    const oldCycle=oldResources.divinationMigrationApplied!==true;
    if(oldCycle){
     const oldPct=Number(oldResources.legacyCollectionCompletion??oldResources.collection);if(Number.isFinite(oldPct)&&oldPct>=0&&oldPct<=100)merged.resources.legacyCollectionCompletion=oldPct;
@@ -418,18 +453,15 @@ function loadState(){
    if(!['','750+','500-749','350-499','200-349','100-199','50-99'].includes(String(merged.resources.legacyGemsSpentBracket??'')))merged.resources.legacyGemsSpentBracket=DIVINATION_PREVIOUS_SNAPSHOT.gemsSpentBracket;
    merged.resourcesConfirmedByUser=v.resourcesConfirmedByUser===true;
    if(!merged.resourcesConfirmedByUser)merged.resources={...merged.resources,gems:null,essence:null,collection:null,set:DIVINATION_SET};
-   const cardCountBeforeCleanup=merged.cards.length;
-   merged.cards=merged.cards.filter(card=>!isEndedHyperGlitch(card));
-   if(merged.cards.length!==cardCountBeforeCleanup){
-    const savedIds=new Set(merged.cards.map(card=>card.id));
-    merged.lineup=merged.lineup.map(id=>savedIds.has(id)?id:'');
-    try{localStorage.setItem(KEY,JSON.stringify(merged));}catch(e){}
-   }
+   const footballIds=new Set(merged.cards.map(card=>card.id));
+   merged.lineup=merged.lineup.map(id=>footballIds.has(id)?id:'');
+   const nbaIds=new Set(merged.nbaCards.map(card=>card.id));
+   merged.nbaLineup=merged.nbaLineup.filter(id=>nbaIds.has(id));
    let recoveredDivination=false;
    if(legacySnapshot&&Array.isArray(legacySnapshot.cards)){
     const confirmedDivination=card=>[card?.setName,card?.set?.name,card?.set?.slug,card?.setSlug].some(value=>/^divination(?:$|[\s_-])/i.test(String(value||'').trim()));
     const existingKeys=new Set(merged.cards.map(card=>card?.sorareSlug||card?.slug||card?.id).filter(Boolean));
-    const recovered=legacySnapshot.cards.filter(card=>card&&typeof card==='object'&&confirmedDivination(card)&&!isEndedHyperGlitch(card)&&!existingKeys.has(card.sorareSlug||card.slug||card.id));
+    const recovered=legacySnapshot.cards.filter(card=>card&&typeof card==='object'&&confirmedDivination(card)&&!isEndedHyperGlitch(card)&&!existingKeys.has(card.sorareSlug||card.slug||card.id)).map(card=>({...card,sport:'football'}));
     if(recovered.length){
      merged.cards.push(...recovered);
      const ids=new Set(merged.cards.map(card=>card.id));
@@ -441,9 +473,10 @@ function loadState(){
      recoveredDivination=true;
     }
    }
-   const hasSavedSorare=Boolean(merged.sorareProfileSlug)&&merged.cards.some(card=>card?.source==='sorare'&&card?.sorareSlug);
+   const hasSavedSorare=Boolean(merged.sorareProfileSlug)&&[...merged.cards,...merged.nbaCards].some(card=>card?.source==='sorare'&&card?.sorareSlug);
    if(!hasSavedSorare)merged.sorareInventoryStatus='unverified';else if(merged.sorareInventoryStatus!=='complete')merged.sorareInventoryStatus='stale';
-   if(recoveredDivination){try{localStorage.setItem(KEY,JSON.stringify(merged));}catch(e){}}
+   merged.sportSeparationVersion=1;
+   if(recoveredDivination||v.sportSeparationVersion!==1){try{localStorage.setItem(KEY,JSON.stringify(merged));}catch(e){}}
    return merged;
   }
  }catch(e){}
@@ -455,8 +488,10 @@ function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
 function num(v){return Number.isFinite(Number(v))?Number(v):0}
 function fmt(v){return num(v).toLocaleString('it-IT',{maximumFractionDigits:1})}
 function fmtKnown(v){return v===null||v===undefined||v===''?'—':fmt(v)}
-function hasSavedSorareInventory(){return Boolean(state.sorareProfileSlug)&&Array.isArray(state.cards)&&state.cards.some(card=>card?.source==='sorare'&&card?.sorareSlug)}
-function collectionCards(){const cards=(Array.isArray(state.cards)?state.cards:[]).filter(card=>!isEndedHyperGlitch(card));const showCache=(state.sorareInventoryStatus==='complete'||state.sorareInventoryStatus==='stale')&&Boolean(state.sorareProfileSlug);return showCache?cards:cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug)}
+function hasSavedSorareInventory(){return Boolean(state.sorareProfileSlug)&&[...(Array.isArray(state.cards)?state.cards:[]),...(Array.isArray(state.nbaCards)?state.nbaCards:[])].some(card=>card?.source==='sorare'&&card?.sorareSlug)}
+function footballCards(){return (Array.isArray(state.cards)?state.cards:[]).filter(card=>normalizeSport(card?.sport)==='football'&&!isEndedHyperGlitch(card));}
+function basketballCards(){return (Array.isArray(state.nbaCards)?state.nbaCards:[]).filter(card=>normalizeSport(card?.sport)==='nba');}
+function collectionCards(){const sport=state.activeSport==='nba'?'nba':'football';return sport==='nba'?basketballCards():footballCards();}
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
 function goto(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));const titles={overview:['Home','Il tuo club, le tue carte e la tua stagione.','FOOTBALL / HOME'],divination:['Arcade · Divination','Il tabellone del Set attivo e le tue ricompense.','FOOTBALL / PLAY / ARCADE'],scores:['Scores','Partite in calendario e performance della tua collezione.','FOOTBALL / SCORES'],market:['Market','Scouting e navigazione del mercato Sorare.','FOOTBALL / MARKET'],cards:['My Cards','La tua galleria, le collezioni e gli oggetti del tuo account.','FOOTBALL / MY CARDS'],analytics:['NEXUS Edge Lab','Forma, volatilità, copertura dei dati e segnali di scouting.','NEXUS / INTELLIGENCE'],lineup:['Lineup Lab · Divination','Costruisci e valuta la tua bozza con i dati disponibili.','NEXUS / LINEUP LAB'],resources:['Resources','Gems, Essence, collezione e ricompense di transizione.','NEXUS / RESOURCES'],sorare:['Account Sync','Connessione Sorare diretta, inventario e stato sincronizzazione.','NEXUS / ACCOUNT']};$('pageTitle').textContent=titles[page][0];$('pageSubtitle').textContent=titles[page][1];$('pageEyebrow').textContent=titles[page][2]||'NEXUS';if($('appSidebar'))$('appSidebar').classList.remove('mobile-open');window.scrollTo({top:0,behavior:'smooth'});if(page==='lineup')renderLineup();if(page==='analytics')renderEdgeLab();if(page==='scores')renderScores();if(page==='market')renderMarket()}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.page)));document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.goto)));
