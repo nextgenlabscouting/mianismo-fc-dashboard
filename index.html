@@ -373,7 +373,7 @@ html,body{background:#0d0f11;color:var(--text);font-family:Inter,ui-sans-serif,s
 </main>
 </div>
 <nav class="mobile-nav" id="mobileNav"><button class="active" data-page="overview"><span>⌂</span>Home</button><button data-page="divination"><span>▣</span>Play</button><button data-page="scores"><span>◷</span>Scores</button><button data-page="market"><span>⌕</span>Market</button><button data-page="cards"><span>▤</span>Cards</button></nav>
-<div class="modal-wrap" id="cardModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><div class="modal-head"><h3 id="modalTitle">Aggiungi una carta</h3><button class="close-btn" id="closeModal" aria-label="Chiudi">✕</button></div><form id="cardForm"><input type="hidden" id="editId"><div class="form-grid"><div class="field"><label for="playerName">Nome giocatore *</label><input class="input" id="playerName" required maxlength="80" placeholder="Es. Nome Cognome"></div><div class="field"><label for="playerClub">Club</label><input class="input" id="playerClub" maxlength="80" placeholder="Nome della squadra"></div><div class="field"><label for="playerLeague">Campionato</label><select class="select" id="playerLeague"><option value="">Seleziona…</option><option>Premier League</option><option>Bundesliga</option><option>La Liga</option><option>Ligue 1</option><option>Serie A</option><option>Altro</option></select></div><div class="field"><label for="playerPosition">Ruolo</label><select class="select" id="playerPosition"><option>Portiere</option><option selected>Difensore</option><option>Centrocampista</option><option>Attaccante</option><option>Altro</option></select></div><div class="field"><label for="playerRarity">Rarità</label><select class="select" id="playerRarity"><option>Limited</option><option>Common</option><option>Rare</option><option>Super Rare</option><option>Unique</option><option>Altro</option></select></div><div class="field"><label for="playerL5">Media L5 (se nota)</label><input class="input" id="playerL5" type="number" min="0" max="100" step="0.1" placeholder="Es. 48.6"></div><div class="field"><label for="playerL15">Media L10 (se nota)</label><input class="input" id="playerL15" type="number" min="0" max="100" step="0.1" placeholder="Es. 45.2"></div><div class="field"><label for="playerAge">Età (facoltativa)</label><input class="input" id="playerAge" type="number" min="1" max="100" placeholder="Età"></div><div class="field full"><label for="playerNote">Note</label><input class="input" id="playerNote" maxlength="250" placeholder="Es. titolare, rigorista, avversario difficile…"></div></div><div class="form-actions"><button type="button" class="btn" id="cancelModal">Annulla</button><button type="submit" class="btn btn-primary">Salva carta</button></div></form></div></div>
+<div class="modal-wrap" id="cardModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><div class="modal-head"><h3 id="modalTitle">Aggiungi una carta</h3><button class="close-btn" id="closeModal" aria-label="Chiudi">✕</button></div><form id="cardForm"><input type="hidden" id="editId"><div class="form-grid"><div class="field"><label for="playerSport">Sport *</label><select class="select" id="playerSport"><option value="football">⚽ Football</option><option value="nba">🏀 NBA</option></select></div><div class="field"><label for="playerName">Nome giocatore *</label><input class="input" id="playerName" required maxlength="80" placeholder="Es. Nome Cognome"></div><div class="field"><label for="playerClub">Club</label><input class="input" id="playerClub" maxlength="80" placeholder="Nome della squadra"></div><div class="field"><label for="playerLeague">Campionato</label><select class="select" id="playerLeague"><option value="">Seleziona…</option><option>Premier League</option><option>Bundesliga</option><option>La Liga</option><option>Ligue 1</option><option>Serie A</option><option>Altro</option></select></div><div class="field"><label for="playerPosition">Ruolo</label><select class="select" id="playerPosition"><option>Portiere</option><option selected>Difensore</option><option>Centrocampista</option><option>Attaccante</option><option>Altro</option></select></div><div class="field"><label for="playerRarity">Rarità</label><select class="select" id="playerRarity"><option>Limited</option><option>Common</option><option>Rare</option><option>Super Rare</option><option>Unique</option><option>Altro</option></select></div><div class="field"><label for="playerL5">Media L5 (se nota)</label><input class="input" id="playerL5" type="number" min="0" max="100" step="0.1" placeholder="Es. 48.6"></div><div class="field"><label for="playerL15">Media L10 (se nota)</label><input class="input" id="playerL15" type="number" min="0" max="100" step="0.1" placeholder="Es. 45.2"></div><div class="field"><label for="playerAge">Età (facoltativa)</label><input class="input" id="playerAge" type="number" min="1" max="100" placeholder="Età"></div><div class="field full"><label for="playerNote">Note</label><input class="input" id="playerNote" maxlength="250" placeholder="Es. titolare, rigorista, avversario difficile…"></div></div><div class="form-actions"><button type="button" class="btn" id="cancelModal">Annulla</button><button type="submit" class="btn btn-primary">Salva carta</button></div></form></div></div>
 <div class="modal-wrap lineup-picker-wrap" id="lineupPickerModal" role="dialog" aria-modal="true" aria-labelledby="lineupPickerTitle"><div class="modal lineup-picker-modal"><div class="modal-head"><div><h3 id="lineupPickerTitle">Seleziona un giocatore</h3><p class="panel-sub" id="lineupPickerSubtitle">Carte compatibili con questo ruolo.</p></div><button class="close-btn" id="closeLineupPicker" type="button" aria-label="Chiudi selettore">✕</button></div><div class="lineup-picker-toolbar"><input class="input" id="lineupPickerSearch" type="search" autocomplete="off" placeholder="Cerca giocatore, club, carta o seriale…" aria-label="Cerca nella collezione"><select class="select" id="lineupPickerRarity" aria-label="Filtra rarità"><option value="">Tutte le rarità</option></select><select class="select" id="lineupPickerSort" aria-label="Ordina risultati"><option value="l5">L5 più alta</option><option value="l10">L10 più alta</option><option value="name">Nome A–Z</option></select><label class="picker-set-only"><input id="lineupPickerTargetOnly" type="checkbox" disabled> Solo Set selezionato</label></div><div class="lineup-picker-results-head"><span id="lineupPickerResultCount">0 giocatori</span><span id="lineupPickerEligibilityNote">L’idoneità del Set è indicata su ogni carta.</span></div><div class="lineup-picker-results" id="lineupPickerResults"></div><div class="lineup-picker-footer"><span class="muted" id="lineupPickerPageLabel">0 risultati</span><div class="toolbar-right"><button class="btn btn-small" type="button" id="lineupPickerPrev">Precedente</button><button class="btn btn-small" type="button" id="lineupPickerNext">Successiva</button></div></div></div></div>
 <input type="file" id="unusedFile" class="hide" aria-hidden="true"><div class="toast" id="toast" role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
@@ -632,7 +632,7 @@ function renderCards(){
   $('cardsEmpty').innerHTML=unverified?'<span class="empty-icon">↻</span><strong>Inventario Sorare da verificare</strong><p>Collega l’account Sorare per verificare la collezione.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button>':'<span class="empty-icon">▧</span><strong>Nessuna carta in archivio</strong><p>Collega Sorare e attendi una sincronizzazione completa.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button>';
   if($('addEmptyCard'))$('addEmptyCard').onclick=()=>goto('sorare');
  }
- document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openModal(state.cards.find(c=>c.id===b.dataset.edit)));
+ document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openModal(findStoredCard(b.dataset.edit)));
  document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteCard(b.dataset.delete));
  $('navCardCount').textContent=cards.length;
 }
@@ -695,7 +695,7 @@ function renderOverview(){
   renderWeekendRadar();
 }
 
-function bindCardActions(root){root.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openModal(state.cards.find(c=>c.id===b.dataset.edit)));root.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteCard(b.dataset.delete))}
+function bindCardActions(root){root.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openModal(findStoredCard(b.dataset.edit)));root.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteCard(b.dataset.delete))}
 function positionKinds(card){
   const source=[];
   if(Array.isArray(card.positionCodes))source.push(...card.positionCodes);
@@ -941,31 +941,43 @@ function safeImageUrl(value){
   if(!value)return null;
   try{const url=new URL(String(value));return url.protocol==="https:"||url.protocol==="http:"?url.href:null;}catch(e){return null;}
 }
+function updateManualSportFields(){
+ const sport=$('playerSport')?.value==='nba'?'nba':'football';
+ const position=$('playerPosition'),league=$('playerLeague');
+ if(!position||!league)return;
+ const currentPosition=position.value,currentLeague=league.value;
+ const positions=sport==='nba'?['Point Guard','Shooting Guard','Small Forward','Power Forward','Center']:['Portiere','Difensore','Centrocampista','Attaccante','Altro'];
+ const leagues=sport==='nba'?['NBA']:['Premier League','Bundesliga','La Liga','Ligue 1','Serie A','Altro'];
+ position.innerHTML=positions.map(value=>'<option>'+esc(value)+'</option>').join('');
+ league.innerHTML='<option value="">Seleziona…</option>'+leagues.map(value=>'<option>'+esc(value)+'</option>').join('');
+ position.value=positions.includes(currentPosition)?currentPosition:(sport==='nba'?'Point Guard':'Difensore');
+ league.value=leagues.includes(currentLeague)?currentLeague:(sport==='nba'?'NBA':'');
+}
+function findStoredCard(id){
+ return [...(state.cards||[]),...(state.nbaCards||[]),...(state.unclassifiedCards||[])].find(card=>card.id===id)||null;
+}
 function openModal(card=null){
-  const form=$("cardForm");
-  form.reset();
-  $("editId").value=card?.id||"";
-  $("playerName").value=card?.name||"";
-  $("playerClub").value=card?.club||card?.team||"";
-  $("playerLeague").value=card?.league||"";
-  let position=card?.position;
-  if(Array.isArray(position))position=position[0];
-  const positionMap={Goalkeeper:"Portiere",Defender:"Difensore",Midfielder:"Centrocampista",Forward:"Attaccante"};
-  position=positionMap[position]||position||"Difensore";
-  $("playerPosition").value=position;
-  const rarity=String(card?.rarity||"Limited");
-  const raritySelect=$("playerRarity");
-  if(!Array.from(raritySelect.options).some(option=>option.value===rarity)){
-    const option=document.createElement("option");option.value=rarity;option.textContent=rarity;raritySelect.append(option);
-  }
-  raritySelect.value=rarity;
-  $("playerL5").value=card?.l5!=null&&card.l5!==""?card.l5:"";
-  $("playerL15").value=card?.l10!=null&&card.l10!==""?card.l10:"";
-  $("playerAge").value=card?.age!=null&&card.age!==""?card.age:"";
-  $("playerNote").value=card?.note||"";
-  $("modalTitle").textContent=card?"Modifica carta":"Aggiungi una carta";
-  $("cardModal").classList.add("open");
-  $("playerName").focus();
+ const form=$("cardForm");form.reset();
+ $("editId").value=card?.id||"";
+ $("playerSport").value=card?detectCardSport(card,'football'):(state.activeSport==='nba'?'nba':'football');
+ updateManualSportFields();
+ $("playerName").value=card?.name||"";
+ $("playerClub").value=card?.club||card?.team||"";
+ $("playerLeague").value=card?.league||($("playerSport").value==='nba'?'NBA':'');
+ let position=card?.position;if(Array.isArray(position))position=position[0];
+ const positionMap={Goalkeeper:"Portiere",Defender:"Difensore",Midfielder:"Centrocampista",Forward:"Attaccante",PG:"Point Guard",SG:"Shooting Guard",SF:"Small Forward",PF:"Power Forward",C:"Center"};
+ position=positionMap[position]||position||'';
+ if(position&&Array.from($("playerPosition").options).some(option=>option.value.toLowerCase()===String(position).toLowerCase()))$("playerPosition").value=position;
+ if(card?.league)$("playerLeague").value=card.league;
+ const rarity=String(card?.rarity||"Limited"),raritySelect=$("playerRarity");
+ if(!Array.from(raritySelect.options).some(option=>option.value===rarity)){const option=document.createElement("option");option.value=rarity;option.textContent=rarity;raritySelect.append(option);}
+ raritySelect.value=rarity;
+ $("playerL5").value=card?.l5!=null&&card.l5!==""?card.l5:"";
+ $("playerL15").value=card?.l10!=null&&card.l10!==""?card.l10:"";
+ $("playerAge").value=card?.age!=null&&card.age!==""?card.age:"";
+ $("playerNote").value=card?.note||"";
+ $("modalTitle").textContent=card?"Modifica giocatore":"Aggiungi un giocatore";
+ $("cardModal").classList.add("open");$("playerName").focus();
 }
 function closeModal(){
   $("cardModal").classList.remove("open");
@@ -973,44 +985,34 @@ function closeModal(){
   $("editId").value="";
 }
 function saveCardFromForm(event){
-  event.preventDefault();
-  const name=$("playerName").value.trim();
-  if(!name){toast("Inserisci il nome del giocatore.");$("playerName").focus();return;}
-  const optionalScore=id=>{
-    const raw=$(id).value.trim();
-    if(raw==="")return null;
-    const value=Number(raw);
-    return Number.isFinite(value)&&value>=0&&value<=100?value:NaN;
-  };
-  const l5=optionalScore("playerL5"),l10=optionalScore("playerL15");
-  if(Number.isNaN(l5)||Number.isNaN(l10)){toast("Le medie devono essere numeri tra 0 e 100.");return;}
-  const ageRaw=$("playerAge").value.trim(),age=ageRaw===""?null:Number(ageRaw);
-  if(age!==null&&(!Number.isFinite(age)||age<1||age>100)){toast("Controlla l'età inserita.");return;}
-  const id=$("editId").value||("manual-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8));
-  const index=state.cards.findIndex(card=>card.id===id);
-  const old=index>=0?state.cards[index]:{};
-  const position=$("playerPosition").value;
-  const rarity=$("playerRarity").value||"Unknown";
-  const item={
-    ...old,id,name,club:$("playerClub").value.trim(),league:$("playerLeague").value||"",
-    position,positionCodes:[position],rarity,rarityTyped:String(rarity).split(" · ")[0].toLowerCase(),
-    l5,l10,age,note:$("playerNote").value.trim(),
-    imageUrl:safeImageUrl(old.imageUrl),playerImageUrl:safeImageUrl(old.playerImageUrl),
-    source:old.source||"manual"
-  };
-  if(index>=0)state.cards[index]=item;else state.cards.unshift(item);
-  closeModal();
-  persist();
-  toast(index>=0?"Carta aggiornata.":"Carta aggiunta.");
+ event.preventDefault();
+ const name=$("playerName").value.trim(),sport=normalizeSport($("playerSport").value);
+ if(!name){toast("Inserisci il nome del giocatore.");$("playerName").focus();return;}
+ if(!sport){toast("Seleziona uno sport valido.");return;}
+ const optionalScore=id=>{const raw=$(id).value.trim();if(raw==="")return null;const value=Number(raw);return Number.isFinite(value)&&value>=0&&value<=100?value:NaN;};
+ const l5=optionalScore("playerL5"),l10=optionalScore("playerL15");
+ if(Number.isNaN(l5)||Number.isNaN(l10)){toast("Le medie devono essere numeri tra 0 e 100.");return;}
+ const ageRaw=$("playerAge").value.trim(),age=ageRaw===""?null:Number(ageRaw);
+ if(age!==null&&(!Number.isFinite(age)||age<1||age>100)){toast("Controlla l'età inserita.");return;}
+ const id=$("editId").value||("manual-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8));
+ const old=findStoredCard(id)||{},position=$("playerPosition").value,rarity=$("playerRarity").value||"Unknown";
+ const item={...old,id,sport,name,club:$("playerClub").value.trim(),league:$("playerLeague").value||"",position,positionCodes:[position],rarity,rarityTyped:String(rarity).split(" · ")[0].toLowerCase(),l5,l10,age,note:$("playerNote").value.trim(),imageUrl:safeImageUrl(old.imageUrl),playerImageUrl:safeImageUrl(old.playerImageUrl),source:old.source||"manual"};
+ state.cards=state.cards.filter(card=>card.id!==id);
+ state.nbaCards=state.nbaCards.filter(card=>card.id!==id);
+ state.unclassifiedCards=state.unclassifiedCards.filter(card=>card.id!==id);
+ if(sport==='nba')state.nbaCards.unshift(item);else state.cards.unshift(item);
+ closeModal();persist();
+ toast("Giocatore salvato nell'archivio "+(sport==='nba'?'NBA.':'Football.'));
 }
 function deleteCard(id){
-  const card=state.cards.find(item=>item.id===id);
-  if(!card)return;
-  if(!window.confirm("Eliminare "+(card.name||"questa carta")+" dall'archivio locale?"))return;
-  state.cards=state.cards.filter(item=>item.id!==id);
-  state.lineup=state.lineup.map(value=>value===id?"":value);
-  persist();
-  toast("Carta eliminata dall'archivio locale.");
+ const card=findStoredCard(id);if(!card)return;
+ if(!window.confirm("Eliminare "+(card.name||"questo giocatore")+" dall'archivio locale?"))return;
+ state.cards=state.cards.filter(item=>item.id!==id);
+ state.nbaCards=state.nbaCards.filter(item=>item.id!==id);
+ state.unclassifiedCards=state.unclassifiedCards.filter(item=>item.id!==id);
+ state.lineup=state.lineup.map(value=>value===id?"":value);
+ state.nbaLineup=state.nbaLineup.filter(value=>value!==id);
+ persist();toast("Giocatore eliminato dall'archivio locale.");
 }
 function saveResourcesFromForm(event){
   event.preventDefault();
@@ -1102,6 +1104,7 @@ function bindCoreControls(){
   $("resourcesForm").addEventListener("submit",saveResourcesFromForm);
   $("resetResources").addEventListener("click",resetResources);
   $("cardForm").addEventListener("submit",saveCardFromForm);
+$("playerSport").addEventListener("change",updateManualSportFields);
   $("addCardTop").addEventListener("click",startSorareLogin);
   $("sorareLoginForm").addEventListener("submit",submitSorareLogin);
   $("sorareOtpBack").addEventListener("click",()=>{resetSorareOtp();setSorareLoginMessage("Inserisci nuovamente email e password per iniziare l’accesso.");});
