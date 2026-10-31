@@ -94,7 +94,7 @@ const checks = [
   [/id="sportModeFootball"/, 'selettore Football indipendente'],
   [/id="sportModeNBA"/, 'selettore NBA indipendente'],
   [/id="playerSport"/, 'sport obbligatorio per le carte manuali'],
-  [/if\(isEndedHyperGlitch\(item\)\)continue/, 'blocco reimportazione delle carte Hyperglitch'],
+  [/if\(isFootball&&isEndedHyperGlitch\(item\)\)continue/, 'blocco import Hyperglitch nell’archivio Football'],
   [/lastSorareSyncAt=new Date\(\)\.toISOString\(\)/, 'memorizzazione data ultima sincronizzazione'],
   [/const KEY='nexusSorareIntelligenceV1';/, 'chiave locale con il nuovo brand'],
   [/localStorage.getItem\('mianismoFcDashboardV1'\)/, 'migrazione dei dati salvati dalla vecchia versione'],
