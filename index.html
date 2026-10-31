@@ -587,6 +587,18 @@ function cardVariantLabel(card){
   if(/common/i.test(String(card.rarityTyped||card.rarity||'')))return 'Standard / Common';
   return '';
 }
+function sportRoleLabel(card){
+ if(state.activeSport==='nba'){
+  const positions=[...(Array.isArray(card?.positionCodes)?card.positionCodes:[]),...(Array.isArray(card?.position)?card.position:[card?.position])].filter(Boolean).join(' ').toLowerCase();
+  if(/point guard|shooting guard|\bguard\b|\bpg\b|\bsg\b/.test(positions))return 'Guard';
+  if(/small forward|power forward|\bforward\b|\bfor\b|\bsf\b|\bpf\b/.test(positions))return 'Forward';
+  if(/center|centre|\bcenter\b|\bc\b/.test(positions))return 'Center';
+  return 'Altro';
+ }
+ const roleMap={GK:'Portiere',DF:'Difensore',MD:'Centrocampista',FW:'Attaccante'};
+ const kinds=positionKinds(card);
+ return roleMap[kinds[0]]||'Altro';
+}
 function renderCards(){
  const cards=collectionCards(),q=$('cardSearch').value.trim().toLowerCase(),pos=$('positionFilter').value;
  const raritySelect=$('rarityFilter'),variantSelect=$('variantFilter'),sortSelect=$('cardsSort'),oldRarity=raritySelect.value,oldVariant=variantSelect.value;
@@ -597,7 +609,7 @@ function renderCards(){
  raritySelect.value=rarities.includes(oldRarity)?oldRarity:'';variantSelect.value=variants.includes(oldVariant)?oldVariant:'';
  const rarity=raritySelect.value,variant=variantSelect.value,sort=sortSelect?.value||'name';
  const positionsFor=c=>[...(Array.isArray(c.positionCodes)?c.positionCodes:[]),...(Array.isArray(c.position)?c.position:[c.position])].map(v=>String(v||'').toLowerCase());
- const roleMap={'portiere':['portiere','goalkeeper','keeper','gk'],'difensore':['difensore','defender','df','def'],'centrocampista':['centrocampista','midfielder','md','mid'],'attaccante':['attaccante','forward','fw','st'],'altro':['altro']};
+ const roleMap=state.activeSport==='nba'?{'guard':['point guard','shooting guard','guard','pg','sg'],'forward':['small forward','power forward','forward','sf','pf'],'center':['center','centre'],'altro':['altro']}:{'portiere':['portiere','goalkeeper','keeper','gk'],'difensore':['difensore','defender','df','def'],'centrocampista':['centrocampista','midfielder','md','mid'],'attaccante':['attaccante','forward','fw','st'],'altro':['altro']};
  const list=cards.filter(c=>{
   const vals=[c.name,c.club,c.activeTeam,c.league,c.rarity,c.rarityTyped,c.position,c.positionCodes,c.edition,cardVariantLabel(c),c.setName,c.slug,c.sorareSlug,c.assetId];
   const matchQ=!q||vals.some(v=>String(v||'').toLowerCase().includes(q));
@@ -617,18 +629,19 @@ function renderCards(){
  $('cardsPageLabel').textContent=list.length?((cardsPage-1)*CARDS_PAGE_SIZE+1)+'–'+Math.min(cardsPage*CARDS_PAGE_SIZE,list.length)+' di '+list.length+' carte':'0 carte';
  $('cardsPrevPage').disabled=cardsPage<=1;$('cardsNextPage').disabled=cardsPage>=pages;
  const notice=$('cardsSyncNotice');
- if(state.sorareInventoryStatus==='stale'&&hasSavedSorareInventory()){
+ const sportInventoryStatus=state.sorareInventoryStatus;
+ if(sportInventoryStatus==='stale'&&hasSavedSorareInventory()){
   notice.className='notice cards-sync-notice';
   notice.innerHTML='<span class="notice-icon">↻</span><div><strong>Ultimo inventario salvato · sincronizzazione live non confermata.</strong><br>Cache locale dell’account <b>'+esc(state.sorareProfileSlug)+'</b>: può essere obsoleta. <button class="btn btn-small" id="openSyncFromCards" type="button">Controlla Sorare Sync</button></div>';
   $('openSyncFromCards').onclick=()=>goto('sorare');
- }else if(state.sorareInventoryStatus==='unverified'&&state.cards.some(c=>c?.source==='sorare'||c?.sorareSlug)){
+ }else if(sportInventoryStatus==='unverified'&&cards.some(c=>c?.source==='sorare'||c?.sorareSlug)){
   notice.className='notice cards-sync-notice';
   notice.innerHTML='<span class="notice-icon">!</span><div><strong>Inventario non verificato.</strong><br>Riconnetti Sorare per verificare l’identità e importare la collezione.</div>';
  }else{notice.className='hide';notice.innerHTML='';}
  $('cardsEmpty').classList.toggle('hide',list.length>0);if($('galleryCount'))$('galleryCount').textContent=list.length+' carte';
  if(cards.length&&list.length===0){$('cardsEmpty').classList.remove('hide');$('cardsEmpty').innerHTML='<span class="empty-icon">⌕</span><strong>Nessuna carta corrispondente</strong><p>Prova a cambiare ricerca o filtri.</p>';}
  else if(!cards.length){
-  const unverified=state.sorareInventoryStatus!=='complete'&&state.cards.some(c=>c?.source==='sorare'||c?.sorareSlug);
+  const unverified=state.sorareInventoryStatus!=='complete'&&cards.some(c=>c?.source==='sorare'||c?.sorareSlug);
   $('cardsEmpty').innerHTML=unverified?'<span class="empty-icon">↻</span><strong>Inventario Sorare da verificare</strong><p>Collega l’account Sorare per verificare la collezione.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button>':'<span class="empty-icon">▧</span><strong>Nessuna carta in archivio</strong><p>Collega Sorare e attendi una sincronizzazione completa.</p><button class="btn btn-primary btn-small" id="addEmptyCard">↻ Riconnetti / sincronizza Sorare</button>';
   if($('addEmptyCard'))$('addEmptyCard').onclick=()=>goto('sorare');
  }
@@ -1197,16 +1210,13 @@ async function submitSorareLogin(event){
  finally{$('sorarePassword').value='';button.disabled=false;}
 }
 function renderAnalytics(){
- const cards=collectionCards();
- const roles=['Portiere','Difensore','Centrocampista','Attaccante','Altro'];
- const groups=roles.map(role=>{const list=cards.filter(c=>roleClass(c.position)===roleClass(role));const scores=list.filter(c=>c.l5!==''&&c.l5!=null&&Number.isFinite(Number(c.l5))).map(c=>Number(c.l5));return {role,count:list.length,avg:scores.length?scores.reduce((a,b)=>a+b,0)/scores.length:null,scored:scores.length};});
- const maximum=Math.max(1,...groups.map(g=>g.count));
- $('analyticsCardTotal').textContent=cards.length+' CARTE';
- $('roleDistribution').innerHTML=groups.map(g=>'<div class="telemetry-row"><span class="telemetry-label '+roleClass(g.role)+'">'+g.role+'</span><div class="telemetry-track"><i class="'+roleClass(g.role)+'" style="width:'+Math.round(g.count/maximum*100)+'%"></i></div><strong>'+g.count+'</strong></div>').join('')||'<div class="empty">Nessuna carta sincronizzata.</div>';
- const scoreMaximum=100;
- $('rolePerformance').innerHTML=groups.map(g=>'<div class="telemetry-row"><span class="telemetry-label '+roleClass(g.role)+'">'+g.role+'</span><div class="telemetry-track"><i class="'+scoreClass(g.avg)+'" style="width:'+Math.max(0,Math.min(scoreMaximum,g.avg||0))+'%"></i></div><strong class="'+scoreClass(g.avg)+'">'+(g.avg==null?'—':fmt(g.avg))+'</strong></div>').join('')+'<p class="telemetry-foot">Copertura L5: '+cards.filter(c=>c.l5!==''&&c.l5!=null&&Number.isFinite(Number(c.l5))).length+' / '+cards.length+' carte.</p>';
+ const cards=collectionCards(),roles=state.activeSport==='nba'?['Guard','Forward','Center','Altro']:['Portiere','Difensore','Centrocampista','Attaccante','Altro'];
+ const groups=roles.map(role=>{const list=cards.filter(card=>sportRoleLabel(card)===role),scores=list.filter(card=>card.l5!==''&&card.l5!=null&&Number.isFinite(Number(card.l5))).map(card=>Number(card.l5));return {role,count:list.length,avg:scores.length?scores.reduce((a,b)=>a+b,0)/scores.length:null,scored:scores.length};});
+ const maximum=Math.max(1,...groups.map(group=>group.count));
+ $('analyticsCardTotal').textContent=cards.length+' '+(state.activeSport==='nba'?'NBA CARDS':'FOOTBALL CARDS');
+ $('roleDistribution').innerHTML=groups.map(group=>'<div class="telemetry-row"><span class="telemetry-label '+roleClass(group.role)+'">'+group.role+'</span><div class="telemetry-track"><i class="'+roleClass(group.role)+'" style="width:'+Math.round(group.count/maximum*100)+'%"></i></div><strong>'+group.count+'</strong></div>').join('')||'<div class="empty">Nessun giocatore classificato.</div>';
+ $('rolePerformance').innerHTML=groups.map(group=>'<div class="telemetry-row"><span class="telemetry-label '+roleClass(group.role)+'">'+group.role+'</span><div class="telemetry-track"><i class="'+scoreClass(group.avg)+'" style="width:'+Math.max(0,Math.min(100,group.avg||0))+'%"></i></div><strong class="'+scoreClass(group.avg)+'">'+(group.avg==null?'—':fmt(group.avg))+'</strong></div>').join('')+'<p class="telemetry-foot">Copertura L5: '+cards.filter(card=>card.l5!==''&&card.l5!=null&&Number.isFinite(Number(card.l5))).length+' / '+cards.length+' giocatori.</p>';
 }
-
 function edgeMetrics(card){
   const safeNumber=value=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value))?Number(value):null;
   const mean=values=>values.length?values.reduce((sum,value)=>sum+value,0)/values.length:null;
@@ -1223,9 +1233,7 @@ function edgeMetrics(card){
   const edge=base===null?null:base-(volatility===null?0:.25*volatility);
   const trend=l5!==null&&l10!==null?l5-l10:null;
   const confidence=(components.length>=2&&raw.length>=5)?'Alta':components.length>=2?'Media':components.length===1?'Bassa':'N.D.';
-  const kinds=positionKinds(card);
-  const roleMap={GK:'Portiere',DF:'Difensore',MD:'Centrocampista',FW:'Attaccante'};
-  const role=roleMap[kinds[0]]||'Altro';
+  const role=sportRoleLabel(card);
   return {card,l5,l10,l15,base,edge,trend,volatility,rawCount:raw.length,confidence,role};
 }
 function edgeSignalLabel(item){
@@ -1285,7 +1293,7 @@ function renderEdgeLab(){
   if(!queue.length)queue.push({kind:'neutral',label:'BASELINE',title:cards.length?'Nessun pattern forte rilevato':'Nessuna carta sincronizzata',detail:cards.length?'Con i dati attuali non emergono soglie forti di momentum o volatilità. Controlla i giocatori direttamente nell’Edge Board.':'Collega Sorare Sync o importa una collezione per generare analisi basate sui dati.'});
   $('edgeSignalQueue').innerHTML=queue.slice(0,5).map(signal=>'<div class="edge-signal '+signal.kind+'"><div class="edge-signal-label">'+esc(signal.label)+'</div><div class="edge-signal-title">'+esc(signal.title)+'</div><div class="edge-signal-detail">'+esc(signal.detail)+'</div></div>').join('');
 
-  const roles=['Portiere','Difensore','Centrocampista','Attaccante','Altro'];
+  const roles=state.activeSport==='nba'?['Guard','Forward','Center','Altro']:['Portiere','Difensore','Centrocampista','Attaccante','Altro'];
   $('edgeRoleCoverage').innerHTML=roles.map(role=>{
     const group=metrics.filter(item=>item.role===role),count=group.filter(item=>item.l5!==null).length,ratio=group.length?Math.round(count/group.length*100):0;
     return '<div class="edge-coverage-row"><span>'+esc(role)+'</span><div class="edge-coverage-track"><i style="width:'+ratio+'%"></i></div><strong>'+count+'/'+group.length+'</strong></div>';
