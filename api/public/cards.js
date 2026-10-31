@@ -136,10 +136,10 @@ async function querySorare(query, variables = {}, accessToken = null) {
 function buildPageQuery(tier) {
   const fields = QUERY_TIERS[tier].fields.join("\n                ");
   return [
-    "query PublicUserCards($slug: String!, $cursor: String) {",
+    "query PublicUserCards($slug: String!, $cursor: String, $sport: Sport!) {",
     "  user(slug: $slug) {",
-    "    cards(after: $cursor) {",
-    "      nodes { " + fields + " }",
+    "    cards(after: $cursor, sport: $sport) {",
+    "      nodes { sport " + fields + " }",
     "      pageInfo { endCursor }",
     "    }",
     "  }",
@@ -171,6 +171,7 @@ function normalizeCard(card) {
   const skin = card.skinEdition || null;
   return {
     slug: card.slug,
+    sport: String(card.sport || "UNKNOWN").toLowerCase(),
     assetId: card.assetId || null,
     playerSlug: player.slug || null,
     name: player.displayName || card.name || card.slug,
@@ -238,6 +239,11 @@ module.exports = async function handler(req, res) {
   const slug = String(session.profile.slug).trim();
   const rawAfter = Array.isArray(req.query.after) ? req.query.after[0] : req.query.after;
   const requestedCursor = rawAfter ? String(rawAfter) : null;
+  const rawSport = Array.isArray(req.query.sport) ? req.query.sport[0] : req.query.sport;
+  const sport = String(rawSport || "FOOTBALL").trim().toUpperCase();
+  if (!["FOOTBALL", "NBA"].includes(sport)) {
+    return res.status(400).json({ error: "Unsupported sport. Use FOOTBALL or NBA." });
+  }
 
   if (!/^[a-zA-Z0-9_-]{1,80}$/.test(slug)) {
     return res.status(400).json({ error: "Invalid slug" });
@@ -261,7 +267,7 @@ module.exports = async function handler(req, res) {
 
       for (let tier = activeTier; tier < QUERY_TIERS.length; tier++) {
         try {
-          const data = await querySorare(buildPageQuery(tier), { slug, cursor }, session?.accessToken || null);
+          const data = await querySorare(buildPageQuery(tier), { slug, cursor, sport }, session?.accessToken || null);
           const candidate = data?.user?.cards;
           if (!candidate) throw new Error("Sorare did not return the cards connection");
           connection = candidate;
@@ -299,6 +305,7 @@ module.exports = async function handler(req, res) {
       source: session?.authType === "jwt" ? "Sorare authenticated GraphQL API" : session ? "Sorare OAuth GraphQL API" : "Sorare public GraphQL API",
       authenticated: Boolean(session),
       profileSlug: slug,
+      sport: sport.toLowerCase(),
       count: items.length,
       items,
       endCursor: cursor,
