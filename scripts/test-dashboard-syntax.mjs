@@ -177,7 +177,8 @@ assert.match(authSources[6], /String\(session\.profile\.slug\)\.trim\(\)/, 'L’
 assert.doesNotMatch(authSources[6], /rawSlug\s*\|\|\s*"mianismo"/, 'L’API profilo non usa account predefiniti');
 assert.match(html, /bcryptjs@2\.4\.3/, 'Il modulo password deve hashare nel browser');
 assert.doesNotMatch(html, /window\.location\.href=['"]\/api\/auth\/sorare\/login/, 'Il pulsante non deve usare OAuth');
-assert.match(html, /const previousSorare=state\.cards\.filter/, 'Le carte Sorare precedenti vengono riconciliate prima della sincronizzazione');
+assert.match(html, /const prevFootball=state\.cards\.filter/, 'Le carte Sorare Football precedenti vengono riconciliate nell’archivio Football');
+assert.match(html, /const prevNba=state\.nbaCards\.filter/, 'Le carte Sorare NBA precedenti vengono riconciliate nell’archivio NBA');
 assert.match(html, /if\(indexBySlug\.has\(card\.slug\)\)/, 'La riconciliazione evita doppioni');
 assert.match(html, /if\(!isSorareAuthenticated\|\|!liveSorareComplete\)/, 'L’importazione rifiuta sessioni non autenticate o inventari parziali');
 assert.match(html, /state\.sorareInventoryStatus='complete'/, 'Lo stato diventa completo dopo la riconciliazione');
