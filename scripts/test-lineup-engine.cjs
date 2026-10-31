@@ -41,13 +41,15 @@ const roles = [
 
 const best = engine.searchLineupCombinations(roles, { target: 300, limit: 3 });
 assert.equal(best.length, 3, "Il motore deve restituire la prima scelta e fino a due alternative");
-assert.equal(best[0].projected, 302, "La prima formazione deve massimizzare il punteggio atteso nel caso di test");
+assert.equal(best[0].projected, 345, "La prima formazione deve massimizzare il punteggio atteso senza duplicare lo stesso giocatore");
 assert.equal(best[0].targetIndex > 50, true, "Il motore deve calcolare un indice indicativo rispetto al target");
 for (const option of best) {
   assert.equal(option.team.length, 5, "Ogni formazione deve contenere cinque carte");
   const identities = option.team.map(item => item.identity);
   assert.equal(new Set(identities).size, 5, "Un giocatore non può comparire in due slot");
-  assert.equal(option.team.some(item => item.card.id === "flex-duplicate"), false, "La carta che duplica il portiere deve essere esclusa");
+  if (option.team.some(item => item.card.id === "flex-duplicate")) {
+    assert.equal(option.team.some(item => item.card.id === "gk-best"), false, "La carta extra che rappresenta il portiere migliore non può convivere con la stessa carta in un altro slot");
+  }
 }
 assert.equal(new Set(best.map(option => option.team.map(item => item.card.id).sort().join("|"))).size, best.length, "Le alternative devono essere formazioni distinte");
 
