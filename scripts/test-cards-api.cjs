@@ -68,6 +68,7 @@ async function callHandler(fetchMock, req = { method: "GET", query: { slug: "mia
 function cardFixture(extra = {}) {
   return {
     slug: "test-player-2026-common",
+    sport: "FOOTBALL",
     assetId: "asset-1",
     rarityTyped: "common",
     seasonYear: 2026,
@@ -87,7 +88,8 @@ async function testVariantQueryFallback() {
   const res = await callHandler(async (_url, options) => {
     calls++;
     const query = JSON.parse(options.body).query;
-    assert.match(query, /cards\(after: \$cursor\)/);
+    assert.match(query, /cards\(after: \$cursor, sport: \$sport\)/);
+    assert.equal(JSON.parse(options.body).variables.sport, "FOOTBALL");
     assert.doesNotMatch(query, /cards\(first:/);
     if (query.includes("rawPlayerGameScores")) {
       return response(422, { errors: [{ message: "Unsupported optional player scores field" }] });
@@ -96,6 +98,8 @@ async function testVariantQueryFallback() {
   });
   assert.equal(res.statusCode, 200);
   assert.equal(res.body.status, "ok");
+  assert.equal(res.body.sport, "football");
+  assert.equal(res.body.items[0].sport, "football");
   assert.equal(res.body.queryTier, "card-details-with-fixtures");
   assert.equal(res.body.items[0].name, "Test Player");
   assert.equal(res.body.items[0].imageUrl, "https://cdn.example/card.png");
@@ -129,6 +133,37 @@ async function testStandardFallbackWhenOptionalFieldsFail() {
   assert.equal(res.body.items[0].name, "Fallback Player");
   assert.equal(res.body.items[0].imageUrl, null);
   assert.ok(res.body.diagnostic.attemptedFallbacks >= 5);
+}
+
+async function testSeparateNbaSportQuery() {
+  let variables = null;
+  const res = await callHandler(async (_url, options) => {
+    const body = JSON.parse(options.body);
+    variables = body.variables;
+    assert.match(body.query, /sport: \$sport/);
+    return response(200, sorareData(cardFixture({
+      slug: "nba-player-2026-common",
+      sport: "NBA",
+      anyPositions: ["Guard"],
+      anyTeam: { name: "Boston Celtics" },
+      anyPlayer: { displayName: "NBA Player" }
+    })));
+  }, { method: "GET", query: { slug: "mianismo", sport: "NBA" } });
+  assert.equal(variables.sport, "NBA", "La richiesta NBA deve essere separata dalla richiesta Football");
+  assert.equal(res.body.sport, "nba");
+  assert.equal(res.body.items[0].sport, "nba");
+  assert.equal(res.body.items[0].name, "NBA Player");
+}
+
+async function testInvalidSportRejected() {
+  let fetched = false;
+  const res = await callHandler(async () => {
+    fetched = true;
+    throw new Error("Invalid sports must be rejected before Sorare is called");
+  }, { method: "GET", query: { slug: "mianismo", sport: "BASEBALL" } });
+  assert.equal(res.statusCode, 400);
+  assert.match(res.body.error, /Football or NBA/);
+  assert.equal(fetched, false);
 }
 
 async function testCursorAndMethodValidation() {
@@ -186,9 +221,11 @@ async function testUnauthenticatedRequestsCannotReadPublicFallback() {
   await testUnauthenticatedRequestsCannotReadPublicFallback();
   await testVariantQueryFallback();
   await testStandardFallbackWhenOptionalFieldsFail();
+  await testSeparateNbaSportQuery();
+  await testInvalidSportRejected();
   await testCursorAndMethodValidation();
   await testAuthenticatedSlugCannotBeOverridden();
-  console.log("Sorare cards API tests passed (4 suites including authenticated account identity).");
+  console.log("Sorare cards API tests passed (separate Football/NBA queries, sport isolation and authenticated account identity).");
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;
