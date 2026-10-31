@@ -655,7 +655,7 @@ function searchLineupCombinations(roleLists,options={}){
    for(const candidate of roleLists[slot]){
     const identity=String(candidate.identity||candidate.card?.playerSlug||candidate.card?.id||candidate.card?.name||'').trim().toLowerCase();
     if(!identity||partial.used.has(identity))continue;
-    const expected=Number(candidate.stats?.expected),risk=Number(candidate.stats?.sd)||0,l10=Number(candidate.stats?.capL10);
+    const expected=Number(candidate.stats?.expected),risk=Number(candidate.stats?.sd)||0,l10Raw=candidate.stats?.capL10,l10=l10Raw==null||String(l10Raw).trim()===''?NaN:Number(l10Raw);
     if(!Number.isFinite(expected)||!Number.isFinite(risk))continue;
     if(capEnabled&&!Number.isFinite(l10))continue;
     const capSum=partial.capSum+(Number.isFinite(l10)?l10:0),capMax=Math.max(partial.capMax,Number.isFinite(l10)?l10:-Infinity);
