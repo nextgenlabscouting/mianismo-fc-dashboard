@@ -42,7 +42,7 @@ const checks = [
   [/cardsNextPage.*addEventListener/s, 'pulsante pagina successiva collegato'],
   [/MAX_CLIENT_PAGES=100/, 'limite di sicurezza paginazione API'],
   [/seenCursors\.has\(next\)/, 'rilevamento cursori ripetuti'],
-  [/cardsQualityGood=hasCardsResponse/, 'controllo qualità prima dell’importazione'],
+  [/qualityGood=Boolean\(lastGoodChunk\)/, 'controllo qualità indipendente per ogni sport prima dell’importazione'],
   [/targetCards=allCards\.filter\(isTargetSetCard\)/, 'ottimizzatore limitato alle carte Divination verificate'],
   [/function searchLineupCombinations\(roleLists,options=\{\}\)/, 'motore lineup con ricerca combinazioni e alternative'],
   [/id="lineupHours"/, 'finestra ore mancanti collegata al generatore'],
