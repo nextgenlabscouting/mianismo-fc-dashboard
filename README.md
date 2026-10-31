@@ -33,7 +33,15 @@ La guida generale descrive cinque Tier (Icon, Star, Impact, Roster, Reserve), pa
 
 ### Regole del nuovo board
 
-Il regolamento generale Sorare Set descrive team composti da cinque o più carte secondo lo sport. Tuttavia, non riutilizzare automaticamente cap, numero di vite, soglie, MVP, tier, prezzi dei pack, odds, missioni o bonus del Set precedente. Questi parametri vanno verificati nel Game Board Divination in-app. Il cap L10 120 e l'MVP escluso mostrati dal lineup builder restano uno scenario operativo, non una regola Divination confermata.
+Il regolamento generale Sorare Set descrive team composti da cinque o più carte secondo lo sport. Tuttavia, non riutilizzare automaticamente cap, numero di vite, soglie, MVP, tier, prezzi dei pack, odds, missioni o bonus del Set precedente. Questi parametri vanno verificati nel Game Board Divination in-app. Il modello a cinque slot e l'eventuale cap L10 con esclusione del valore più alto restano parametri operativi da confrontare con il Game Board: NEXUS non li considera regole Divination confermate. Il cap è disattivato per impostazione predefinita e si applica soltanto quando viene attivato manualmente.
+
+### NEXUS Smart Lineup
+
+Il **Lineup Lab** genera una formazione con un solo pulsante. Inserisci il punteggio da raggiungere e le ore mancanti alla chiusura (da 1 a 336, predefinite 48). NEXUS considera soltanto carte Divination verificate con ruolo riconosciuto, una prossima partita futura restituita da Sorare entro la finestra scelta e una media L5 disponibile. Confronta più combinazioni, impedisce di selezionare due carte dello stesso giocatore e ordina le proposte in base al punteggio storico atteso, alla variabilità e all'indice modellato di raggiungimento del target. Mostra la prima scelta e fino a due alternative distinte applicabili con un clic.
+
+Il cap L10 è facoltativo e disattivato all'apertura. Quando lo attivi, NEXUS richiede L10 per tutti i giocatori e applica il modello locale dei quattro valori L10 più bassi (il valore più alto viene escluso): usalo solo se il Game Board conferma che questa è la regola applicabile. I giocatori senza una prossima partita leggibile, con kickoff fuori dalla finestra o senza punteggi recenti sufficienti non vengono inventati né inseriti. La sorgente fixture attuale espone la prossima partita disponibile per carta, non l'intero calendario.
+
+Le stime si basano su medie e variabilità storiche: non conoscono formazione titolare, infortuni, avversario in termini di difficoltà o bonus ufficiali non esposti dall'API. L'indice target è un indicatore matematico interno, non una probabilità reale di vittoria. NEXUS prepara e salva la bozza nel browser; non invia la formazione a Sorare e non certifica l'idoneità ufficiale.
 
 Ordine consigliato F2P: riscuotere/controllare le ricompense già maturate, verificare i saldi, leggere il board, completare le opportunità gratuite e solo dopo valutare l'uso di Essence o Gems. Evita di rottamare carte prima di controllare collezioni, missioni e bonus.
 
