@@ -628,6 +628,16 @@ function cardScoreStats(card){
   const sd=series.length>1?Math.sqrt(series.reduce((sum,v)=>sum+Math.pow(v-mean,2),0)/series.length):0;
   return {expected,capL10,sd,low:expected==null?null:Math.max(0,expected-sd*.5),high:series.length?Math.max(...series):expected,rawCount:raw.length};
 }
+function applyEditionBonusToStats(stats,rawBonus){
+ const multiplier=rawBonus==null||String(rawBonus).trim()===''?1:Number(rawBonus);
+ const valid=Number.isFinite(multiplier)&&multiplier>=1&&multiplier<=1.5?multiplier:1;
+ return {...stats,expected:stats.expected==null?null:stats.expected*valid,sd:stats.sd*valid,low:stats.low==null?null:stats.low*valid,high:stats.high==null?null:stats.high*valid,editionMultiplier:valid,editionBonusPct:Math.round((valid-1)*1000)/10};
+}
+function lineupCardScoreStats(card){
+ const stats=cardScoreStats(card);
+ return applyEditionBonusToStats(stats,card?.skinEdition?.bonus??card?.bonus);
+}
+
 function playerIdentity(card){
   const player=String(card.playerSlug||card.name||'').trim().toLowerCase();
   const club=String(card.activeTeam||card.club||'').trim().toLowerCase();
@@ -743,7 +753,7 @@ function buildOptimalLineup(){
   toast('Nessuna carta Divination verificata: controlla la sincronizzazione Sorare.');
   return;
  }
- const deadline=now+hours*60*60*1000,scored=targetCards.map(card=>({card,stats:cardScoreStats(card),kinds:positionKinds(card),fixture:nextLineupFixture(card,now)}));
+ const deadline=now+hours*60*60*1000,scored=targetCards.map(card=>({card,stats:lineupCardScoreStats(card),kinds:positionKinds(card),fixture:nextLineupFixture(card,now)}));
  const scoreable=scored.filter(item=>item.stats.expected!=null&&item.kinds.length>0);
  const scheduled=scoreable.filter(item=>item.fixture);
  const inWindow=scheduled.filter(item=>item.fixture.time<=deadline);
@@ -799,7 +809,7 @@ function renderLineupPickerResults(){
 function renderLineup(){
  const availableCards=collectionCards(),slots=$('lineupSlots'),labels=['Portiere','Difensore','Centrocampista','Attaccante','Flex / posizione aggiuntiva'];
  slots.innerHTML=labels.map((label,i)=>{
-  const id=state.lineup[i]||'',card=availableCards.find(item=>item.id===id),stats=card?cardScoreStats(card):null;
+  const id=state.lineup[i]||'',card=availableCards.find(item=>item.id===id),stats=card?lineupCardScoreStats(card):null;
   const pos=card?(Array.isArray(card.positionCodes)&&card.positionCodes.length?card.positionCodes.join(', '):(Array.isArray(card.position)?card.position.join(', '):card.position||'Ruolo n.d.')):'';
   const l10=stats&&stats.capL10!=null?fmt(stats.capL10):'n.d.',l5=stats&&stats.expected!=null?fmt(stats.expected):'n.d.';
   const visual=card?safeImageUrl(cardVisualUrl(card)):null,art=visual?'<img src="'+esc(visual)+'" alt="" loading="lazy">':'<div class="slot-thumb-fallback">'+esc(cardInitials(card?.name||label))+'</div>';
@@ -811,10 +821,10 @@ function renderLineup(){
  $('lineupAverage').textContent=known.length?fmt(known.reduce((sum,item)=>sum+item.expected,0)/known.length):'—';
  renderLineupBuildPanels();
  if(!chosen.length){$('lineupSummary').className='empty';$('lineupSummary').innerHTML='<span class="empty-icon">⚽</span><strong>Pronto a costruire la formazione</strong><p>Inserisci il target e le ore mancanti, poi premi “Crea la formazione migliore”.</p>';return;}
- const projection=teamProjection(chosen,0),target=Number($('lineupTarget')?.value||0),rows=chosen.map((card,index)=>{
-  const st=stats[index],position=Array.isArray(card.positionCodes)&&card.positionCodes.length?card.positionCodes.join(', '):(Array.isArray(card.position)?card.position.join(', '):card.position||'Ruolo n.d.');
+ const lineupStats=chosen.map(lineupCardScoreStats),projection={stats:lineupStats,base:lineupStats.reduce((sum,item)=>sum+(item.expected||0),0),projected:lineupStats.reduce((sum,item)=>sum+(item.expected||0),0),risk:Math.sqrt(lineupStats.reduce((sum,item)=>sum+item.sd*item.sd,0)),low:lineupStats.reduce((sum,item)=>sum+(item.low??item.expected??0),0),high:lineupStats.reduce((sum,item)=>sum+(item.high??item.expected??0),0)},target=Number($('lineupTarget')?.value||0),rows=chosen.map((card,index)=>{
+  const st=lineupCardScoreStats(card),position=Array.isArray(card.positionCodes)&&card.positionCodes.length?card.positionCodes.join(', '):(Array.isArray(card.position)?card.position.join(', '):card.position||'Ruolo n.d.');
   const fixture=nextLineupFixture(card,Date.now()),fixtureText=fixture?lineupFixtureText({card,fixture}):'Prossima partita non disponibile';
-  return '<div class="activity"><div class="activity-ico">'+esc(cardInitials(card.name))+'</div><div><strong>'+esc(card.name)+'</strong><p>'+esc(card.club||card.activeTeam||'Club n.d.')+' · '+esc(position)+' · L5 '+(st.expected==null?'n.d.':esc(fmt(st.expected)))+' · L10 '+(st.capL10==null?'n.d.':esc(fmt(st.capL10)))+' · '+esc(fixtureText)+'</p></div></div>';
+  return '<div class="activity"><div class="activity-ico">'+esc(cardInitials(card.name))+'</div><div><strong>'+esc(card.name)+'</strong><p>'+esc(card.club||card.activeTeam||'Club n.d.')+' · '+esc(position)+' · L5 '+(st.expected==null?'n.d.':esc(fmt(st.expected)))+' · L10 '+(st.capL10==null?'n.d.':esc(fmt(st.capL10)))+' · '+esc(fixtureText)+(st.editionBonusPct>0?' · bonus edizione +'+fmt(st.editionBonusPct)+'%':'')+'</p></div></div>';
  }).join('');
  const roleNames=['GK','DF','MD','FW','Flex'];
  const roleErrors=state.lineup.map((id,index)=>{
