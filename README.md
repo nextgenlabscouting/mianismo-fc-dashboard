@@ -35,6 +35,16 @@ La guida generale descrive cinque Tier (Icon, Star, Impact, Roster, Reserve), pa
 
 Il regolamento generale Sorare Set descrive team composti da cinque o più carte secondo lo sport. Tuttavia, non riutilizzare automaticamente cap, numero di vite, soglie, MVP, tier, prezzi dei pack, odds, missioni o bonus del Set precedente. Questi parametri vanno verificati nel Game Board Divination in-app. Il modello a cinque slot e l'eventuale cap L10 con esclusione del valore più alto restano parametri operativi da confrontare con il Game Board: NEXUS non li considera regole Divination confermate. Il cap è disattivato per impostazione predefinita e si applica soltanto quando viene attivato manualmente.
 
+## Separazione Football / NBA
+
+NEXUS mantiene **due archivi distinti**: `state.cards` per Football e `state.nbaCards` per NBA. Le carte vecchie vengono riclassificate durante la migrazione usando lo sport dichiarato da Sorare e, quando manca, i ruoli/metadata riconoscibili. I record senza indicazioni affidabili restano in `unclassifiedCards`: non vengono assegnati a caso. Ogni carta salvata riporta il proprio campo `sport`.
+
+Il selettore laterale **Football / NBA** cambia workspace. Galleria, Scores, Market, Edge Lab, riepilogo e filtri leggono esclusivamente l'archivio dello sport attivo. Anche l'inserimento manuale richiede la scelta dello sport e usa ruoli diversi (calcio oppure Guard / Forward / Center). Il backup esporta e reimporta i due archivi separatamente e mantiene distinti i rispettivi ID.
+
+La sincronizzazione usa il parametro ufficiale Sorare `sport` ed effettua due letture indipendenti: `FOOTBALL` e `NBA`. NEXUS sostituisce le carte salvate soltanto quando entrambe le letture e l'identità dell'account risultano complete; in caso contrario conserva l'archivio precedente. Le carte con sport incompatibile o non verificabile non vengono inserite nell'archivio sbagliato.
+
+Il **Divination Lineup Lab resta esclusivamente Football**: usa solo le carte Football e non è visibile nel workspace NBA. Non viene riutilizzato per il basket perché i ruoli e i criteri di formazione sono differenti; il generatore NBA sarà una funzione separata, non una variante del lineup calcistico.
+
 ### NEXUS Smart Lineup
 
 Il **Lineup Lab** genera una formazione con un solo pulsante. Inserisci il punteggio da raggiungere e le ore mancanti alla chiusura (da 1 a 336, predefinite 48). NEXUS considera soltanto carte Divination verificate con ruolo riconosciuto, una prossima partita futura restituita da Sorare entro la finestra scelta e una media L5 disponibile. Confronta più combinazioni, impedisce di selezionare due carte dello stesso giocatore e ordina le proposte in base al punteggio storico atteso, alla variabilità e all'indice modellato di raggiungimento del target. Mostra la prima scelta e fino a due alternative distinte applicabili con un clic.
