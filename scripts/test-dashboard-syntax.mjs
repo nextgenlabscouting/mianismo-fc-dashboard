@@ -51,7 +51,7 @@ const checks = [
   [/data-lineup-option/, 'pulsante per applicare una formazione alternativa'],
   [/function currentTargetSet\(\)/, 'nessuna formazione senza un Set selezionato'],
   [/legacyEssenceExpired=true/, 'migrazione Essence HyperGlitch scaduta'],
-  [/reportItems=items\.slice\(0,60\)/, 'limite rendering del pannello tecnico'],
+  [/items\.slice\(0,60\)/, 'limite rendering del pannello tecnico'],
   [/function variantBonusLabel\(value\)/, 'bonus variante visualizzato in percentuale'],
   [/function updateLoyaltyRewardEstimate\(\)/, 'stima premi fedeltà implementata'],
   [/rewardByBracket=\{'750\+':60,'500-749':40,'350-499':25,'200-349':15,'100-199':10,'50-99':5\}/, 'fasce Gems allineate alla tabella ufficiale'],
@@ -83,7 +83,17 @@ const checks = [
   [/async function restoreSorareSession\(\)/, 'ripristino sessione senza nuova sincronizzazione'],
   [/restoreSorareSession\(\);/, 'ripristino automatico della sola sessione al caricamento'],
   [/merged\.cards=merged\.cards\.filter\(card=>!isEndedHyperGlitch\(card\)\)/, 'rimozione definitiva delle carte Hyperglitch dai dati salvati'],
-  [/function collectionCards\(\).*filter\(card=>!isEndedHyperGlitch\(card\)/, 'esclusione Hyperglitch da tutte le viste operative'],
+  [/function footballCards\(\).*isEndedHyperGlitch/s, 'archivio Football con esclusione Hyperglitch'],
+  [/function basketballCards\(\).*sport\)==='nba'/, 'archivio NBA separato'],
+  [/function normalizeSport\(value\)/, 'normalizzazione esplicita Football/NBA'],
+  [/function detectCardSport\(card,fallback='unclassified'\)/, 'classificazione delle vecchie carte e quarantena dei casi incerti'],
+  [/function fetchSorareSportInventory\(slug,sport\)/, 'lettura Sorare separata per sport'],
+  [/fetchSorareSportInventory\(activeSorareSlug,'football'\)/, 'query Football separata'],
+  [/fetchSorareSportInventory\(activeSorareSlug,'nba'\)/, 'query NBA separata'],
+  [/const allCards=footballCards\(\)/, 'lineup calcistica limitata alle carte Football'],
+  [/id="sportModeFootball"/, 'selettore Football indipendente'],
+  [/id="sportModeNBA"/, 'selettore NBA indipendente'],
+  [/id="playerSport"/, 'sport obbligatorio per le carte manuali'],
   [/if\(isEndedHyperGlitch\(item\)\)continue/, 'blocco reimportazione delle carte Hyperglitch'],
   [/lastSorareSyncAt=new Date\(\)\.toISOString\(\)/, 'memorizzazione data ultima sincronizzazione'],
   [/const KEY='nexusSorareIntelligenceV1';/, 'chiave locale con il nuovo brand'],
@@ -98,6 +108,9 @@ const checks = [
   [/--bg:#070510/, 'tema Divination nero, viola e oro']
 ];
 
+assert.ok(scripts[0][1].includes('cards(after: $cursor, sport: $sport)'), 'Le richieste Sorare devono specificare lo sport');
+assert.ok(scripts[0][1].includes('state.nbaCards=nba.cards'), 'Le carte NBA vengono salvate nell’archivio NBA');
+assert.ok(scripts[0][1].includes('state.cards=football.cards'), 'Le carte Football vengono salvate nell’archivio Football');
 assert.doesNotMatch(scripts[0][1], /setInterval\s*\([^;]*loadSorarePublicData/, 'La dashboard non deve sincronizzare Sorare in automatico a intervalli');
 assert.ok(scripts[0][1].includes('if(setFields.some(isDivination))return false;'), 'Divination ha sempre precedenza sul filtro Hyperglitch');
 assert.ok(scripts[0][1].includes('legacySnapshot.cards.filter(card=>card&&typeof card===\'object\'&&confirmedDivination(card)'), 'Il vecchio archivio locale può recuperare carte Divination confermate');
