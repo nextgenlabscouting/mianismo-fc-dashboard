@@ -513,13 +513,16 @@ function applySportModeUI(){
  if(scoresTitle)scoresTitle.textContent=nba?'NBA Scores':'Scores';
  if(scoresDescription)scoresDescription.textContent=nba?'Partite e forma recente esclusivamente dei giocatori NBA.':'Partite in calendario e forma recente dei giocatori della tua collezione.';
  const addManual=$('addCardPage');if(addManual)addManual.textContent=nba?'＋ Aggiungi giocatore NBA':'＋ Aggiunta manuale';
- document.querySelectorAll('[data-cards-view="collections"],[data-cards-view="boxes"],[data-cards-view="essence"]').forEach(button=>button.classList.toggle('sport-hidden',nba));
- ['cardsCollectionsView','cardsBoxesView','cardsEssenceView'].forEach(id=>$(id)?.classList.toggle('sport-hidden',nba));
- if(nba){
-  document.querySelectorAll('[data-cards-view]').forEach(button=>button.classList.toggle('active',button.dataset.cardsView==='gallery'));
-  ['cardsCollectionsView','cardsBoxesView','cardsEssenceView'].forEach(id=>$(id)?.classList.add('hide'));
-  $('cardsGalleryView')?.classList.remove('hide');
- }
+ const selectedView=nba?'gallery':(document.querySelector('[data-cards-view].active')?.dataset.cardsView||'gallery');
+ document.querySelectorAll('[data-cards-view]').forEach(button=>{
+  button.classList.toggle('sport-hidden',nba&&button.dataset.cardsView!=='gallery');
+  button.classList.toggle('active',button.dataset.cardsView===selectedView);
+ });
+ ['gallery','collections','boxes','essence'].forEach(view=>{
+  const id='cards'+view[0].toUpperCase()+view.slice(1)+'View';
+  $(id)?.classList.toggle('sport-hidden',nba&&view!=='gallery');
+  $(id)?.classList.toggle('hide',view!==selectedView);
+ });
  const posFilter=$('positionFilter');
  if(posFilter&&posFilter.dataset.sport!==sport){
   const values=nba?['Guard','Forward','Center','Altro']:['Portiere','Difensore','Centrocampista','Attaccante','Altro'];
