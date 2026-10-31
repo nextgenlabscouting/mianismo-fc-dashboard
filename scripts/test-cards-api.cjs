@@ -162,7 +162,7 @@ async function testInvalidSportRejected() {
     throw new Error("Invalid sports must be rejected before Sorare is called");
   }, { method: "GET", query: { slug: "mianismo", sport: "BASEBALL" } });
   assert.equal(res.statusCode, 400);
-  assert.match(res.body.error, /Football or NBA/);
+  assert.match(res.body.error, /football or nba/i);
   assert.equal(fetched, false);
 }
 
