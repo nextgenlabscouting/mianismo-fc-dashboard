@@ -1080,54 +1080,54 @@ function exportBackup(){
   }catch(error){toast("Esportazione non riuscita: "+String(error?.message||error));}
 }
 async function importBackupFromFile(event){
-  const file=event.target.files?.[0];
-  if(!file)return;
-  try{
-    const payload=JSON.parse(await file.text());
-    const incoming=payload&&typeof payload==="object"&&payload.state&&typeof payload.state==="object"?payload.state:payload;
-    if(!incoming||typeof incoming!=="object"||!Array.isArray(incoming.cards))throw new Error("Il file non contiene un archivio carte riconoscibile.");
-    const cards=incoming.cards.filter(card=>card&&typeof card==="object"&&String(card.name||"").trim()&&!isEndedHyperGlitch(card)).map(card=>({
-      ...card,
-      id:String(card.id||card.sorareSlug||card.slug||("imported-"+Math.random().toString(36).slice(2,10))),
-      name:String(card.name).trim(),
-      imageUrl:safeImageUrl(card.imageUrl),
-      playerImageUrl:safeImageUrl(card.playerImageUrl)
-    }));
-    const incomingResources=incoming.resources&&typeof incoming.resources==="object"?incoming.resources:{};
-    const numberOr=(value,fallback,min,max,integer=false)=>{
-      if(value===null||value===undefined||String(value).trim()==='')return fallback;
-      const parsed=Number(value);
-      return Number.isFinite(parsed)&&parsed>=min&&parsed<=max&&(!integer||Number.isSafeInteger(parsed))?parsed:fallback;
-    };
-    const resources={
-      ...initial.resources,...incomingResources,
-      gems:numberOr(incomingResources.gems,initial.resources.gems,0,Number.MAX_SAFE_INTEGER,true),
-      essence:numberOr(incomingResources.essence,initial.resources.essence,0,Number.MAX_SAFE_INTEGER,true),
-      collection:numberOr(incomingResources.collection,initial.resources.collection,0,100,false),
-      goal:numberOr(incomingResources.goal,initial.resources.goal,0,Number.MAX_SAFE_INTEGER,true),
-      legacyGemsSpentBracket:["","750+","500-749","350-499","200-349","100-199","50-99"].includes(String(incomingResources.legacyGemsSpentBracket??initial.resources.legacyGemsSpentBracket))?String(incomingResources.legacyGemsSpentBracket??initial.resources.legacyGemsSpentBracket):initial.resources.legacyGemsSpentBracket,
-      legacyCollectionCompletion:numberOr(incomingResources.legacyCollectionCompletion,incomingResources.collection??initial.resources.legacyCollectionCompletion,0,100,false),
-      legacyGemsAtRollover:numberOr(incomingResources.legacyGemsAtRollover,incomingResources.gems??initial.resources.legacyGemsAtRollover,0,Number.MAX_SAFE_INTEGER,true),
-      divinationMigrationApplied:true,
-      set:DIVINATION_SET,
-      notes:String(incomingResources.notes||"").slice(0,250)
-    };
-    const previousAppBackup=incomingResources.divinationMigrationApplied!==true;
-    if(previousAppBackup){resources.legacyCollectionCompletion=numberOr(incomingResources.legacyCollectionCompletion,incomingResources.collection,initial.resources.legacyCollectionCompletion,100,false);resources.legacyGemsAtRollover=numberOr(incomingResources.legacyGemsAtRollover,incomingResources.gems,initial.resources.legacyGemsAtRollover,Number.MAX_SAFE_INTEGER,true);resources.gems=null;resources.essence=null;resources.collection=null;resources.set=DIVINATION_SET;resources.legacyEssenceExpired=true;resources.divinationMigrationApplied=true;}
-    const ids=new Set(cards.map(card=>card.id));
-    const savedLineup=Array.isArray(incoming.lineup)?incoming.lineup:[];
-    const lineup=Array.from({length:5},(_,i)=>{const id=String(savedLineup[i]||"");return ids.has(id)?id:"";});if(previousAppBackup)lineup.fill("");
-    const resourcesConfirmedByUser=incoming.resourcesConfirmedByUser===true;
-    if(!resourcesConfirmedByUser){resources.gems=null;resources.essence=null;resources.collection=null;resources.set=DIVINATION_SET;}
-    state={...structuredClone(initial),...incoming,divinationTasks:{...initial.divinationTasks,...(incoming.divinationTasks||{})},cards,lineup,resources,resourcesConfirmedByUser,sorareInventoryStatus:'unverified'};
-    cardsPage=1;
-    persist();
-    toast("Backup importato e validato: "+cards.length+" carte.");
-  }catch(error){
-    toast("Backup non importato: "+String(error?.message||error));
-  }finally{
-    event.target.value="";
-  }
+ const file=event.target.files?.[0];if(!file)return;
+ try{
+  const payload=JSON.parse(await file.text()),incoming=payload&&typeof payload==='object'&&payload.state&&typeof payload.state==='object'?payload.state:payload;
+  if(!incoming||typeof incoming!=='object'||(!Array.isArray(incoming.cards)&&!Array.isArray(incoming.nbaCards)))throw new Error('Il file non contiene un archivio carte riconoscibile.');
+  const seen=new Set(),footballCards=[],nbaCards=[],unclassifiedCards=[];
+  const prepare=(raw,fallback='unclassified')=>{
+   if(!raw||typeof raw!=='object'||!String(raw.name||'').trim())return;
+   const card={...raw,id:String(raw.id||raw.sorareSlug||raw.slug||('imported-'+Math.random().toString(36).slice(2,10))),name:String(raw.name).trim(),imageUrl:safeImageUrl(raw.imageUrl),playerImageUrl:safeImageUrl(raw.playerImageUrl)};
+   if(seen.has(card.id))return;seen.add(card.id);
+   const sport=detectCardSport(card,fallback);card.sport=sport;
+   if(sport==='football'){if(!isEndedHyperGlitch(card))footballCards.push(card);}
+   else if(sport==='nba')nbaCards.push(card);
+   else unclassifiedCards.push(card);
+  };
+  (Array.isArray(incoming.cards)?incoming.cards:[]).forEach(card=>prepare(card,card?.source==='manual'?'football':'unclassified'));
+  (Array.isArray(incoming.nbaCards)?incoming.nbaCards:[]).forEach(card=>prepare({...card,sport:card?.sport||'nba'},'nba'));
+  (Array.isArray(incoming.unclassifiedCards)?incoming.unclassifiedCards:[]).forEach(card=>prepare(card,'unclassified'));
+  const incomingResources=incoming.resources&&typeof incoming.resources==='object'?incoming.resources:{};
+  const numberOr=(value,fallback,min,max,integer=false)=>{
+   if(value===null||value===undefined||String(value).trim()==='')return fallback;
+   const parsed=Number(value);return Number.isFinite(parsed)&&parsed>=min&&parsed<=max&&(!integer||Number.isSafeInteger(parsed))?parsed:fallback;
+  };
+  const resources={
+   ...initial.resources,...incomingResources,
+   gems:numberOr(incomingResources.gems,initial.resources.gems,0,Number.MAX_SAFE_INTEGER,true),
+   essence:numberOr(incomingResources.essence,initial.resources.essence,0,Number.MAX_SAFE_INTEGER,true),
+   collection:numberOr(incomingResources.collection,initial.resources.collection,0,100,false),
+   goal:numberOr(incomingResources.goal,initial.resources.goal,0,Number.MAX_SAFE_INTEGER,true),
+   legacyGemsSpentBracket:["","750+","500-749","350-499","200-349","100-199","50-99"].includes(String(incomingResources.legacyGemsSpentBracket??initial.resources.legacyGemsSpentBracket))?String(incomingResources.legacyGemsSpentBracket??initial.resources.legacyGemsSpentBracket):initial.resources.legacyGemsSpentBracket,
+   legacyCollectionCompletion:numberOr(incomingResources.legacyCollectionCompletion,incomingResources.collection??initial.resources.legacyCollectionCompletion,0,100,false),
+   legacyGemsAtRollover:numberOr(incomingResources.legacyGemsAtRollover,incomingResources.gems??initial.resources.legacyGemsAtRollover,0,Number.MAX_SAFE_INTEGER,true),
+   divinationMigrationApplied:true,set:DIVINATION_SET,notes:String(incomingResources.notes||'').slice(0,250)
+  };
+  const previousAppBackup=incomingResources.divinationMigrationApplied!==true;
+  if(previousAppBackup){resources.legacyCollectionCompletion=numberOr(incomingResources.legacyCollectionCompletion,incomingResources.collection,initial.resources.legacyCollectionCompletion,100,false);resources.legacyGemsAtRollover=numberOr(incomingResources.legacyGemsAtRollover,incomingResources.gems,initial.resources.legacyGemsAtRollover,Number.MAX_SAFE_INTEGER,true);resources.gems=null;resources.essence=null;resources.collection=null;resources.set=DIVINATION_SET;resources.legacyEssenceExpired=true;resources.divinationMigrationApplied=true;}
+  const footballIds=new Set(footballCards.map(card=>card.id)),nbaIds=new Set(nbaCards.map(card=>card.id));
+  const savedLineup=Array.isArray(incoming.lineup)?incoming.lineup:[];
+  const lineup=Array.from({length:5},(_,index)=>{const id=String(savedLineup[index]||'');return footballIds.has(id)?id:'';});
+  const savedNbaLineup=Array.isArray(incoming.nbaLineup)?incoming.nbaLineup:[];
+  const nbaLineup=savedNbaLineup.map(id=>String(id||'')).filter(id=>nbaIds.has(id));
+  if(previousAppBackup)lineup.fill('');
+  const resourcesConfirmedByUser=incoming.resourcesConfirmedByUser===true;
+  if(!resourcesConfirmedByUser){resources.gems=null;resources.essence=null;resources.collection=null;resources.set=DIVINATION_SET;}
+  state={...structuredClone(initial),...incoming,cards:footballCards,nbaCards,unclassifiedCards,lineup,nbaLineup,activeSport:normalizeSport(incoming.activeSport)==='nba'?'nba':'football',sportSeparationVersion:1,divinationTasks:{...initial.divinationTasks,...(incoming.divinationTasks||{})},resources,resourcesConfirmedByUser,sorareInventoryStatus:'unverified'};
+  cardsPage=1;persist();
+  toast('Backup importato e separato: Football '+footballCards.length+' · NBA '+nbaCards.length+' · da classificare '+unclassifiedCards.length+'.');
+ }catch(error){toast('Backup non importato: '+String(error?.message||error));}
+ finally{event.target.value='';}
 }
 function bindCoreControls(){
   $("resourcesForm").addEventListener("submit",saveResourcesFromForm);
@@ -1514,61 +1514,55 @@ async function loadSorarePublicData(){
  }
 }
 async function restoreSorareSession(){
-  try{
-    const response=await fetch('/api/auth/sorare/session',{cache:'no-store'});
-    const session=await response.json().catch(()=>({authenticated:false,profile:null}));
-    updateSorareAuthUI(session);
-    if(!response.ok||!session.authenticated||!session.profile?.slug){
-      activeSorareSlug='';liveSorareProfileSlug='';liveSorareItems=[];liveSorareComplete=false;
-      state.sorareInventoryStatus=hasSavedSorareInventory()?'stale':'unverified';
-      renderAll();
-      renderSorareReport({
-        status:'not_authenticated',requestedSlug:'',
-        profile:{found:false,slug:'',nickname:null},
-        cards:{status:'unavailable',count:null,items:[],complete:false,authenticated:false,message:hasSavedSorareInventory()?'Archivio locale conservato. Ricollega Sorare solo se la sessione è scaduta.':'Collega Sorare una sola volta per avviare la sincronizzazione iniziale.',detail:'Nessuna sincronizzazione automatica viene avviata all’apertura.'},
-        message:'Sessione Sorare non attiva.',
-        detail:'I dati locali già salvati restano disponibili. La sincronizzazione si avvia soltanto dopo il login o quando premi Rileggi dati.'
-      });
-      return;
-    }
-    const slug=String(session.profile.slug);
-    activeSorareSlug=slug;liveSorareProfileSlug=slug;
-    if(state.sorareProfileSlug&&state.sorareProfileSlug!==slug){
-      const manualCards=state.cards.filter(card=>card?.source!=='sorare'&&!card?.sorareSlug);
-      const manualIds=new Set(manualCards.map(card=>card.id));
-      state.cards=manualCards;
-      state.lineup=state.lineup.map(id=>manualIds.has(id)?id:'');
-      state.sorareInventoryStatus='unverified';
-      state.sorareProfileSlug=slug;
-      persist();
-    }else{
-      state.sorareProfileSlug=slug;
-      const cachedCount=state.cards.filter(card=>(card?.source==='sorare'||card?.sorareSlug)&&!isEndedHyperGlitch(card)).length;
-      state.sorareInventoryStatus=cachedCount?(state.sorareInventoryStatus==='complete'?'complete':'stale'):'unverified';
-      renderAll();
-    }
-    const cachedCards=state.cards.filter(card=>(card?.source==='sorare'||card?.sorareSlug)&&!isEndedHyperGlitch(card));
-    const lastSync=state.lastSorareSyncAt?new Date(state.lastSorareSyncAt).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'}):'Non ancora sincronizzato';
-    $('sorareStatus').textContent='Sessione attiva';
-    $('sorareStatus').className='stat-value green';
-    $('sorareStatusFoot').textContent=cachedCards.length?'Archivio locale ripristinato · nessuna nuova lettura':'Account collegato · inventario da importare';
-    $('sorareProfileFound').textContent='Sì';
-    $('sorareProfileName').textContent=(session.profile.nickname||slug)+' · '+slug;
-    $('sorareCardCount').textContent=cachedCards.length?fmt(cachedCards.length):'—';
-    $('sorareCardFoot').textContent=cachedCards.length?'Carte già salvate in questo browser. Nessuna nuova richiesta a Sorare.':'Nessun archivio locale associato a questo account. Premi Rileggi dati per importarlo.';
-    $('sorareUpdated').textContent=lastSync;
-    $('sorareCardBadge').textContent=cachedCards.length?cachedCards.length+' carte in archivio':'Inventario non importato';
-    $('sorareCardsList').className='notice';
-    $('sorareCardsList').innerHTML='<span class="notice-icon">✓</span><div><strong>Sessione Sorare ripristinata</strong><br>'+esc(cachedCards.length?cachedCards.length+' carte già presenti nell’archivio locale. Nessun caricamento ripetuto.':'Account collegato. Avvia una sola sincronizzazione iniziale con “Rileggi dati”.')+'<br><span class="muted">Ultimo aggiornamento: '+esc(lastSync)+'</span></div>';
-    $('importSorareCards').disabled=true;
-    $('importSorareCards').textContent='Inventario già salvato';
-    setSorareLoginMessage('Accesso Sorare già attivo. Non serve rifare il login; i dati vengono caricati dall’archivio locale.','success');
-  }catch(error){
-    updateSorareAuthUI({authenticated:false,profile:null});
-    state.sorareInventoryStatus=hasSavedSorareInventory()?'stale':'unverified';
-    renderAll();
-    setSorareLoginMessage('Verifica della sessione non riuscita: '+String(error?.message||error),'error');
+ try{
+  const response=await fetch('/api/auth/sorare/session',{cache:'no-store'});
+  const session=await response.json().catch(()=>({authenticated:false,profile:null}));
+  updateSorareAuthUI(session);
+  if(!response.ok||!session.authenticated||!session.profile?.slug){
+   activeSorareSlug='';liveSorareProfileSlug='';liveSorareItems=[];liveSorareFootballItems=[];liveSorareNbaItems=[];liveSorareComplete=false;liveSorareCompleteBySport={football:false,nba:false};
+   state.sorareInventoryStatus=hasSavedSorareInventory()?'stale':'unverified';renderAll();
+   renderSorareReport({status:'not_authenticated',requestedSlug:'',profile:{found:false,slug:'',nickname:null},cards:{status:'unavailable',count:null,items:[],complete:false,authenticated:false,message:hasSavedSorareInventory()?'Archivio Football e NBA conservato in questo browser. Ricollega Sorare solo se la sessione è scaduta.':'Collega Sorare una volta per avviare le sincronizzazioni distinte.',detail:'Nessuna sincronizzazione automatica viene avviata all’apertura.'},message:'Sessione Sorare non attiva.',detail:'Gli archivi locali Football e NBA restano distinti. La sincronizzazione parte solo dopo il login o premendo Rileggi dati.'});
+   return;
   }
+  const slug=String(session.profile.slug);activeSorareSlug=slug;liveSorareProfileSlug=slug;
+  if(state.sorareProfileSlug&&state.sorareProfileSlug!==slug){
+   const remote=card=>card?.source==='sorare'||Boolean(card?.sorareSlug);
+   state.cards=state.cards.filter(card=>!remote(card));
+   state.nbaCards=state.nbaCards.filter(card=>!remote(card));
+   state.unclassifiedCards=state.unclassifiedCards.filter(card=>!remote(card));
+   const footballIds=new Set(state.cards.map(card=>card.id)),nbaIds=new Set(state.nbaCards.map(card=>card.id));
+   state.lineup=state.lineup.map(id=>footballIds.has(id)?id:'');state.nbaLineup=state.nbaLineup.filter(id=>nbaIds.has(id));
+   state.sorareInventoryStatus='unverified';state.sorareProfileSlug=slug;persist();
+  }else{
+   state.sorareProfileSlug=slug;
+   const hasCached=[...state.cards,...state.nbaCards].some(card=>(card?.source==='sorare'||card?.sorareSlug));
+   state.sorareInventoryStatus=hasCached?(state.sorareInventoryStatus==='complete'?'complete':'stale'):'unverified';
+   persist();
+  }
+  const footballCache=state.cards.filter(card=>(card?.source==='sorare'||card?.sorareSlug)&&!isEndedHyperGlitch(card));
+  const nbaCache=state.nbaCards.filter(card=>card?.source==='sorare'||card?.sorareSlug);
+  const total=footballCache.length+nbaCache.length;
+  liveSorareFootballItems=footballCache;liveSorareNbaItems=nbaCache;liveSorareItems=footballCache.concat(nbaCache);
+  liveSorareComplete=false;liveSorareCompleteBySport={football:false,nba:false};
+  const lastSync=state.lastSorareSyncAt?new Date(state.lastSorareSyncAt).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'}):'Non ancora sincronizzato';
+  $('sorareStatus').textContent='Sessione attiva';$('sorareStatus').className='stat-value green';
+  $('sorareStatusFoot').textContent='Account collegato · archivi separati · nessuna nuova lettura automatica';
+  $('sorareProfileFound').textContent='Sì';$('sorareProfileName').textContent=(session.profile.nickname||slug)+' · '+slug;
+  $('sorareCardCount').textContent=total?fmt(total):'—';
+  $('sorareCardFoot').textContent='Archivio Football: '+footballCache.length+' carte · Archivio NBA: '+nbaCache.length+' carte. Nessuna nuova richiesta a Sorare.';
+  $('sorareUpdated').textContent=lastSync;
+  $('sorareCardBadge').textContent='Football '+footballCache.length+' · NBA '+nbaCache.length;
+  $('sorareCardsList').className='notice';
+  $('sorareCardsList').innerHTML='<span class="notice-icon">✓</span><div><strong>Sessione Sorare ripristinata</strong><br>Football: '+footballCache.length+' carte · NBA: '+nbaCache.length+' carte. Gli archivi sono separati e non è partita una nuova sincronizzazione.<br><span class="muted">Ultimo aggiornamento: '+esc(lastSync)+'</span></div>';
+  $('importSorareCards').disabled=true;$('importSorareCards').textContent='Rileggi entrambi gli sport';
+  setSorareLoginMessage('Accesso Sorare già attivo. Gli archivi Football e NBA vengono ripristinati separatamente; nessuna lettura automatica.','success');
+  renderAll();
+ }catch(error){
+  updateSorareAuthUI({authenticated:false,profile:null});
+  state.sorareInventoryStatus=hasSavedSorareInventory()?'stale':'unverified';
+  renderAll();
+  setSorareLoginMessage('Verifica della sessione non riuscita: '+String(error?.message||error),'error');
+ }
 }
 function renderHeaderChrome(){const manual=state.resourcesConfirmedByUser===true,r=state.resources||{},g=manual?fmtKnown(r.gems):'—',e=manual?fmtKnown(r.essence):'—';['headerGems','sideGems'].forEach(id=>{if($(id))$(id).textContent=g;});['headerEssence','sideEssence','cardsEssenceBalance'].forEach(id=>{if($(id))$(id).textContent=e;});if($('cardsGemsBalance'))$('cardsGemsBalance').textContent=g;if($('sideAccountState'))$('sideAccountState').textContent=isSorareAuthenticated?'Account collegato':'Collega il tuo account';if($('galleryCount'))$('galleryCount').textContent=collectionCards().length+' carte';if($('gallerySource'))$('gallerySource').textContent=state.sorareInventoryStatus==='complete'?'Inventario verificato':state.sorareInventoryStatus==='stale'?'Ultimo inventario salvato':'Inventario non verificato';if($('marketOwnedCount'))$('marketOwnedCount').textContent=collectionCards().length+' CARTE';}
 function renderCollections(){const box=$('collectionsGrid');if(!box)return;const cards=collectionCards(),groups=new Map();cards.forEach(card=>{const name=String(card.set?.name||card.setName||card.edition||'Set non specificato').trim()||'Set non specificato';if(!groups.has(name))groups.set(name,[]);groups.get(name).push(card);});const entries=[...groups.entries()].sort((a,b)=>a[0].localeCompare(b[0]));$('collectionsCount').textContent=entries.length+' COLLECTIONS';$('collectionsEmpty').classList.toggle('hide',entries.length>0);box.innerHTML=entries.map(([name,items])=>{const thumbs=items.slice(0,4).map(card=>{const src=safeImageUrl(cardVisualUrl(card));return src?'<img src="'+esc(src)+'" alt="" loading="lazy">':'<span>'+esc(cardInitials(card.name))+'</span>';}).join('');return '<article class="collection-tile"><div class="collection-preview">'+thumbs+'</div><div class="collection-tile-meta"><div><strong>'+esc(name)+'</strong><small>'+items.length+' '+(items.length===1?'carta':'carte')+'</small></div><span>›</span></div></article>';}).join('');}
