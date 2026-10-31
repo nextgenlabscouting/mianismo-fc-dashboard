@@ -108,7 +108,7 @@ const checks = [
   [/--bg:#070510/, 'tema Divination nero, viola e oro']
 ];
 
-assert.ok(scripts[0][1].includes('cards(after: $cursor, sport: $sport)'), 'Le richieste Sorare devono specificare lo sport');
+assert.ok(authSources[5].includes('cards(after: $cursor, sport: $sport)'), 'Le richieste Sorare devono specificare lo sport');
 assert.ok(scripts[0][1].includes('state.nbaCards=nba.cards'), 'Le carte NBA vengono salvate nell’archivio NBA');
 assert.ok(scripts[0][1].includes('state.cards=football.cards'), 'Le carte Football vengono salvate nell’archivio Football');
 assert.doesNotMatch(scripts[0][1], /setInterval\s*\([^;]*loadSorarePublicData/, 'La dashboard non deve sincronizzare Sorare in automatico a intervalli');
