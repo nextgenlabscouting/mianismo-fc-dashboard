@@ -400,13 +400,14 @@ function detectCardSport(card,fallback='unclassified'){
  const explicit=normalizeSport(card?.sport||card?.sportCode||card?.sportType||card?.collection);
  if(explicit)return explicit;
  const fields=[card?.positionCodes,card?.position,card?.positions].flatMap(value=>Array.isArray(value)?value:[value]).filter(Boolean).map(value=>String(value).trim().toLowerCase());
+ const tokens=new Set(fields.flatMap(value=>value.split(/[\s,/|_-]+/).filter(Boolean)));
  const text=fields.join(' ');
- if(/point guard|shooting guard|small forward|power forward|center|centre|\\bguard\\b|\\bpg\\b|\\bsg\\b|\\bsf\\b|\\bpf\\b/.test(text))return 'nba';
- if(/goalkeeper|keeper|portiere|defender|difensore|midfielder|centrocampista|striker|attaccante|\\bgk\\b|\\bdf\\b|\\bmd\\b|\\bfw\\b/.test(text))return 'football';
+ if(/point guard|shooting guard|small forward|power forward|center|centre|basketball/.test(text)||['guard','pg','sg','sf','pf','c','center','centre'].some(token=>tokens.has(token)))return 'nba';
+ if(/goalkeeper|keeper|portiere|defender|difensore|midfielder|centrocampista|striker|attaccante|soccer|football/.test(text)||['gk','df','def','md','mid','fw','st','for'].some(token=>tokens.has(token)))return 'football';
  const setFields=[card?.setName,card?.set?.name,card?.set?.slug,card?.setSlug].map(value=>String(value||'').toLowerCase()).join(' ');
  if(/divination/.test(setFields))return 'football';
  const league=String(card?.league||card?.competition||'').toLowerCase();
- if(/\\bnba\\b|national basketball/.test(league))return 'nba';
+ if(/nba|national basketball/.test(league))return 'nba';
  if(card?.source==='manual')return fallback==='nba'?'nba':'football';
  return fallback;
 }
