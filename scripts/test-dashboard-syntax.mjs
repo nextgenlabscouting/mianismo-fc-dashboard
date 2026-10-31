@@ -82,7 +82,7 @@ const checks = [
   [/function updateSorareAuthUI\(session\)/, 'stato account Sorare diretto'],
   [/async function restoreSorareSession\(\)/, 'ripristino sessione senza nuova sincronizzazione'],
   [/restoreSorareSession\(\);/, 'ripristino automatico della sola sessione al caricamento'],
-  [/merged\.cards=merged\.cards\.filter\(card=>!isEndedHyperGlitch\(card\)\)/, 'rimozione definitiva delle carte Hyperglitch dai dati salvati'],
+  [/if\(isFootball&&isEndedHyperGlitch\(item\)\)continue/, 'rimozione delle carte Hyperglitch soltanto dall’archivio Football'],
   [/function footballCards\(\).*isEndedHyperGlitch/s, 'archivio Football con esclusione Hyperglitch'],
   [/function basketballCards\(\).*sport\)==='nba'/, 'archivio NBA separato'],
   [/function normalizeSport\(value\)/, 'normalizzazione esplicita Football/NBA'],
