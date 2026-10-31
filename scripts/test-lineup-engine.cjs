@@ -18,6 +18,18 @@ const searchSource = extract("function searchLineupCombinations(roleLists,option
 const fixtureSource = extract("function nextLineupFixture(card,now=Date.now()){", "\nfunction lineupFixtureText");
 const engine = new Function(searchSource + "\n" + fixtureSource + "\nreturn {searchLineupCombinations,nextLineupFixture};")();
 
+const bonusSource = extract("function applyEditionBonusToStats(stats,rawBonus){", "\\nfunction lineupCardScoreStats");
+const applyEditionBonusToStats = new Function(bonusSource + "\\nreturn applyEditionBonusToStats;")();
+
+const standardBonus = applyEditionBonusToStats({ expected: 50, sd: 10, low: 40, high: 65, capL10: 45 }, 1);
+const shinyBonus = applyEditionBonusToStats({ expected: 50, sd: 10, low: 40, high: 65, capL10: 45 }, 1.05);
+const unknownBonus = applyEditionBonusToStats({ expected: 50, sd: 10, low: 40, high: 65, capL10: 45 }, null);
+assert.equal(standardBonus.expected, 50, "Carta senza bonus esplicito: stima non alterata");
+assert.equal(shinyBonus.expected, 52.5, "Il bonus d'edizione esplicito deve aumentare la proiezione");
+assert.equal(shinyBonus.capL10, 45, "Il bonus d'edizione non deve alterare il dato L10 del cap");
+assert.equal(shinyBonus.editionBonusPct, 5, "Il bonus d'edizione deve essere mostrato in percentuale");
+assert.equal(unknownBonus.expected, 50, "I bonus mancanti non devono essere inventati");
+
 function candidate(id, role, expected, identity = id, l10 = 40, sd = 4) {
   return {
     identity,
