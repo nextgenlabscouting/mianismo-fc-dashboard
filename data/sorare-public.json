@@ -108382,10 +108382,10 @@
       "attemptedFallbacks": 0,
       "fallbackErrors": []
     },
-    "refreshAttemptedAt": "2026-11-21T05:41:28.016Z",
-    "refreshError": "Risposta inventario rifiutata: nomi o dettagli essenziali non risolti (1241 record). Nessun dato degradato verrà presentato come inventario valido."
+    "refreshAttemptedAt": "2026-11-21T14:13:59.982Z",
+    "refreshError": "Risposta inventario rifiutata: nomi o dettagli essenziali non risolti (1275 record). Nessun dato degradato verrà presentato come inventario valido."
   },
   "message": "Aggiornamento non accettato; mantenuto l’ultimo inventario che aveva superato i controlli.",
-  "detail": "Risposta inventario rifiutata: nomi o dettagli essenziali non risolti (1241 record). Nessun dato degradato verrà presentato come inventario valido.",
-  "refreshAttemptedAt": "2026-11-21T05:41:28.016Z"
+  "detail": "Risposta inventario rifiutata: nomi o dettagli essenziali non risolti (1275 record). Nessun dato degradato verrà presentato come inventario valido.",
+  "refreshAttemptedAt": "2026-11-21T14:13:59.982Z"
 }
